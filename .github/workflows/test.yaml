@@ -34,8 +34,8 @@ jobs:
               run : npm install node@latest
             - name : Checkout my repository
               uses : actions/checkout@v4
-              
+
             - name : Initalize my build action
-              uses : ./.git-readme-action/action.yml@main
+              uses : KanishkChhajed/git-readme-action@v1
               with :
                 environment_variable : ${{secrets.GITHUB_TOKEN}} 

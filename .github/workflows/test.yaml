@@ -34,9 +34,7 @@ jobs:
               run : npm install node@latest
             - name : Checkout my repository
               uses : actions/checkout@v4
-              with :
-                repository : github.repository
-
+              
             - name : Initalize my build action
               uses : ./.git-readme-action/action.yml@main
               with :

@@ -37,5 +37,3 @@ jobs:
 
             - name : Initalize my build action
               uses : KanishkChhajed/git-readme-action@v1
-              with :
-                environment_variable : ${{secrets.GITHUB_TOKEN}} 

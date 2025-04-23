@@ -17,7 +17,7 @@ inputs:
 
   token:
     description: 'Environment variable to access github'
-    required : true
+    required : false
     default: ${{secrets.GITHUB_TOKEN}}
 
 

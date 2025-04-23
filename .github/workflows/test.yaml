@@ -32,6 +32,8 @@ jobs:
         steps:
             - name: Install Node on image machine
               run : npm install node@latest
+            - name : Checkout my repository
+              run : actions/checkout@v4
             - name : Initalize my build action
               uses : ./.git-readme-action/action.yml@main
               with :

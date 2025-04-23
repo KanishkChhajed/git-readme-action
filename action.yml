@@ -14,7 +14,8 @@ inputs:
     description: 'Path to output readme file'
     required: false
     default: 'README.md'
-  environment_variable:
+
+  token:
     description: 'Environment variable to access github'
     required : true
     default: ${{secrets.GITHUB_TOKEN}}

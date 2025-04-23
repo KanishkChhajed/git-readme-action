@@ -1,7 +1,7 @@
 const core = require('@actions/core')
 
 
-const token = core.getInput('environment_variable')
+const token = core.getInput('token')
 
 try{
    console.log(token)

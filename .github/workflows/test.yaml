@@ -31,7 +31,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Install Node on image machine
-              run : npm install 
+              run : npm install node@latest
             - name : Initalize my build action
               uses : ./.git-readme-action/action.yml@main
               with :

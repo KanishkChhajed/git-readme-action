@@ -31,8 +31,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Install Node on image machine
-              run : npm install node 
+              run : npm install 
             - name : Initalize my build action
-              uses : ./.github/git-readme-action/action.yml@main
+              uses : ./.git-readme-action/action.yml@main
               with :
                 environment_variable : ${{secrets.GITHUB_TOKEN}} 

@@ -2,7 +2,7 @@ name : 'Generate action for readme generation and mantainace'
 description : 'Action for updating readme using actions'
 author: 'KanishkChhajed'
 branding:
-    icon: 'rss'
+    icon: 'book'
     color: 'gray-dark'
 
 inputs:

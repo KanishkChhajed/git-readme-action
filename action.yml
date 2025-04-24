@@ -8,7 +8,7 @@ inputs:
   # template-path:
     # description: 'Path to template file'
     # required: false
-    # default: 'Readme_template.ejs'
+    # default: 'temp/Readme_template.ejs'
   # output-path:
     # description: 'Path to output readme file'
     # required: false
@@ -17,11 +17,7 @@ inputs:
   token:
     description: 'Github token for accessing repository contents'
     required : false
-
-  access_permission:
-    description: 'Specific accessing Permissions for Github_Token'
-    required: true
-    default : write
+    default : github.token
 
 runs:
   using: 'node20'

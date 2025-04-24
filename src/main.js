@@ -1,4 +1,4 @@
-const {Ocktokit} =  require("octokit")
+const {Octokit} =  require("octokit")
 
 const core = require('@actions/core')
 

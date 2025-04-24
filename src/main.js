@@ -9,8 +9,8 @@ async function  generate(){
     
     try{
         // Authentication process
+        const octokit = new Octokit({auth : token})
         try{
-            const octokit = new Octokit({auth : token})
             const {
                 data: { login },
               } = await octokit.rest.users.getAuthenticated();

@@ -3,7 +3,7 @@ const {Ocktokit} =  require("octokit")
 const core = require('@actions/core')
 
 
-function generate(){
+async function  generate(){
 
     const token = core.getInput('token')
     
@@ -11,7 +11,10 @@ function generate(){
         // Authentication process
         try{
             const octokit = new Octokit({auth : token})
-            console.log(octokit)
+            const {
+                data: { login },
+              } = await octokit.rest.users.getAuthenticated();
+              console.log("Hello, %s", login)
         }catch{
             console.log("Authentication process failed...")
         }

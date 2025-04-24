@@ -12,8 +12,8 @@ async function  generate(){
         const octokit = new Octokit({auth : token})
         try{
             const { data: repo } = await octokit.rest.repos.get({
-                owner: token.split('/')[0],
-                repo: token.split('/')[1],
+                owner: process.env.GITHUB_REPOSITORY.split('/')[0],
+                repo: process.env.GITHUB_REPOSITORY.split('/')[1],
             });
         
             console.log(`Repo: ${repo.full_name}`);

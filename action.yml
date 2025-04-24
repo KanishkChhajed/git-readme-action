@@ -4,7 +4,6 @@ author: 'KanishkChhajed'
 # branding:
 #     icon: 'book'
 #     color: 'gray-dark'
-
 inputs:
   # template-path:
     # description: 'Path to template file'
@@ -18,7 +17,6 @@ inputs:
   token:
     description: 'Github token for accessing repository contents'
     required : false
-
 runs:
   using: 'node20'
   main: 'main.js'

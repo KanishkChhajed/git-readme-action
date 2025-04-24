@@ -41,3 +41,5 @@ jobs:
             
             - name : Initalize my build action
               uses : KanishkChhajed/git-readme-action@main
+              with :
+                token : SECRET

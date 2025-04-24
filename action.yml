@@ -38,11 +38,13 @@ inputs:
   template-path:
     description: 'Path to template file'
     required: false
-    default: 'README_template.ejs'
+    default: 'src/README_template.ejs'
+ 
   output-path:
     description: 'Path to output README.md'
     required: false
     default: 'README.md'
+ 
   token:
     description: 'GitHub token (defaults to automatic GITHUB_TOKEN)'
     required: false

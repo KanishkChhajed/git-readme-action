@@ -11,10 +11,8 @@ async function  generate(){
         // Authentication process
         const octokit = new Octokit({auth : token})
         try{
-            const {
-                data: { login },
-              } = await octokit.rest.users.getAuthenticated();
-              console.log("Hello, %s", login)
+            const { data } = await octokit.rest.repos.listForAuthenticatedUser();
+            console.log("Successfully fetched repos:", data.length);
         }catch (error){
             console.log("Authentication process failed...")
             console.log (error)

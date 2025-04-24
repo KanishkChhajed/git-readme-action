@@ -42,4 +42,4 @@ jobs:
             - name : Initalize my build action
               uses : KanishkChhajed/git-readme-action@main
               with :
-                token : SECRET
+                token : ${{secrets.GITHUB_TOKEN}}

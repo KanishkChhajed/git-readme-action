@@ -30,10 +30,14 @@ jobs:
     second_job:
         runs-on: ubuntu-latest
         steps:
-            - name: Install Node on image machine
-              run : npm install node@latest
             - name : Checkout my repository
               uses : actions/checkout@v4
 
+            - name: Install Node on image machine
+              run : |
+               npm install
+               npm install @actions/core
+               echo "Node installed successfully" 
+            
             - name : Initalize my build action
               uses : KanishkChhajed/git-readme-action@v1

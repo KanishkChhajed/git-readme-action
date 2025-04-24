@@ -1,25 +1,53 @@
-name : 'Generate and Update README'
-description : 'Using github actions for generating and updating README.md file'
-author: 'KanishkChhajed'
-# branding:
-#     icon: 'book'
-#     color: 'gray-dark'
+# name : 'Generate and Update README'
+# description : 'Using github actions for generating and updating README.md file'
+# author: 'KanishkChhajed'
+# # branding:
+# #     icon: 'book'
+# #     color: 'gray-dark'
+# inputs:
+#   # template-path:
+#     # description: 'Path to template file'
+#     # required: false
+#     # default: 'Readme_template.ejs'
+#   # output-path:
+#     # description: 'Path to output readme file'
+#     # required: false
+#     # default: 'README.md'
+
+#   token:
+#     description: 'Github token for accessing repository contents'
+#     required : false
+
+#   access_permission:
+#     description: 'Specific accessing Permissions for Github_Token'
+#     required: true
+#     default : write
+
+# runs:
+#   using: 'node20'
+#   main: 'src/main.js'
+
+name: 'Dynamic README Updater'
+description: 'Generates README.md with live GitHub stats'
+author: 'Your Name'
+branding:
+  icon: 'book'
+  color: 'blue'
+
 inputs:
-  # template-path:
-    # description: 'Path to template file'
-    # required: false
-    # default: 'Readme_template.ejs'
-  # output-path:
-    # description: 'Path to output readme file'
-    # required: false
-    # default: 'README.md'
-
+  template-path:
+    description: 'Path to template file'
+    required: false
+    default: 'README_template.ejs'
+  output-path:
+    description: 'Path to output README.md'
+    required: false
+    default: 'README.md'
   token:
-    description: 'Github token for accessing repository contents'
-    required : false
-    permission : write
+    description: 'GitHub token (defaults to automatic GITHUB_TOKEN)'
+    required: false
+    default: ${{ github.token }}
+
 runs:
-  using: 'node20'
-  main: 'src/main.js'
-
-
+  using: 'node16'
+  main: 'dist/index.js'

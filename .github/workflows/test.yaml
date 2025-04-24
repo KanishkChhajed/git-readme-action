@@ -44,10 +44,3 @@ jobs:
               uses : KanishkChhajed/git-readme-action@main
               with :
                 token : ${{secrets.GITHUB_TOKEN}}
-
-            - name: Commit changes
-              run: |
-                  git config --global user.name "github-actions"
-                  git add README.md
-                  git commit -m "📚 Auto-update README" || echo "No changes"
-                  git push

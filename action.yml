@@ -17,6 +17,7 @@ inputs:
   token:
     description: 'Github token for accessing repository contents'
     required : false
+    permission : write
 runs:
   using: 'node20'
   main: 'src/main.js'

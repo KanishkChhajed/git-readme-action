@@ -15,8 +15,9 @@ async function  generate(){
                 data: { login },
               } = await octokit.rest.users.getAuthenticated();
               console.log("Hello, %s", login)
-        }catch{
+        }catch (error){
             console.log("Authentication process failed...")
+            console.log (error)
         }
         
 

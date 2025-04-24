@@ -1,5 +1,4 @@
-import {Ocktokit} from "octokit"
-
+const {Ocktokit} =  require("octokit")
 
 const core = require('@actions/core')
 

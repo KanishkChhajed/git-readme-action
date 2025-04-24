@@ -18,7 +18,6 @@ inputs:
   token:
     description: 'Github token for accessing repository contents'
     required : false
-    default: ${{secrets.GITHUB_TOKEN}}
 
 runs:
   using: 'node20'

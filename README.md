@@ -10,15 +10,15 @@
 
 ## 🚀 Latest Commits
 
+- [`8f3972c`](https://github.com/KanishkChhajed/git-readme-action/commit/8f3972c33f8b57bb3c74faeaaaf4aba7c5bcd42e) Merge branch &#39;main&#39; of https://github.com/KanishkChhajed/git-readme-action (by **KanishkChhajed**)
+
+- [`e49f4bf`](https://github.com/KanishkChhajed/git-readme-action/commit/e49f4bfa59225314e85fd283862843299439fb30) Modify icon in metadata (by **KanishkChhajed**)
+
+- [`600c5a7`](https://github.com/KanishkChhajed/git-readme-action/commit/600c5a7be9492103b5a4976d0b9e4017474925b9) 📚 Auto-update README (by **github-actions**)
+
 - [`88fb2a5`](https://github.com/KanishkChhajed/git-readme-action/commit/88fb2a528f449055cb9d2de0ea593ae70760271e) Modify metadata main (by **KanishkChhajed**)
 
 - [`7419270`](https://github.com/KanishkChhajed/git-readme-action/commit/7419270aa8d1d549d5456975ec26d3e491ba3165) Modify metadata main (by **KanishkChhajed**)
-
-- [`ba9bb2e`](https://github.com/KanishkChhajed/git-readme-action/commit/ba9bb2ea72e01bb21621898c0b68987591cfe1a3) Adding AI generated code for testing (by **KanishkChhajed**)
-
-- [`e39e895`](https://github.com/KanishkChhajed/git-readme-action/commit/e39e89562a53faa845fe7dc03106ac94e25bf98b) Trying to add permissions in metadata file (by **KanishkChhajed**)
-
-- [`779829b`](https://github.com/KanishkChhajed/git-readme-action/commit/779829b3a00ff5c9b2af9c59795c71f04b9cf7ca) Modify Authentication code in main.js (by **KanishkChhajed**)
 
 
 ---

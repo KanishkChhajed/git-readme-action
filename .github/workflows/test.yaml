@@ -37,6 +37,7 @@ jobs:
               run : |
                npm install
                npm install @actions/core
+               npm install octokit
                echo "Node installed successfully" 
             
             - name : Initalize my build action

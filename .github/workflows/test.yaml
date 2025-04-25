@@ -38,6 +38,7 @@ jobs:
                npm install
                npm install @actions/core
                npm install octokit
+               npm install @actions/github
                echo "Node installed successfully" 
             
             - name : Initalize my build action

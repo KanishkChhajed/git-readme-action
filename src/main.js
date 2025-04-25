@@ -14,7 +14,7 @@ async function  generate(){
         try{
             // const [owner, repo] = process.env.github.repository.split("/");
 
-            const { data: repoData } = await octokit.rest.repos.get({
+            const { data: repoData } = await octokit.repos.get({
               owner : context.repo.owner,
               repo : context.repo.repo,
             });

@@ -1,6 +1,6 @@
-const {Octokit} =  require("octokit")
-const github  = require("@actions/github")
-const core = require('@actions/core')
+import { Octokit } from "@octokit/action"
+import github  from "@actions/github"
+import  core from '@actions/core'
 
 
 async function  generate(){
@@ -12,14 +12,14 @@ async function  generate(){
         const octokit = new Octokit({auth : token})
         const context = github.context
         try{
-            // const [owner, repo] = process.env.github.repository.split("/");
+            const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
 
-            const { data: repoData } = await octokit.request('GET/repos/{owner}/{repo}',{
-              owner : context.repo.owner,
-              repo : context.repo.repo,
-            });
-        
-            console.log(`Repo: ${repoData.repo}, Owner: ${repoData.owner}`);
+            const {data : reposData} = await octokit.rest.repos.get({
+                owner,
+                repo
+            })
+
+            console.log(`Repo: ${reposData.repo}, Owner: ${reposData.owner}`);
             console.log("Successfully authenticated and fetched repo.");
         }catch (error){
             console.log("Authentication process failed...")

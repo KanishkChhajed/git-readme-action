@@ -17,7 +17,6 @@ async function  generate(){
             const {data : reposData} = await octokit.rest.repos.get({
                 owner,
                 repo,
-                ref : "main",
             });
 
             const ref = process.env.GITHUB_SHA
@@ -28,7 +27,7 @@ async function  generate(){
                 ref,
             });
             console.log(`Commit : ${commitData.commit.message}`)
-            console.log(`RepoData: ${reposData.owner.name}`);
+            console.log(`RepoData: ${reposData.language}`);
             console.log("Successfully authenticated and fetched repo.");
         }catch (error){
             console.log("Authentication process failed...")

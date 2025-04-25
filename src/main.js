@@ -19,7 +19,7 @@ async function  generate(){
                 repo,
             });
 
-            const {data : issuesData} =  await octokit.request( `POST /repos/{owner}/{repo}/issues`,{
+            const {data : issuesData} =  await octokit.rest.issues.post({
                 owner,
                 repo,
                 title: "Created with the REST API",

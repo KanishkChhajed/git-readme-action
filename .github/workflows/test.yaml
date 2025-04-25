@@ -35,10 +35,11 @@ jobs:
 
             - name: Install Node on image machine
               run : |
-               npm install
+               npm install -y
                npm install @actions/core
                npm install octokit
                npm install @actions/github
+               npm install @octokit/action
                echo "Node installed successfully" 
             
             - name : Initalize my build action

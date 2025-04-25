@@ -19,7 +19,14 @@ async function  generate(){
                 repo,
             });
 
-            console.log(`Repo: ${reposData.full_name}, Owner: ${GITHUB_ACTOR},RepoName: ${GITHUB_REPOSITORY}`);
+            const {data : issuesData} =  await octokit.request( `POST /repos/{owner}/{repo}/issues`,{
+                owner,
+                repo,
+                title: "Created with the REST API",
+                body: "This is a test issue created by the REST API",
+            });
+            console.log(`Issue : ${issuesData}`)
+            console.log(`RepoData: ${reposData}`);
             console.log("Successfully authenticated and fetched repo.");
         }catch (error){
             console.log("Authentication process failed...")

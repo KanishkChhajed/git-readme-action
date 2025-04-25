@@ -23,8 +23,8 @@ async function  generate(){
                 owner,
                 repo,
             });
-            console.log(`Issue : ${commitData.commit}`)
-            console.log(`RepoData: ${reposData.owner}`);
+            console.log(`Issue : ${commitData.commit.comment_count}`)
+            console.log(`RepoData: ${reposData.owner.name}`);
             console.log("Successfully authenticated and fetched repo.");
         }catch (error){
             console.log("Authentication process failed...")

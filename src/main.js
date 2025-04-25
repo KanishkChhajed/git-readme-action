@@ -19,9 +19,12 @@ async function  generate(){
                 repo,
             });
 
+            const ref = process.env.GITHUB_SHA
+
             const {data : commitData} =  await octokit.rest.repos.getCommit({
                 owner,
                 repo,
+                ref,
             });
             console.log(`Commit : ${commitData.commit.message}`)
             console.log(`RepoData: ${reposData.owner.name}`);

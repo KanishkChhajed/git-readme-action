@@ -17,6 +17,7 @@ async function  generate(){
             const {data : reposData} = await octokit.rest.repos.get({
                 owner,
                 repo,
+                ref : "main",
             });
 
             const ref = process.env.GITHUB_SHA

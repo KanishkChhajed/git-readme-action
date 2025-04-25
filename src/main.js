@@ -16,7 +16,7 @@ async function  generate(){
 
             const { data: repoData } = await octokit.rest.repos.get({
               owner : context.repo.owner,
-              repo : context.owner.repo,
+              repo : context.repo.repo,
             });
         
             console.log(`Repo: ${repoData.repo}, Owner: ${repoData.owner}`);

@@ -13,11 +13,11 @@ async function  generate(){
             const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
 
             const {data : reposData} = await octokit.rest.repos.get({
-                owner : `/repos/${owner}`,
-                repo : `/repos/${owner}/${repo}`
+                owner,
+                repo,
             });
 
-            console.log(`Repo: ${reposData.repo}, Owner: ${reposData.owner},RepoName: ${reposData.full_name}`);
+            console.log(`Repo: ${reposData.repo}, Owner: ${reposData.actor},RepoName: ${reposData.full_name}`);
             console.log("Successfully authenticated and fetched repo.");
         }catch (error){
             console.log("Authentication process failed...")

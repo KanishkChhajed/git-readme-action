@@ -19,7 +19,7 @@ async function  generate(){
                 repo,
             });
 
-            console.log(`Repo: ${reposData.repo}, Owner: ${github.repository_owner},RepoName: ${github.repository}`);
+            console.log(`Repo: ${reposData.full_name}, Owner: ${GITHUB_ACTOR},RepoName: ${GITHUB_REPOSITORY}`);
             console.log("Successfully authenticated and fetched repo.");
         }catch (error){
             console.log("Authentication process failed...")

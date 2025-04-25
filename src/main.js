@@ -1,7 +1,6 @@
-const { Octokit } = require("@octokit/action")
 const github  = require("@actions/github")
 const  core  =  require('@actions/core')
-
+const {Octokit} = require('octokit')
 
 async function  generate(){
 

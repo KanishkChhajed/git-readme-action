@@ -19,14 +19,12 @@ async function  generate(){
                 repo,
             });
 
-            const {data : issuesData} =  await octokit.rest.issues.post({
+            const {data : commitData} =  await octokit.rest.repos.getCommit({
                 owner,
                 repo,
-                title: "Created with the REST API",
-                body: "This is a test issue created by the REST API",
             });
-            console.log(`Issue : ${issuesData}`)
-            console.log(`RepoData: ${reposData}`);
+            console.log(`Issue : ${commitData.commit}`)
+            console.log(`RepoData: ${reposData.owner}`);
             console.log("Successfully authenticated and fetched repo.");
         }catch (error){
             console.log("Authentication process failed...")

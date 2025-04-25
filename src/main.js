@@ -1,5 +1,5 @@
 const {Octokit} =  require("octokit")
-
+const github  = require("@actions/github")
 const core = require('@actions/core')
 
 

@@ -39,10 +39,10 @@ async function  generate(){
                 repo,
             });
 
-            const readme_template = {
+            const readme_Info = {
                 repoName: reposData.name,
                 owner: reposData.owner.login,
-                language: JSON.stringify(languages),
+                language: JSON.stringify(languages).split(':'),
                 // contributors: reposData.contributors_url.login,
                 stars: reposData.stargazers_count,
                 forks: reposData.forks_count,
@@ -52,7 +52,7 @@ async function  generate(){
                 user_view_type: commitData.committer.user_view_type, 
             }
             
-            console.log(readme_template)
+            console.log(readme_Info)
             console.log(`Repos Languages : ${JSON.stringify(languages)}`)
             console.log(`Issues : ${JSON.stringify(issueData)}`)
             console.log(`Commit Message : ${JSON.stringify(last_commit_message)}`)

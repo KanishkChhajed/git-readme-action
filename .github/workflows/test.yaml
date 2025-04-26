@@ -14,10 +14,6 @@ permissions:
     contents: write
     # models: read
 
-# env:
-    # SECRET: ${{secrets.GITHUB_TOKEN}}
-    # GITHUB_CONTEXT: ${{ toJson(github) }}
-
 jobs:
     # first_job:
     #     runs-on: ubuntu-latest

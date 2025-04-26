@@ -26,8 +26,17 @@ async function  generate(){
                 repo,
                 ref: "main",
             });
-            console.log(`Commit : ${commitData.commit.message}`)
-            console.log(`RepoData: ${reposData.language}`);
+
+            const {data: issueData} = await  octokit.rest.issues.listForRepo({
+                owner,
+                repo,
+            })
+            const last_commit_message = commitData.commit.message;
+            const repo_language = reposData.language;
+
+            console.log(`Issues : ${JSON.stringify(issueData)}`)
+            console.log(`Commit : ${JSON.stringify(last_commit_message)}`)
+            console.log(`RepoData: ${JSON.stringify(repo_language)}`);
             console.log("Successfully authenticated and fetched repo.");
         }catch (error){
             console.log("Authentication process failed...")

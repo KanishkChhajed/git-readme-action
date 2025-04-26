@@ -42,8 +42,8 @@ async function  generate(){
             const readme_template = {
                 repoName: reposData.name,
                 owner: reposData.owner.login,
-                language: reposData.languages_url[1],
-                contributors: reposData.contributors_url.login[0],
+                language: JSON.stringify(languages),
+                // contributors: reposData.contributors_url.login,
                 stars: reposData.stargazers_count,
                 forks: reposData.forks_count,
                 watchs: reposData.watchers_count,

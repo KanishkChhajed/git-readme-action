@@ -34,6 +34,12 @@ async function  generate(){
             const last_commit_message = commitData.commit.message;
             const repo_language = reposData.languages_url;
 
+            const {data : languages} = octokit.request(`GET ${repo_language}`,{
+                owner,
+                repo,
+            });
+            
+            console.log(`Repos Languages : ${JSON.stringify(languages)}`)
             console.log(`Issues : ${JSON.stringify(issueData)}`)
             console.log(`Commit : ${JSON.stringify(last_commit_message)}`)
             console.log(`RepoData: ${JSON.stringify(repo_language)}`);

@@ -19,13 +19,13 @@ env:
     # GITHUB_CONTEXT: ${{ toJson(github) }}
 
 jobs:
-    first_job:
-        runs-on: ubuntu-latest
-        steps:
-            - name : My first job
-              run : |
-                 echo "Hello World!!!"
-                #  echo $GITHUB_CONTEXT
+    # first_job:
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - name : My first job
+    #           run : |
+    #              echo "Hello World!!!"
+    #             #  echo $GITHUB_CONTEXT
 
     second_job:
         runs-on: ubuntu-latest

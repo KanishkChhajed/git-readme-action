@@ -32,7 +32,7 @@ async function  generate(){
                 repo,
             })
             const last_commit_message = commitData.commit.message;
-            const repo_language = reposData.language;
+            const repo_language = reposData.languages_url;
 
             console.log(`Issues : ${JSON.stringify(issueData)}`)
             console.log(`Commit : ${JSON.stringify(last_commit_message)}`)

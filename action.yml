@@ -21,6 +21,7 @@ inputs:
 
 runs:
   using: 'node20'
+  pre: 'src/dependences.js'
   main: 'src/main.js'
 
 

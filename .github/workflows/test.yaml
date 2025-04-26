@@ -31,7 +31,7 @@ jobs:
 
             - name: Install Node on image machine
               run : |
-               node install -y
+               npm install -y
                echo "Node installed successfully" 
             #    npm install @actions/core
             #    echo "@actions/core installed successfully" 

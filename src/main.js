@@ -48,7 +48,7 @@ async function  generate(){
             const readme_Info = {
                 repoName: reposData.name,
                 owner: reposData.owner.login,
-                language: JSON.stringify(languages).split(':'),
+                language: JSON.stringify(languages).replaceAll(':'," "),
                 contributors: JSON.stringify(contributors),
                 stars: reposData.stargazers_count,
                 forks: reposData.forks_count,
@@ -59,12 +59,12 @@ async function  generate(){
             }
             
             console.log(readme_Info)
-            console.log(`Repos Languages : ${JSON.stringify(languages)}`)
-            console.log(`Issues : ${JSON.stringify(issueData)}`)
-            console.log(`Commit Message : ${JSON.stringify(last_commit_message)}`)
+            // console.log(`Repos Languages : ${JSON.stringify(languages)}`)
+            // console.log(`Issues : ${JSON.stringify(issueData)}`)
+            // console.log(`Commit Message : ${JSON.stringify(last_commit_message)}`)
             // console.log(`Languages: ${JSON.stringify(repo_language)}`);
-            console.log(`Repo Data: ${JSON.stringify(reposData)}`);
-            console.log(`Commit Data: ${JSON.stringify(commitData)}`);
+            // console.log(`Repo Data: ${JSON.stringify(reposData)}`);
+            // console.log(`Commit Data: ${JSON.stringify(commitData)}`);
             console.log("Successfully authenticated and fetched repo.");
         }catch (error){
             console.log("Authentication process failed...")

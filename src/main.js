@@ -35,23 +35,23 @@ async function  generate(){
             const repo_language = reposData.languages_url;
             const repo_contributors = reposData.contributors_url;
 
-            const {data : languages} = await octokit.request(`GET ${repo_language}`,{
-                owner,
-                repo,
-            });
+            const {data : languages} = await octokit.request(`GET ${repo_language}`);
 
-            const {data: contributors} = await octokit.request(`GET ${repo_contributors}`, {
-                owner,
-                repo
-            })
+            const languageArray  = Object.keys(languages).map(langName => ({
+                langName,
+            }));
+
+            const {data: contributors} = await octokit.request(`GET ${repo_contributors}`)
+
+            const contributorArray = Object.keys(contributors).map(contributorsName => ({
+                Name : contributorsName.login,
+            }))
 
             const readme_Info = {
                 repoName: reposData.name,
                 owner: reposData.owner.login,
-                language: JSON.stringify(languages.map(language => ({
-                   lang:  language.split(':')[0],  
-                }))),
-                contributors: JSON.stringify(contributors),
+                language: JSON.stringify(languageArray),
+                contributors: JSON.stringify(contributorArray),
                 stars: reposData.stargazers_count,
                 forks: reposData.forks_count,
                 watchs: reposData.watchers_count,

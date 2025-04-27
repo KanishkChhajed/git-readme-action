@@ -37,15 +37,11 @@ async function  generate(){
 
             const {data : languages} = await octokit.request(`GET ${repo_language}`);
 
-            const languageArray  = Object.keys(languages).map(langName => ({
-                langName,
-            }));
+            const languageArray  = Object.keys(languages);
 
             const {data: contributors} = await octokit.request(`GET ${repo_contributors}`)
 
-            const contributorArray = Object.keys(contributors).map(contributorsName => ({
-                Name : contributorsName.login,
-            }))
+            const contributorArray = Object.keys(contributors.login)
 
             const readme_Info = {
                 repoName: reposData.name,

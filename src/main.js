@@ -48,8 +48,8 @@ async function  generate(){
             const readme_Info = {
                 repoName: reposData.name,
                 owner: reposData.owner.login,
-                language: JSON.stringify(languages).split(':')[0],
-                contributors: JSON.stringify(contributors.login),
+                language: JSON.stringify(languages).split(':'),
+                contributors: JSON.stringify(contributors),
                 stars: reposData.stargazers_count,
                 forks: reposData.forks_count,
                 watchs: reposData.watchers_count,

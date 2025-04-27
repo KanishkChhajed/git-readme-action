@@ -41,7 +41,7 @@ async function  generate(){
 
             const {data: contributors} = await octokit.request(`GET ${repo_contributors}`)
 
-            const contributorArray = Object.keys(contributors.login)
+            // const contributorArray = Object.keys(contributors.login)
 
             const readme_Info = {
                 repoName: reposData.name,

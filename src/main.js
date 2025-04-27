@@ -41,13 +41,13 @@ async function  generate(){
 
             const {data: contributors} = await octokit.request(`GET ${repo_contributors}`)
 
-            // const contributorArray = Object.keys(contributors.login)
+            const contributorArray = Object.keys(contributors)
 
             const readme_Info = {
                 repoName: reposData.name,
                 owner: reposData.owner.login,
-                language: JSON.stringify(languageArray),
-                // contributors: JSON.stringify(contributorArray),
+                language: languageArray,
+                contributors: JSON.stringify(contributorArray),
                 stars: reposData.stargazers_count,
                 forks: reposData.forks_count,
                 watchs: reposData.watchers_count,

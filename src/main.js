@@ -33,17 +33,23 @@ async function  generate(){
             })
             const last_commit_message = commitData.commit.message;
             const repo_language = reposData.languages_url;
+            const repo_contributors = reposData.contributors_url;
 
             const {data : languages} = await octokit.request(`GET ${repo_language}`,{
                 owner,
                 repo,
             });
 
+            const {data: contributors} = await octokit.request(`GET ${repo_contributors}`, {
+                owner,
+                repo
+            })
+
             const readme_Info = {
                 repoName: reposData.name,
                 owner: reposData.owner.login,
-                language: reposData.languages_url.split(':')[0],
-                // contributors: reposData.contributors_url.login,
+                language: JSON.stringify(languages).split(':')[0],
+                contributors: JSON.stringify(contributors.login),
                 stars: reposData.stargazers_count,
                 forks: reposData.forks_count,
                 watchs: reposData.watchers_count,

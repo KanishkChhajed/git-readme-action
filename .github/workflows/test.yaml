@@ -10,8 +10,8 @@ on:
     # schedule:
         # - cron : '0 * * * *'   #Run every hour
 
-permissions:
-    contents: write
+# permissions:
+    # contents: write
     # models: read
 
 jobs:

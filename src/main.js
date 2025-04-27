@@ -47,7 +47,7 @@ async function  generate(){
                 repoName: reposData.name,
                 owner: reposData.owner.login,
                 language: JSON.stringify(languageArray),
-                contributors: JSON.stringify(contributorArray),
+                // contributors: JSON.stringify(contributorArray),
                 stars: reposData.stargazers_count,
                 forks: reposData.forks_count,
                 watchs: reposData.watchers_count,

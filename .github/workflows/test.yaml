@@ -32,7 +32,13 @@ jobs:
             - name: Install Node on image machine
               run : |
                npm install -y
-               echo "Node installed successfully" 
+            - uses: actions/setup-node@v4
+              with:
+                    node-version: 20
+                    cache: 'npm'
+            - run : |
+                npm ci 
+                echo "Node installed successfully" 
             #    npm install @actions/core
             #    echo "@actions/core installed successfully" 
             #    npm install octokit

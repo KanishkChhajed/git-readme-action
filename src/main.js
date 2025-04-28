@@ -65,6 +65,7 @@ async function  generate_readme(){
                 repoFullName: reposData.full_name,
                 repoName: reposData.name,
                 owner: reposData.owner.login,
+                owner_avatar:reposData.owner.avatar_url,
                 language: languageArray,
                 contributors: contributorArray,
                 stars: reposData.stargazers_count,

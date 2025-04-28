@@ -1,74 +1,30 @@
-<!-- views/dashboard_readme.ejs
-<div align="center">
-    <!-- Animated header with repo owner avatar -->
-    <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px;">
-      <img src="<%= readme_Info.owner_avatar %>" width="80" height="80" style="border-radius: 50%; border: 3px solid var(--color-border-default); animation: pulse 2s infinite;">
-      <h1>
-        <a href="https://github.com/<%= readme_Info.owner %>/<%= readme_Info.repoName %>" style="text-decoration: none;">
-          <span style="color: var(--color-fg-default);"><%= owner %></span>/
-          <span style="color: var(--color-accent-fg);"><%= repoName %></span>
-        </a>
-      </h1>
-    </div>
-  
-    <!-- Interactive stats grid -->
-    <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 30px 0;">
-      <div class="stat-card" style="padding: 15px; background: var(--color-canvas-subtle); border-radius: 10px; transition: all 0.3s ease;" 
-           onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.1)'">
-        ⭐ <strong><%=stars %></strong> Stars
-      </div>
-      <div class="stat-card" style="padding: 15px; background: var(--color-canvas-subtle); border-radius: 10px; transition: all 0.3s ease;"
-           onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.1)'">
-        🍴 <strong><%=forks %></strong> Forks
-      </div>
-      <div class="stat-card" style="padding: 15px; background: var(--color-canvas-subtle); border-radius: 10px; transition: all 0.3s ease;"
-           onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.1)'">
-        👀 <strong><%=watchs %></strong> Watchers
-      </div>
-      <div class="stat-card" style="padding: 15px; background: var(--color-canvas-subtle); border-radius: 10px; transition: all 0.3s ease;"
-           onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.1)'">
-        💬 <strong><%=open_issues %></strong> Open Issues
-      </div>
-    </div>
-  
-    <!-- Language distribution with animated bars -->
-    <h2>📊 Language Breakdown</h2>
-    <div style="background: var(--color-canvas-subtle); padding: 15px; border-radius: 10px; margin: 20px 0; max-width: 600px;">
-      <% language.forEach(lang => { %>
-        <div style="margin-bottom: 10px;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-            <span><%= lang.name %></span>
-            <span><%= lang.percentage %>%</span>
-          </div>
-          <div style="height: 10px; background: var(--color-border-default); border-radius: 5px; overflow: hidden;">
-            <div style="height: 100%; width: <%= lang.percentage %>%; background: var(--color-accent-fg); border-radius: 5px; 
-                        animation: grow 1.5s ease-out forwards;"></div>
-          </div>
-        </div>
-      <% }); %>
-    </div>
-  
-    <!-- Last commit info with typing animation -->
-    <div style="margin-top: 30px; padding: 15px; background: var(--color-canvas-subtle); border-radius: 10px; max-width: 600px;">
-      <h3>Last Commit</h3>
-      <p style="overflow: hidden; white-space: nowrap; animation: typing 3.5s steps(40, end);">
-        <%= LastCommitMessage %>
-      </p>
-    </div>
-  </div>
-  
-  <style>
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    @keyframes grow {
-      from { width: 0%; }
-      to { width: attr(data-width); }
-    }
-    @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
-    }
-  </style> -->
+<h1 align="center"><%= repoName %> 🚀</h1>
+
+<p align="center">
+  <img src="<%= owner_avatar %>" width="100" style="border-radius:50%;">
+</p>
+
+<p align="center">
+  <b>Owner:</b> <%= owner %> • <b>Visibility:</b> <%= visibility %> • <b>Main Language:</b> <%= language.join(", ") %>
+</p>
+
+<p align="center">
+  ⭐ Stars: <%= stars %> | 🍴 Forks: <%= forks %> | 👁 Watchers: <%= watchs %> | 🐛 Open Issues: <%= open_issues %> | ✅ Closed Issues: <%= closed_issues %>
+</p>
+
+---
+
+## 📜 Last Commit Message
+> _"<%= LastCommitMessage %>"_
+
+---
+
+## 👥 Contributors
+<% contributors.forEach(contributor => { %>
+- [`<%= contributor.contributorName %>`](#) (Contributions: <%= contributor.contributionCount %>)
+<% }); %>
+
+---
+
+> *Generated using GitHub Actions ⚙️ automatically by <%= user_view_type || "Unknown User" %>.*
+

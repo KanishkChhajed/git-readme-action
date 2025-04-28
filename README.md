@@ -11,12 +11,12 @@
 ## 📊 Repo Stats
 - **Stars**: 1
 - **Forks**: 0
-- **Watches**: 
+- **Watches**: 1
 - **Open Issues**: 3
 - **Closed Issues**:2
 
 ## 🚀 Latest Commits
-- Adding API route to find closed issues count
+- Correcting watches in ejs template
 
 ## Owner 
 - KanishkChhajed

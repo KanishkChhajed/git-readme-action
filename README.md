@@ -1,30 +1,37 @@
-<h1 align="center">git-readme-action 🚀</h1>
-
 <p align="center">
-  <img src="https://avatars.githubusercontent.com/u/121193249?v=4" width="100" style="border-radius:50%;">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=00F7FF&center=true&vCenter=true&width=435&lines=Welcome+to+git-readme-action+Repository!" alt="Typing SVG" />
 </p>
 
-<p align="center">
-  <b>Owner:</b> KanishkChhajed • <b>Visibility:</b> public • <b>Main Language:</b> JavaScript, EJS
-</p>
+## 🏡 Project Info
 
-<p align="center">
-  ⭐ Stars: 1 | 🍴 Forks: 0 | 👁 Watchers: 1 | 🐛 Open Issues: 3 | ✅ Closed Issues: 2
-</p>
+- **Repository:** KanishkChhajed/git-readme-action
+- **Owner:** KanishkChhajed
+- **Visibility:** public
+
+![Stars](https://img.shields.io/github/stars/KanishkChhajed/git-readme-action?style=social)
+![Forks](https://img.shields.io/github/forks/KanishkChhajed/git-readme-action?style=social)
+![Issues](https://img.shields.io/github/issues/KanishkChhajed/git-readme-action)
+![Contributors](https://img.shields.io/github/contributors/KanishkChhajed/git-readme-action)
 
 ---
 
-## 📜 Last Commit Message
-> _"Testing first template"_
+## 🔥 Languages Used
 
----
-
-## 👥 Contributors
-
-- [`KanishkChhajed`](#) (Contributions: 135)
-
-
----
-
-> *Generated using GitHub Actions ⚙️ automatically by public.*
-
+JavaScript,EJS
+    
+    ---
+    
+    ## 🧑‍💻 Contributors
+    
+    
+    - 🔗 **KanishkChhajed** (Contributions: 139)
+    
+    
+    ---
+    
+    ## ✍️ Latest Commit
+    > _Testing tempate2_
+    
+    ---
+    > Powered by GitHub Actions ✨
+    

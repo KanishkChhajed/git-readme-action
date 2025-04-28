@@ -36,9 +36,15 @@ async function  generate_readme(){
                 ref: "main",
             });
 
-            const {data: issueData} = await  octokit.rest.issues.listForRepo({
+            // const {data: issueData} = await  octokit.rest.issues.listForRepo({
+            //     owner,
+            //     repo,
+            // })
+
+            const {data : issueDataClosed} = await octokit.rest.issues.listForRepo({
                 owner,
                 repo,
+                state : 'closed',
             })
             const last_commit_message = commitData.commit.message;
             const repo_language = reposData.languages_url;
@@ -64,6 +70,7 @@ async function  generate_readme(){
                 forks: reposData.forks_count,
                 watchs: reposData.watchers_count,
                 open_issues: reposData.open_issues_count,
+                closed_issues: issueDataClosed.length,
                 visibility: reposData.visibility,
                 user_view_type: commitData.committer.user_view_type, 
                 LastCommitMessage : last_commit_message,

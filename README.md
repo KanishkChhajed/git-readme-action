@@ -16,16 +16,17 @@
 - **Closed Issues**:2
 
 ## 🚀 Latest Commits
-- Trying to correct Owner avatar in ejs template
+- Change owner avatar variable from owner -&gt; owner_avator in ejs template
 
 ## Owner 
-![Owner](https://contributors-img.web.app/image?repo=KanishkChhajed)
+- **Owner**: KanishkChhajed
+![Owner](https://contributors-img.web.app/image?repo=https://avatars.githubusercontent.com/u/121193249?v=4)
 
 ## Contributors
 ![Contributors](https://contributors-img.web.app/image?repo=KanishkChhajed/git-readme-action)
 
 <!-- 
-    -[`KanishkChhajed`](134)
+    -[`KanishkChhajed`](135)
     
  -->
 ---

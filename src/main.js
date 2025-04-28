@@ -59,7 +59,7 @@ async function  generate_readme(){
                 repoName: reposData.name,
                 owner: reposData.owner.login,
                 language: languageArray,
-                contributors: contributorArray.Object.keys(contributors)[0],
+                contributors: contributorArray[0],
                 stars: reposData.stargazers_count,
                 forks: reposData.forks_count,
                 watchs: reposData.watchers_count,

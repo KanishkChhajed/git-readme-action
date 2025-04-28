@@ -16,13 +16,13 @@
 - **Closed Issues**:2
 
 ## 🚀 Latest Commits
-- Trying to add contributors avatar in ejs template
+- Adding avatar for owner and contributors in ejs template
 
 ## Owner 
-- KanishkChhajed
+- ![Owner](https://contributors-img.web.app/image?repo=KanishkChhajed)
 
 ## Contributors
-- https://contributors-img.web.app/image?repo=KanishkChhajed/git-readme-action
+- ![Contributors](https://contributors-img.web.app/image?repo=KanishkChhajed/git-readme-action)
 
 
     -[`KanishkChhajed`](129)

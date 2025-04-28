@@ -76,7 +76,8 @@ async function  generate_readme(){
             fs.writeFileSync(output_path , render)
 
             console.log("Readme file successfully generated")
-            execSync(`git config --global user.name "github actions"`)
+            execSync(`git config --global user.email "${reposData.owner.email}"`)
+            execSync(`git config --global user.name "${reposData.owner.login}"`)
             execSync(`git add README.md`)
             execSync(`git commit -m "📚 Auto-generation README"`)
             execSync(`git push`)

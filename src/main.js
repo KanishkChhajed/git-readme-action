@@ -81,7 +81,6 @@ async function  generate_readme(){
             execSync(`git add README.md`)
             execSync(`git commit -m "📚 Auto-generation README"`)
             execSync(`git push -u origin main`)
-            execSync(`git pull`)
             console.log("Successfully pushed to README.md")
             // console.log(`Repos Languages : ${JSON.stringify(languages)}`)
             // console.log(`Issues : ${JSON.stringify(issueData)}`)

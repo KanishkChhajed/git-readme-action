@@ -8,6 +8,7 @@ const fs = require('fs')
 // const { formatWithOptions } = require("node:util")
 
 const template_path = './temp/README_template.ejs'
+const output_path = 'README.md'
 
 async function  generate_readme(){
 
@@ -71,7 +72,7 @@ async function  generate_readme(){
 
             const template = fs.readFileSync(template_path,'utf-8')
             const render = ejs.render(template,readme_Info)
-            fs.writeFileSync(README.md , render)
+            fs.writeFileSync(output_path , render)
 
             console.log("Readme file successfully generated")
             // console.log(`Repos Languages : ${JSON.stringify(languages)}`)

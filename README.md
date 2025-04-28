@@ -16,12 +16,14 @@
 - **Closed Issues**:2
 
 ## 🚀 Latest Commits
-- Correcting watches in ejs template
+- Trying to add contributors avatar in ejs template
 
 ## Owner 
 - KanishkChhajed
 
 ## Contributors
+- https://contributors-img.web.app/image?repo=KanishkChhajed/git-readme-action
+
 
     -[`KanishkChhajed`](129)
     

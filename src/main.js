@@ -62,6 +62,7 @@ async function  generate_readme(){
             }));
 
             const readme_Info = {
+                repoFullName: reposData.full_name,
                 repoName: reposData.name,
                 owner: reposData.owner.login,
                 language: languageArray,

@@ -1,8 +1,15 @@
 const github  = require("@actions/github")
 const  core  =  require('@actions/core')
 const {Octokit} = require('octokit')
+const ejs = require('ejs')
+const fs = require('fs')
+// const os = require('os')
+// const {execSync} = require('node:child_process')
+// const { formatWithOptions } = require("node:util")
 
-async function  generate(){
+const template_path = './temp/README_template.ejs'
+
+async function  generate_readme(){
 
     const token = core.getInput('token')
     
@@ -57,9 +64,16 @@ async function  generate(){
                 open_issues: reposData.open_issues_count,
                 visibility: reposData.visibility,
                 user_view_type: commitData.committer.user_view_type, 
+                LastCommitMessage : last_commit_message,
             }
             
             console.log(readme_Info)
+
+            const template = fs.readFileSync(template_path,'utf-8')
+            const render = ejs.render(template,readme_Info)
+            fs.writeFileSync(README.md , render)
+
+            console.log("Readme file successfully generated")
             // console.log(`Repos Languages : ${JSON.stringify(languages)}`)
             // console.log(`Issues : ${JSON.stringify(issueData)}`)
             // console.log(`Commit Message : ${JSON.stringify(last_commit_message)}`)
@@ -81,4 +95,4 @@ async function  generate(){
     }
 }
 
-generate();
+generate_readme();

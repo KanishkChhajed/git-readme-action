@@ -19,10 +19,10 @@
 - <%= LastCommitMessage %>
 
 ## Owner 
-- <%= owner %>
+- ![Owner](https://contributors-img.web.app/image?repo=<%= owner %>)
 
 ## Contributors
-- https://contributors-img.web.app/image?repo=<%=repoFullName%>
+- ![Contributors](https://contributors-img.web.app/image?repo=<%=repoFullName%>)
 
 <% contributors.forEach(contributor => { %>
     -[`<%=contributor.contributorName%>`](<%=contributor.contributionCount%>)

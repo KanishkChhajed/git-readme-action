@@ -15,14 +15,14 @@
 - **Open Issues**: 0
 
 ## 🚀 Latest Commits
-- Trying to update contributors tab in ejs template
+- Correcting ejs template access syntax to contributor.contributorName and contributor.contributionCount
 
 ## Owner 
 - KanishkChhajed
 
 ## Contributors
 
-    -[``]()
+    -[`KanishkChhajed`](107)
     
 
 ---

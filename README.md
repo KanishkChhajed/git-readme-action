@@ -12,17 +12,18 @@
 - **Stars**: 1
 - **Forks**: 0
 - **Watches**: 
-- **Open Issues**: 0
+- **Open Issues**: 3
+- **Closed Issues**:2
 
 ## 🚀 Latest Commits
-- Correcting ejs template access syntax to contributor.contributorName and contributor.contributionCount
+- Adding API route to find closed issues count
 
 ## Owner 
 - KanishkChhajed
 
 ## Contributors
 
-    -[`KanishkChhajed`](107)
+    -[`KanishkChhajed`](129)
     
 
 ---

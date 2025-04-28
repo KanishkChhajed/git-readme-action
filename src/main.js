@@ -8,7 +8,7 @@ const { execSync } = require("child_process")
 // const {execSync} = require('node:child_process')
 // const { formatWithOptions } = require("node:util")
 
-const template_path = './temp/README_template2.ejs'
+const template_path = './temp/README_template3.ejs'
 const output_path = 'README.md'
 
 async function  generate_readme(){

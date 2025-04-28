@@ -1,0 +1,67 @@
+<!-- views/contributors_readme.ejs
+<div align="center">
+    <!-- Floating repo name with subtle animation -->
+    <h1 style="animation: float 6s ease-in-out infinite;">
+      <%= repoName %>
+    </h1>
+    
+    <!-- Visibility badge with color change -->
+    <div style="display: inline-block; padding: 5px 15px; background: <%= visibility === 'public' ? '#238636' : '#8957e5' %>; 
+                 color: white; border-radius: 20px; margin-bottom: 20px; animation: colorShift 4s infinite alternate;">
+      <%= visibility %> repository
+    </div>
+  
+    <!-- Contributor carousel -->
+    <h2>👥 Contributors</h2>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 30px 0;">
+      <% contributors.forEach(contributor => { %>
+        <a href="<%= contributor.html_url %>" style="text-decoration: none;">
+          <img src="<%= contributor.avatar_url %>" width="60" height="60" style="border-radius: 50%; border: 2px solid var(--color-accent-fg); 
+                    transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.1) rotate(5deg)'; this.style.boxShadow='0 0 15px <%= contributor.type === 'User' ? '#1f6feb' : '#8957e5' %>'" 
+                    onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
+        </a>
+      <% }); %>
+    </div>
+  
+    <!-- Stats comparison with animation -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 600px; margin: 30px auto;">
+      <div style="padding: 20px; background: var(--color-canvas-subtle); border-radius: 10px; text-align: center; opacity: 0; animation: fadeIn 1s forwards;">
+        <div style="font-size: 2em; font-weight: bold; color: var(--color-accent-fg);"><%= open_issues %></div>
+        <div>Open Issues</div>
+      </div>
+      <div style="padding: 20px; background: var(--color-canvas-subtle); border-radius: 10px; text-align: center; opacity: 0; animation: fadeIn 1s forwards 0.3s;">
+        <div style="font-size: 2em; font-weight: bold; color: var(--color-success-fg);"><%= closed_issues %></div>
+        <div>Closed Issues</div>
+      </div>
+    </div>
+  
+    <!-- Activity meter -->
+    <h2>📈 Project Activity</h2>
+    <div style="background: var(--color-canvas-subtle); padding: 15px; border-radius: 10px; max-width: 600px; margin: 20px auto;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+        <span>Commit Activity</span>
+        <span><%= user_view_type === 'regular' ? 'Regular' : 'Seasonal' %> Commits</span>
+      </div>
+      <div style="height: 10px; background: linear-gradient(90deg, var(--color-accent-fg) <%= user_view_type === 'regular' ? '70' : '30' %>%, var(--color-border-default) <%= user_view_type === 'regular' ? '70' : '30' %>%); border-radius: 5px; animation: widen 1.5s ease-out;"></div>
+    </div>
+  </div>
+  
+  <style>
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    @keyframes colorShift {
+      from { filter: hue-rotate(0deg); }
+      to { filter: hue-rotate(20deg); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes widen {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+  </style> -->

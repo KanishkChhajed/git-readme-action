@@ -61,6 +61,11 @@ async function  generate_readme(){
                 contributionCount : contributor.contributions,
             }));
 
+            const {data: teckStack} = await octokit.rest.dependencyGraph.createRepositorySnapshot({
+                owner,
+                repo,
+            })
+
             const readme_Info = {
                 repoFullName: reposData.full_name,
                 repoName: reposData.name,
@@ -79,6 +84,7 @@ async function  generate_readme(){
             }
             
             console.log(readme_Info)
+            console.log(teckStack)
 
             const template = fs.readFileSync(template_path,'utf-8')
             const render = ejs.render(template,readme_Info)

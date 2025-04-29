@@ -119,7 +119,6 @@ async function  generate_readme(){
                 job:{
                     id: `${reposData.id}`,
                     correlator:`${process.env.GITHUB_WORKFLOW+process.env.GITHUB_JOB}`,
-                    html_url: `${reposData.html_url}`,
                 },
                 detector:{
                     name : "custom-github-action",
@@ -127,7 +126,7 @@ async function  generate_readme(){
                     url : `${reposData.html_url}`,
                 },
                 manifests:{
-
+                    name: 'package.json',
                 },
                 scanned: true,
 

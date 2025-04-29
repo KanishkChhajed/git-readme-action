@@ -110,6 +110,9 @@ async function  generate_readme(){
                 contributionCount : contributor.contributions,
             }));
 
+            const packageJsonPath = path.join(process.cwd(),'package.json')
+            const packageJsonContent = fs.readFileSync(packageJsonPath,'utf-8')
+
             const {data: techStack} = await octokit.rest.dependencyGraph.createRepositorySnapshot({
                 owner,
                 repo,
@@ -126,7 +129,13 @@ async function  generate_readme(){
                     url : `${reposData.html_url}`,
                 },
                 manifests:{
-                    name: package.json,
+                    'package.json':{
+                        name: 'package.json',
+                        file:{
+                            source_location:'package.json',
+                            bytes:Buffer.from(packageJsonContent).toString('base64'),
+                        },
+                    }
                 },
                 scanned: 'true',
 

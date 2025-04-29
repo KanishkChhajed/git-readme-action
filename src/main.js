@@ -122,13 +122,13 @@ async function  generate_readme(){
                 },
                 detector:{
                     name : "custom-github-action",
-                    version : 0,
+                    version :"0",
                     url : `${reposData.html_url}`,
                 },
                 manifests:{
-                    name: 'package.json',
+                    name: package.json,
                 },
-                scanned: true,
+                scanned: 'true',
 
             })
 

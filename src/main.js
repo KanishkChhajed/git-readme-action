@@ -133,8 +133,6 @@ async function  generate_readme(){
                         name: 'package.json',
                         file:{
                             source_location:'package.json',
-                            content :Buffer.from(packageJsonContent).toString('base64'),
-                            encoding: 'base64',
                         },
                     }
                 },

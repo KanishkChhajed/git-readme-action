@@ -116,7 +116,7 @@ async function  generate_readme(){
             const {data: techStack} = await octokit.rest.dependencyGraph.createRepositorySnapshot({
                 owner,
                 repo,
-                ref:`${reposData.default_branch}`,
+                ref:`refs/heads/${reposData.default_branch}`,
                 version: 0,
                 sha: `${commitData.sha}`,
                 job:{
@@ -133,11 +133,12 @@ async function  generate_readme(){
                         name: 'package.json',
                         file:{
                             source_location:'package.json',
-                            bytes:Buffer.from(packageJsonContent).toString('base64'),
+                            content :Buffer.from(packageJsonContent).toString('base64'),
+                            encoding: 'base64',
                         },
                     }
                 },
-                scanned: 'true',
+                scanned: new Date().toISOString(),
 
             })
 

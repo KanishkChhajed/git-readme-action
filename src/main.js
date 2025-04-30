@@ -12,53 +12,6 @@ const { execSync } = require("child_process")
 const template_path = './temp/README_template3.ejs'
 const output_path = 'README.md'
 
-async function detect_dependencies(){
-    const workSpace = process.env.GITHUB_WORKSPACE;
-    const files = fs.readdirSync(workSpace);
-    const isJavaScript = files.includes('package.json'|| 'package-lock.json' || 'yarn.lock'||'pnpm-lock.yaml');
-    const isPython = files.includes('requirements.txt'||'pyproject.toml' ||'Pipfile' ||'poetry.lock' || 'setup.py')
-    const isJava = files.includes('pom.xml' ||'build.gradle'||'build.gradle.kts')
-    const isPHP = files.includes('composer.json'|| 'composer.lock')
-    const isRuby = files.includes('Gemfile' ||'Gemfile.lock')
-    const isGo = files.includes('go.mod'|| 'go.sum')
-    const isRust = files.includes('Cargo.toml' ||'Cargo.lock')
-    const isNET = files.includes('.csproj' ||'packages.config' ||'project.json')
-    const isCpp = files.includes('CMakeLists.txt' ||'vcpkg.json')
-    const isSwift = files.includes('Package.swift' ||'Cartfile'||'Podfile')
-    const isKotlin  = files.includes('build.gradle' ||'build.gradle.kts')
-    const isDart = files.includes('pubspec.yaml' ||'pubspec.lock')
-    const isElixir = files.includes('mix.exs' ||'mix.lock')
-    const isScala = files.includes('build.sbt'|| 'build.gradle')
-    const isHaskell = files.includes('package.yaml' ||'stack.yaml' ||'cabal.project')
-    const isPerl = files.includes('cpanfile' || 'Makefile.PL')
-    const isR = files.includes('DESCRIPTION' ||'renv.lock')
-    const isJulia = files.includes('Project.toml'||'Manifest.toml')
-    const isObjective_C = files.includes('Podfile'||'Podfile.lock')
-
-    if(isJavaScript){}
-    else if(isPython){}
-    else if(isJava){}
-    else if(isPHP){}
-    else if(isRuby){}
-    else if(isGo){}
-    else if(isRust){}
-    else if(isNET){}
-    else if(isCpp){}
-    else if(isSwift){}
-    else if(isKotlin){}
-    else if(isDart){}
-    else if(isElixir){}
-    else if(isScala){}
-    else if(isHaskell){}
-    else if(isPerl){}
-    else if(isR){}
-    else if(isJulia){}
-    else if(isObjective_C){}
-    else{
-        console.log("No common dependency file found")
-    }
-
-}
 
 async function  generate_readme(){
 
@@ -113,32 +66,32 @@ async function  generate_readme(){
             const packageJsonPath = path.join(process.cwd(),'package.json')
             const packageJsonContent = fs.readFileSync(packageJsonPath,'utf-8')
 
-            const {data: techStack} = await octokit.rest.dependencyGraph.createRepositorySnapshot({
-                owner,
-                repo,
-                ref:`refs/heads/${reposData.default_branch}`,
-                version: 0,
-                sha: `${commitData.sha}`,
-                job:{
-                    id: `${reposData.id}`,
-                    correlator:`${process.env.GITHUB_WORKFLOW+process.env.GITHUB_JOB}`,
-                },
-                detector:{
-                    name : "custom-github-action",
-                    version :"0",
-                    url : `${reposData.html_url}`,
-                },
-                manifests:{
-                    'package.json':{
-                        name: 'package.json',
-                        file:{
-                            source_location:'package.json',
-                        },
-                    }
-                },
-                scanned: new Date().toISOString(),
+            // const {data: techStack} = await octokit.rest.dependencyGraph.createRepositorySnapshot({
+            //     owner,
+            //     repo,
+            //     ref:`refs/heads/${reposData.default_branch}`,
+            //     version: 0,
+            //     sha: `${commitData.sha}`,
+            //     job:{
+            //         id: `${reposData.id}`,
+            //         correlator:`${process.env.GITHUB_WORKFLOW+process.env.GITHUB_JOB}`,
+            //     },
+            //     detector:{
+            //         name : "custom-github-action",
+            //         version :"0",
+            //         url : `${reposData.html_url}`,
+            //     },
+            //     manifests:{
+            //         'package.json':{
+            //             name: 'package.json',
+            //             file:{
+            //                 source_location:'package.json',
+            //             },
+            //         }
+            //     },
+            //     scanned: new Date().toISOString(),
 
-            })
+            // })
 
             const readme_Info = {
                 repoFullName: reposData.full_name,
@@ -158,7 +111,7 @@ async function  generate_readme(){
             }
             
             console.log(readme_Info)
-            console.log(techStack)
+            // console.log(techStack)
 
             const template = fs.readFileSync(template_path,'utf-8')
             const render = ejs.render(template,readme_Info)

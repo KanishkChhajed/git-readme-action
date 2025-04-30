@@ -31,7 +31,7 @@ jobs:
 
             - name: Install Node on image machine
               run : |
-               npm install -y
+               npm init -y
             - uses: actions/setup-node@v4
               with:
                     node-version: 20

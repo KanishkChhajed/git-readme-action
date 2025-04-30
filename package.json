@@ -1,7 +1,7 @@
 {
   "name": "git-readme-action",
   "version": "1.0.0",
-  "description": "",
+  "description": "<h1 align=\"center\">\r     <img src=\"https://img.shields.io/badge/git-readme-action-🎯-blueviolet?style=for-the-badge\" alt=\"Repo Badge\">\r   </h1>",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

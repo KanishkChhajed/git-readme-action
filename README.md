@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Remving content and encoding from manifests in main.js"
+  > "Adding techStack.js file in src"
   
   ---
   

@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Testing third template"
+  > "Remving content and encoding from manifests in main.js"
   
   ---
   

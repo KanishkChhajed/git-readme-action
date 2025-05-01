@@ -1,9 +1,11 @@
 const fs = require('fs')
+const { execSync } = require("child_process")
 const path = require('path')
 const os  = require('os')
+const toml = require('toml')
 
 
-let techstack_Array = []
+let techstack_Set = new Set()
 
  function isInclude(allFiles,dependencyPackage){
     return  dependencyPackage.filter(file => allFiles.includes(file))
@@ -12,6 +14,7 @@ let techstack_Array = []
 export async function detect_dependencies(){
     const workSpace = process.env.GITHUB_WORKSPACE;
     const files = fs.readdirSync(workSpace);
+    const lang = process.env.GITHUB_L
 
     // Identify which language is used in the project
 
@@ -75,25 +78,117 @@ export async function detect_dependencies(){
     if(isJavaScript.length){
         for(const file of isJavaScript){
             if(file === 'package.json'){
-                
-            }else if(file === 'package-lock.json'){}
-            else if(file === 'yarn.lock'){}
-            else if(file ==='pnpm-lock.yaml'){}
+                const pkg = JSON.parse(fs.readFileSync(file,'utf-8'))
+                let dependencyArray= Object.keys(pkg.dependencies ||{})
+                let devDependencyArray = Object.keys(pkg.devDependencies||{})
+                for(const dep of dependencyArray){
+                    techstack_Set.add(dep)
+                }
+                for (const dep of devDependencyArray){
+                    techstack_Set.add(dep)
+                }
+            }else if(file === 'package-lock.json'){
+                const pkg = JSON.parse(fs.readFileSync(file,'utf-8'))
+                let dependencies = pkg.packages?.[""]?.dependencies || {}
+                for(const dep of dependencies){
+                    techstack_Set.add(dep)
+                }
+            }
+            else if(file === 'yarn.lock'){
+                const output = execSync(`yarn list`, {encoding:'utf-8'})
+                const lines = output.trim().split('\n')
+                for(const line of lines){
+                    const parseLine = JSON.parse(line)
+                    if(parseLine.type === 'tree'){
+                        for(const dep of parseLine.data.trees){
+                            const depName = dep.name.split('@')[0]
+                            techstack_Set.add(depName)
+                        }
+                    }
+                }
+            }
+            else if(file ==='pnpm-lock.yaml'){
+                const pkg = JSON.parse(fs.readFileSync(file),'utf-8')
+                let dependencyArray = Object.keys(pkg.dependencies || {})
+                let devDependencyArray = Object.keys(pkg.devDependencies || {})
+                for(const dep of dependencyArray){
+                    techstack_Set.add(dep)
+                }
+                for(const dep of devDependencyArray){
+                    techstack_Set.add(dep)
+                }
+            }
 
         }
     }
     else if(isPython.length){
         for(const file of isPython){
-            if(file === 'requirements.txt'){}
-            else if (file === 'pyproject.toml'){}
-            else if (file === 'Pipfile'){}
-            else if(file === 'poetry.lock'){}
-            else if (file === 'setup.py'){}
+            if(file === 'requirements.txt'){
+                const pkg = fs.readFileSync(file,'utf-8').split('\n')
+                pkg.forEach(line =>{
+                    techstack_Set.add(line.split('==')[0].trim())
+                })
+            }
+            else if (file === 'pyproject.toml'){
+                const pkg = fs.readFileSync(file,'utf-8')
+                const parsedFile = toml.parse(pkg)
+                const dependenciesArray = parsedFile.tool?.poetry?.['dependencies'].split('=')[0].trim() ||{}
+                const devDependencyArray = parsedFile.tool?.poetry?.['dev-dependencies'].split('=')[0].trim() || {}
+                for(const dep of dependenciesArray){
+                    techstack_Set.add(dep)
+                }
+                for(const dep of devDependencyArray){
+                    techstack_Set.add(dep)
+                }
+
+            }
+            else if (file === 'Pipfile'){
+                const pkg  = fs.readFileSync(file,'utf-8')
+                const parsedFile = toml.parse(pkg)
+                const dependenciesArray = parsedFile?.['dev-packages'].split('=')[0].trim() || {}
+                for(const dep of dependenciesArray){
+                    techstack_Set.add(dep)
+                }
+            }
+            else if(file === 'poetry.lock'){
+                const pkg = fs.readFileSync(file,'utf-8')
+                const parsedFile = toml.parse(pkg)
+                const dependenciesArray = parsedFile?.['package.dependencies'].split("=")[0].trim() || {}
+                for(const dep of dependenciesArray){
+                    techstack_Set.add(dep)
+                }
+            }
+            else if (file === 'setup.py'){
+                const setupPath = path.join(process.env.GITHUB_WORKSPACE,file)
+                const pkg = fs.readFileSync(setupPath,'utf-8')
+                const match = pkg.match(/install_requires\s*=\s*\[([^\]]+)\]/)
+                const match1 = pkg.match(/extras_require\s*=\s*\[([^\]]+)\]/)
+                if(match){
+                    const deps = match[1].split(',').map(dep => dep.trim().replace(/['"]/g, '')).filter(Boolean)
+                    deps.forEach(dep => {
+                        techstack_Set.add(dep)
+                    })
+                }
+                if(match){
+                    const deps = match[1].split(',').map(dep => dep.trim().replace(/['"]/g, '')).filter(Boolean)
+                    deps.forEach(dep => {
+                        techstack_Set.add(dep)
+                    })
+                }
+                if(match1){
+                    const deps = match1[1].split(',').map(dep => dep.trim().replace(/['"]/g, '')).filter(Boolean)
+                    deps.forEach(dep => {
+                        techstack_Set.add(dep)
+                    })
+                }
+            }
         }
     }
     else if(isJava.length){
         for(const file of isJava){
-            if(file === 'pom.xml'){}
+            if(file === 'pom.xml'){
+                
+            }
             else if (file === 'build.gradle'){}
             else if (file === 'build.gradle.kts'){}
         }
@@ -201,4 +296,5 @@ export async function detect_dependencies(){
         console.log("No common package dependency file found....")
     }
 
+    return Array.from(techstack_Set)
 }

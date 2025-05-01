@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding techStack.js file in src"
+  > "Updating techStack.js"
   
   ---
   

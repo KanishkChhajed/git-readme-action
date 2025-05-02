@@ -3,6 +3,7 @@ const { execSync } = require("child_process")
 const path = require('path')
 const os  = require('os')
 const toml = require('toml')
+const xml2js = require('xml2js')
 
 
 let techstack_Set = new Set()
@@ -82,16 +83,16 @@ export async function detect_dependencies(){
                 let dependencyArray= Object.keys(pkg.dependencies ||{})
                 let devDependencyArray = Object.keys(pkg.devDependencies||{})
                 for(const dep of dependencyArray){
-                    techstack_Set.add(dep)
+                    techstack_Set.add(dep.split(":")[0])
                 }
                 for (const dep of devDependencyArray){
-                    techstack_Set.add(dep)
+                    techstack_Set.add(dep.split(":")[0])
                 }
             }else if(file === 'package-lock.json'){
                 const pkg = JSON.parse(fs.readFileSync(file,'utf-8'))
                 let dependencies = pkg.packages?.[""]?.dependencies || {}
                 for(const dep of dependencies){
-                    techstack_Set.add(dep)
+                    techstack_Set.add(dep.split(":")[0])
                 }
             }
             else if(file === 'yarn.lock'){
@@ -112,10 +113,10 @@ export async function detect_dependencies(){
                 let dependencyArray = Object.keys(pkg.dependencies || {})
                 let devDependencyArray = Object.keys(pkg.devDependencies || {})
                 for(const dep of dependencyArray){
-                    techstack_Set.add(dep)
+                    techstack_Set.add(dep.split(":")[0])
                 }
                 for(const dep of devDependencyArray){
-                    techstack_Set.add(dep)
+                    techstack_Set.add(dep.split(":")[0])
                 }
             }
 
@@ -187,47 +188,228 @@ export async function detect_dependencies(){
     else if(isJava.length){
         for(const file of isJava){
             if(file === 'pom.xml'){
-                
+                const xmlString = fs.readFileSync(file,'utf-8')
+                const parsedFile = new xml2js.Parser()
+                const pkg = await parsedFile.parseStringPromise(xmlString)
+                const dependenciesArray = pkg.project.dependencies[0].dependency
+                const deps = dependenciesArray.map(dep=>({
+                    artifact: dep.artifactId[0],
+                }))
+                deps.forEach(dep => {
+                    techstack_Set.add(dep)
+                })
             }
-            else if (file === 'build.gradle'){}
-            else if (file === 'build.gradle.kts'){}
+            else if (file === 'build.gradle'){
+                const Path = path.join(__dirname,file)
+                const pkg = fs.readFileSync(Path,'utf-8')
+                const match = pkg.match(/dependencies\s*\{([\s\S]*?)\}/)
+                if(match){
+                    const depsBlock = match[1]
+                    const depLine = depsBlock.match(/(?:implementation|api|compileOnly|runtimeOnly|testImplementation|testRuntimeOnly)\s*\(.+?\)/g)
+                    if(depLine){
+                        for(const line of depLine){
+                            const matchLine = line.match(/['"]([^:'"]+):([^:'"]+)/)
+                            if(matchLine){
+                                const artifact = matchLine[2]
+                                techstack_Set.add(artifact)
+                            }
+                        }
+                    }
+                }
+            }
+            else if (file === 'build.gradle.kts'){
+                const Path = path.join(__dirname,file)
+                const pkg = fs.readFileSync(Path,'utf-8')
+                const match = pkg.match(/dependencies\s*\{([\s\S]*?)\}/)
+                if(match){
+                    const depsBlock = match[1]
+                    const depLine = depsBlock.match(/(?:implementation|api|compileOnly|runtimeOnly|testImplementation|testCompile)\((['"])([^'"]+)\1\)/g)
+                    if(depLine){
+                        for(const line of depLine){
+                            const matchLine = line.match(/\((['"])([^:'"]+):([^:'"]+)/)
+                            if(matchLine){
+                                const artifact = matchLine[3]
+                                techstack_Set.add(artifact)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     else if(isPHP.length){
         for(const file of isPHP){
-            if(file === 'composer.json'){}
-            else if(file === 'composer.lock'){}
+            if(file === 'composer.json'){
+                const pkg = fs.readFileSync(file,'utf-8')
+                const dependenciesArray = Object.keys(pkg.require)||{}
+                const devDependencyArray = Object.keys(pkg?.['require-dev'])||{}
+                for(const dep of dependenciesArray){
+                    techstack_Set.add(dep.split(":")[0])
+                }
+                for(const dep of devDependencyArray){
+                    techstack_Set.add(dep.split(":")[0])
+                }
+            }
+            else if(file === 'composer.lock'){
+                const pkg = fs.readFileSync(file,'utf-8')
+                const dependenciesArray = Object.keys(pkg.require)||{}
+                const devDependencyArray = Object.keys(pkg?.['require-dev'])||{}
+                for(const dep of dependenciesArray){
+                    techstack_Set.add(dep.split(":")[0])
+                }
+                for(const dep of devDependencyArray){
+                    techstack_Set.add(dep.split(":")[0])
+                }
+            }
         }
     }
     else if(isRuby.length){
         for(const file of isRuby){
-            if(file === 'Gemfile'){}
-            else if (file === 'Gemfile.lock'){}
+            if(file === 'Gemfile'){
+                const pkg = fs.readFileSync(file,'utf-8')
+                const gemRegex = /^\s*gem\s+['"]([^'"]+)['"]/gm;
+                let match
+                while((match=gemRegex.exec(pkg)) !== null){
+                    techstack_Set.add(match[1])
+                }
+            }
+            else if (file === 'Gemfile.lock'){
+                const pkg = fs.readFileSync(file,'utf-8').split('\n')
+                let inDependenciesSection = false;
+                for(let line of pkg){
+                    line = pkg.trim()
+
+                    if(line === 'DEPENDENCIES'){
+                        inDependenciesSection = true
+                        continue
+                    }
+                    if(inDependenciesSection && line === ''){
+                        break;
+                    }
+                    if(inDependenciesSection && line){
+                        techstack_Set.add(line.split('(')[0].trim())
+                    }
+                }
+            }
         }
     }
     else if(isGo.length){
         for(const file of isGo){
-            if(file === 'go.mod'){}
-            else if (file === 'go.sum'){}
+            if(file === 'go.mod'){
+                const pkg = fs.readFileSync(file,'utf-8').split('\n')
+                let inRequireBlock = false
+                for(let line of pkg){
+                    line = line.trim()
+                    if(line.startsWith('require (')){
+                        inRequireBlock = true
+                        continue
+                    }
+                    if(inRequireBlock && line === ')'){
+                        inRequireBlock = false
+                        continue
+                    }
+                    if((inRequireBlock || line.startsWith('require ')) && !line.startsWith('//')){
+                        let dep = line.replace('require','').trim().split(' ')[0]
+                        dep = dep.split('/')
+                        let depName = dep[dep.length - 1]
+                        techstack_Set.add(depName)
+                    }
+
+                }
+            }
+            else if (file === 'go.sum'){
+                const pkg = fs.readFileSync(file,'utf-8').split('\n')
+                for(let dep of pkg){
+                    dep = dep.split(' ')[0]
+                    dep = dep.split('/')
+                    let depName = dep[dep.length - 1]
+                    techstack_Set.add(depName)
+                }
+            }
         }
     }
     else if(isRust.length){
         for(const file of isRust){
-            if(file === 'Cargo.toml'){}
-            else if (file === 'Cargo.lock'){}
+            if(file === 'Cargo.toml'){
+                const pkg = fs.readFileSync(file,'utf-8')
+                const parsedFile = toml.parse(pkg)
+                const dependenciesObject = parsedFile?.['dependencies'] || {}
+                const devDependencyObject = parsedFile?.['dev-dependencies'] || {}
+                for(const dep of Object.keys(dependenciesObject)){
+                    techstack_Set.add(dep)
+                }
+                for(const dep of Object.keys(devDependencyObject)){
+                    techstack_Set.add(dep)
+                }
+            }
+            else if (file === 'Cargo.lock'){
+                const pkg = fs.readFileSync(file,'utf-8')
+                const parsedFile = toml.parse(pkg)
+                const dependenciesArray = parsedFile?.['package'] || []
+                for(const pkgEntry of dependenciesArray){
+                    const deps = pkgEntry?.['dependencies'] ||  []
+                    for(const dep of deps){
+                        techstack_Set.add(dep.split(" ")[0].trim())
+                    }
+                }
+            }
         }
     }
     else if(isNET.length){
         for(const file of isNET){
-            if(file === '.csproj'){}
-            else if (file === 'packages.config'){}
-            else if (file === 'project.json'){}
+            if(file.endsWith('.csproj')){
+                const xmlString = fs.readFileSync(file,'utf-8')
+                const parsedFile = new xml2js.Parser()
+                const pkg = await parsedFile.parseStringPromise(xmlString)
+                const dependenciesArray = pkg?.Project?.ItemGroup || []
+                for(const group of dependenciesArray){
+                    const PackageReference = group?.PackageReference || []
+
+                    for(const dep of PackageReference){
+                       const depName = dep?.$?.Include
+                        if(depName) techstack_Set.add(depName)
+                    }
+                }
+            }
+            else if (file === 'packages.config'){
+                const xmlString = fs.readFileSync(file,'utf-8')
+                const parsedFile = new xml2js.Parser()
+                const pkg = await parsedFile.parseStringPromise(xmlString)
+                const dependenciesArray = pkg?.packages?.package || []
+                for(const dep of dependenciesArray){
+                    const depName = dep?.$?.id
+                     if(depName) techstack_Set.add(depName)
+                }
+            }
+            else if (file === 'project.json'){
+                const pkg = JSON.parse(fs.readFileSync(file,'utf-8'))
+                let dependencyArray= Object.keys(pkg.dependencies ||{})
+                for(const dep of dependencyArray){
+                    techstack_Set.add(dep.trim())
+                }
+            }
         }
     }
     else if(isCpp.length){
         for(const file of isCpp){
-            if(file === 'CMakeLists.txt'){}
-            else if (file === 'vcpkg.json'){}
+            if(file === 'CMakeLists.txt'){
+                const pkg = fs.readFileSync(file, 'utf-8').split('\n');
+                const findPackageRegex = /find_package\(\s*(?<package>[\w:\-_]+).*?\)/;
+                const targetLinkLibrariesRegex = /target_link_libraries\([^)]*?\b(?<dependency>[\w:\-_]+)\b.*?\)/;
+                for (const line of pkg) {
+                    const findPackageMatch = line.match(findPackageRegex);
+                    if (findPackageMatch?.groups?.package) {
+                        techstack_Set.add(findPackageMatch.groups.package);
+                    }
+                    const targetLinkLibrariesMatch = line.match(targetLinkLibrariesRegex);
+                    if (targetLinkLibrariesMatch?.groups?.dependency) {
+                        techstack_Set.add(targetLinkLibrariesMatch.groups.dependency);
+                    }
+                }
+            }
+            else if (file === 'vcpkg.json'){
+                
+            }
         }
     }
     else if(isSwift.length){

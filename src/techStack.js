@@ -15,7 +15,7 @@ function isInclude(allFiles, dependencyPackage) {
 export async function detect_dependencies() {
   const workSpace = process.env.GITHUB_WORKSPACE;
   const files = fs.readdirSync(workSpace);
-  const lang = process.env.GITHUB_L;
+  // const lang = process.env.GITHUB_L;
 
   // Identify which language is used in the project
 
@@ -100,13 +100,16 @@ export async function detect_dependencies() {
           techstack_Set.add(dep.split(":")[0]);
         }
       } else if (file === "package-lock.json") {
-        const pkg = JSON.parse(fs.readFileSync(file, "utf-8"));
-        let dependencies = pkg.packages?.[""]?.dependencies || {};
+        const pkg = JSON.parse(fs.readFileSync(path.join(workSpace, file), "utf-8"));
+        const dependencies = pkg.dependencies || pkg.packages?.[""]?.dependencies || {};
         for (const dep of dependencies) {
           techstack_Set.add(dep.split(":")[0]);
         }
       } else if (file === "yarn.lock") {
-        const output = execSync(`yarn list`, { encoding: "utf-8" });
+        const output = execSync(`yarn list`, { 
+          encoding: "utf-8",
+          timeout: 5000,
+        });
         const lines = output.trim().split("\n");
         for (const line of lines) {
           const parseLine = JSON.parse(line);
@@ -139,11 +142,10 @@ export async function detect_dependencies() {
       } else if (file === "pyproject.toml") {
         const pkg = fs.readFileSync(file, "utf-8");
         const parsedFile = toml.parse(pkg);
-        const dependenciesArray =
-          parsedFile.tool?.poetry?.["dependencies"].split("=")[0].trim() || {};
-        const devDependencyArray =
-          parsedFile.tool?.poetry?.["dev-dependencies"].split("=")[0].trim() ||
-          {};
+        const dependenciesObj = parsedFile.tool?.poetry?.dependencies || {};
+        const dependenciesArray = typeof dependenciesObj === 'string' ? [dependenciesObj.split("=")[0].trim()] : Object.keys(dependenciesObj);
+        const devDependencyObj = parsedFile.tool?.poetry?.["dev-dependencies"]||{};
+        const devDependencyArray = typeof devDependencyObj ==="string"?[devDependencyObj.split("=")[0].trim()] : Object.keys(devDependencyObj)
         for (const dep of dependenciesArray) {
           techstack_Set.add(dep);
         }
@@ -207,9 +209,8 @@ export async function detect_dependencies() {
         const parsedFile = new xml2js.Parser();
         const pkg = await parsedFile.parseStringPromise(xmlString);
         const dependenciesArray = pkg.project.dependencies[0].dependency;
-        const deps = dependenciesArray.map((dep) => ({
-          artifact: dep.artifactId[0],
-        }));
+        const deps = (dependenciesArray || []).map((dep) => 
+          dep.artifactId?.[0]?.split(':')[0]).filter(Boolean);
         deps.forEach((dep) => {
           techstack_Set.add(dep);
         });
@@ -256,7 +257,7 @@ export async function detect_dependencies() {
   } else if (isPHP.length) {
     for (const file of isPHP) {
       if (file === "composer.json") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = JSON.parse(fs.readFileSync(path.join(workSpace, file),"utf-8"))
         const dependenciesArray = Object.keys(pkg.require) || {};
         const devDependencyArray = Object.keys(pkg?.["require-dev"]) || {};
         for (const dep of dependenciesArray) {
@@ -438,7 +439,7 @@ export async function detect_dependencies() {
           const urlMatch = content.match(urlRegex);
           if (urlMatch) {
             const dep = urlMatch[1].split("/");
-            const depName = dep[dep.length - 1].replace(".git", "");
+            const depName = dep[dep.length - 1].replace(/\.git$/, "").split('@')[0];
             techstack_Set.add(depName);
           }
         }
@@ -761,5 +762,5 @@ export async function detect_dependencies() {
     console.log("No common package dependency file found....");
   }
 
-  return Array.from(techstack_Set);
+  return Array.from(techstack_Set).filter(Boolean);
 }

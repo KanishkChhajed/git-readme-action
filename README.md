@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding more techStack in techStack.js file"
+  > "Format techStack.js file"
   
   ---
   

@@ -9,7 +9,8 @@ const yaml = require("js-yaml");
 let techstack_Set = new Set();
 
 function isInclude(allFiles, dependencyPackage) {
-  return dependencyPackage.filter((file) => allFiles.includes(file));
+  if (!allFiles || !dependencyPackage) return [];
+  return dependencyPackage.filter((file) => allFiles.includes(path.join(workSpace, file)));
 }
 
 export async function detect_dependencies() {
@@ -90,7 +91,14 @@ export async function detect_dependencies() {
   if (isJavaScript.length) {
     for (const file of isJavaScript) {
       if (file === "package.json") {
-        const pkg = JSON.parse(fs.readFileSync(file, "utf-8"));
+        // const pkg = JSON.parse(fs.readFileSync(file, "utf-8"));
+        let pkg;
+        try {
+          pkg = JSON.parse(fs.readFileSync(path.join(workSpace, file), "utf-8"));
+        } catch (e) {
+          console.error(`Error parsing ${file}: ${e.message}`);
+          continue;
+}
         let dependencyArray = Object.keys(pkg.dependencies || {});
         let devDependencyArray = Object.keys(pkg.devDependencies || {});
         for (const dep of dependencyArray) {
@@ -112,7 +120,13 @@ export async function detect_dependencies() {
         });
         const lines = output.trim().split("\n");
         for (const line of lines) {
-          const parseLine = JSON.parse(line);
+          let parseLine
+          try{
+            parseLine = JSON.parse(line);
+          } catch (e){
+            console.error(`Error parsing ${file}: ${e.message}`);
+            continue;
+          }
           if (parseLine.type === "tree") {
             for (const dep of parseLine.data.trees) {
               const depName = dep.name.split("@")[0];
@@ -121,7 +135,7 @@ export async function detect_dependencies() {
           }
         }
       } else if (file === "pnpm-lock.yaml") {
-        const pkg = JSON.parse(fs.readFileSync(file), "utf-8");
+        const pkg = JSON.parse(fs.readFileSync(path.join(workSpace, file)), "utf-8");
         let dependencyArray = Object.keys(pkg.dependencies || {});
         let devDependencyArray = Object.keys(pkg.devDependencies || {});
         for (const dep of dependencyArray) {
@@ -135,14 +149,14 @@ export async function detect_dependencies() {
   } else if (isPython.length) {
     for (const file of isPython) {
       if (file === "requirements.txt") {
-        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
         pkg.forEach((line) => {
           techstack_Set.add(line.split("==")[0].trim());
         });
       } else if (file === "pyproject.toml") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const parsedFile = toml.parse(pkg);
-        const dependenciesObj = parsedFile.tool?.poetry?.dependencies || {};
+        const dependenciesObj = typeof parsedFile.tool?.poetry?.dependencies==='object' ? parsedFile.tool.poetry.dependencies : {};
         const dependenciesArray = typeof dependenciesObj === 'string' ? [dependenciesObj.split("=")[0].trim()] : Object.keys(dependenciesObj);
         const devDependencyObj = parsedFile.tool?.poetry?.["dev-dependencies"]||{};
         const devDependencyArray = typeof devDependencyObj ==="string"?[devDependencyObj.split("=")[0].trim()] : Object.keys(devDependencyObj)
@@ -153,7 +167,7 @@ export async function detect_dependencies() {
           techstack_Set.add(dep);
         }
       } else if (file === "Pipfile") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const parsedFile = toml.parse(pkg);
         const dependenciesArray =
           parsedFile?.["dev-packages"].split("=")[0].trim() || {};
@@ -161,17 +175,16 @@ export async function detect_dependencies() {
           techstack_Set.add(dep);
         }
       } else if (file === "poetry.lock") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const parsedFile = toml.parse(pkg);
         const dependenciesArray =
           parsedFile?.["package.dependencies"].split("=")[0].trim() || {};
         for (const dep of dependenciesArray) {
           techstack_Set.add(dep);
         }
-      } else if (file === "setup.py") {
-        const setupPath = path.join(process.env.GITHUB_WORKSPACE, file);
-        const pkg = fs.readFileSync(setupPath, "utf-8");
-        const match = pkg.match(/install_requires\s*=\s*\[([^\]]+)\]/);
+      } else if (file === "setup.py") { 
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
+        const match = pkg.match(/install_requires\s*=\s*\[([^\]]+)\]/m);
         const match1 = pkg.match(/extras_require\s*=\s*\[([^\]]+)\]/);
         if (match) {
           const deps = match[1]
@@ -205,18 +218,17 @@ export async function detect_dependencies() {
   } else if (isJava.length) {
     for (const file of isJava) {
       if (file === "pom.xml") {
-        const xmlString = fs.readFileSync(file, "utf-8");
+        const xmlString = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const parsedFile = new xml2js.Parser();
         const pkg = await parsedFile.parseStringPromise(xmlString);
-        const dependenciesArray = pkg.project.dependencies[0].dependency;
+        const dependenciesArray = pkg.project.dependencies[0].dependency ||[];
         const deps = (dependenciesArray || []).map((dep) => 
           dep.artifactId?.[0]?.split(':')[0]).filter(Boolean);
         deps.forEach((dep) => {
           techstack_Set.add(dep);
         });
       } else if (file === "build.gradle") {
-        const Path = path.join(__dirname, file);
-        const pkg = fs.readFileSync(Path, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const match = pkg.match(/dependencies\s*\{([\s\S]*?)\}/);
         if (match) {
           const depsBlock = match[1];
@@ -234,8 +246,7 @@ export async function detect_dependencies() {
           }
         }
       } else if (file === "build.gradle.kts") {
-        const Path = path.join(__dirname, file);
-        const pkg = fs.readFileSync(Path, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const match = pkg.match(/dependencies\s*\{([\s\S]*?)\}/);
         if (match) {
           const depsBlock = match[1];
@@ -257,7 +268,13 @@ export async function detect_dependencies() {
   } else if (isPHP.length) {
     for (const file of isPHP) {
       if (file === "composer.json") {
-        const pkg = JSON.parse(fs.readFileSync(path.join(workSpace, file),"utf-8"))
+        let pkg;
+        try {
+          pkg = JSON.parse(fs.readFileSync(path.join(workSpace, file), "utf-8"));
+        } catch (e) {
+          console.error(`Error parsing ${file}: ${e.message}`);
+          continue;
+        }
         const dependenciesArray = Object.keys(pkg.require) || {};
         const devDependencyArray = Object.keys(pkg?.["require-dev"]) || {};
         for (const dep of dependenciesArray) {
@@ -267,7 +284,7 @@ export async function detect_dependencies() {
           techstack_Set.add(dep.split(":")[0]);
         }
       } else if (file === "composer.lock") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const dependenciesArray = Object.keys(pkg.require) || {};
         const devDependencyArray = Object.keys(pkg?.["require-dev"]) || {};
         for (const dep of dependenciesArray) {
@@ -281,14 +298,14 @@ export async function detect_dependencies() {
   } else if (isRuby.length) {
     for (const file of isRuby) {
       if (file === "Gemfile") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const gemRegex = /^\s*gem\s+['"]([^'"]+)['"]/gm;
         let match;
         while ((match = gemRegex.exec(pkg)) !== null) {
           techstack_Set.add(match[1]);
         }
       } else if (file === "Gemfile.lock") {
-        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
         let inDependenciesSection = false;
         for (let line of pkg) {
           line = line.trim();
@@ -301,7 +318,8 @@ export async function detect_dependencies() {
             break;
           }
           if (inDependenciesSection && line) {
-            techstack_Set.add(line.split("(")[0].trim());
+            const dep = line.split("(")[0].trim();
+            if (dep && dep !== '') techstack_Set.add(dep);
           }
         }
       }
@@ -309,7 +327,7 @@ export async function detect_dependencies() {
   } else if (isGo.length) {
     for (const file of isGo) {
       if (file === "go.mod") {
-        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
         let inRequireBlock = false;
         for (let line of pkg) {
           line = line.trim();
@@ -332,7 +350,7 @@ export async function detect_dependencies() {
           }
         }
       } else if (file === "go.sum") {
-        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
         for (let dep of pkg) {
           dep = dep.split(" ")[0];
           dep = dep.split("/");
@@ -344,8 +362,14 @@ export async function detect_dependencies() {
   } else if (isRust.length) {
     for (const file of isRust) {
       if (file === "Cargo.toml") {
-        const pkg = fs.readFileSync(file, "utf-8");
-        const parsedFile = toml.parse(pkg);
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
+        let parsedFile;
+        try {
+          parsedFile = toml.parse(pkg);
+        } catch (e) {
+          console.error(`Error parsing ${file}: ${e.message}`);
+          continue;
+        }
         const dependenciesObject = parsedFile?.["dependencies"] || {};
         const devDependencyObject = parsedFile?.["dev-dependencies"] || {};
         for (const dep of Object.keys(dependenciesObject)) {
@@ -355,7 +379,7 @@ export async function detect_dependencies() {
           techstack_Set.add(dep);
         }
       } else if (file === "Cargo.lock") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const parsedFile = toml.parse(pkg);
         const dependenciesArray = parsedFile?.["package"] || [];
         for (const pkgEntry of dependenciesArray) {
@@ -369,7 +393,7 @@ export async function detect_dependencies() {
   } else if (isNET.length) {
     for (const file of isNET) {
       if (file.endsWith(".csproj")) {
-        const xmlString = fs.readFileSync(file, "utf-8");
+        const xmlString = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const parsedFile = new xml2js.Parser();
         const pkg = await parsedFile.parseStringPromise(xmlString);
         const dependenciesArray = pkg?.Project?.ItemGroup || [];
@@ -382,7 +406,7 @@ export async function detect_dependencies() {
           }
         }
       } else if (file === "packages.config") {
-        const xmlString = fs.readFileSync(file, "utf-8");
+        const xmlString = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const parsedFile = new xml2js.Parser();
         const pkg = await parsedFile.parseStringPromise(xmlString);
         const dependenciesArray = pkg?.packages?.package || [];
@@ -391,7 +415,7 @@ export async function detect_dependencies() {
           if (depName) techstack_Set.add(depName);
         }
       } else if (file === "project.json") {
-        const pkg = JSON.parse(fs.readFileSync(file, "utf-8"));
+        const pkg = JSON.parse(fs.readFileSync(path.join(workSpace, file), "utf-8"));
         let dependencyArray = Object.keys(pkg.dependencies || {});
         for (const dep of dependencyArray) {
           techstack_Set.add(dep.trim());
@@ -401,7 +425,7 @@ export async function detect_dependencies() {
   } else if (isCpp.length) {
     for (const file of isCpp) {
       if (file === "CMakeLists.txt") {
-        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
         const findPackageRegex = /find_package\(\s*(?<package>[\w:\-_]+).*?\)/;
         const targetLinkLibrariesRegex =
           /target_link_libraries\([^)]*?\b(?<dependency>[\w:\-_]+)\b.*?\)/;
@@ -416,13 +440,13 @@ export async function detect_dependencies() {
           }
         }
       } else if (file === "vcpkg.json") {
-        const pkg = JSON.parse(fs.readFileSync(file, "utf-8"));
+        const pkg = JSON.parse(fs.readFileSync(path.join(workSpace, file), "utf-8"));
         const dependenciesArray = pkg.dependencies || [];
         for (const dep of dependenciesArray) {
           if (typeof dep === "string") {
             techstack_Set.add(dep);
           } else if (typeof dep === "object" && dep.name) {
-            techstack_Set.add(dep.name);
+            if (dep.name && dep.name.trim() !== '') techstack_Set.add(dep.name);
           }
         }
       }
@@ -430,7 +454,7 @@ export async function detect_dependencies() {
   } else if (isSwift.length) {
     for (const file of isSwift) {
       if (file === "Package.swift") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const packageRegex = /\.package\s*\(([\s\S]*?)\)/g;
         const urlRegex = /url:\s*["']([^"']+)["']/;
         const matches = pkg.matchAll(packageRegex);
@@ -439,12 +463,12 @@ export async function detect_dependencies() {
           const urlMatch = content.match(urlRegex);
           if (urlMatch) {
             const dep = urlMatch[1].split("/");
-            const depName = dep[dep.length - 1].replace(/\.git$/, "").split('@')[0];
+            const depName = dep[dep.length - 1].replace(/\.git$/, "").split('@')[0].replace(/[^a-zA-Z0-9\-_]/g, '');
             techstack_Set.add(depName);
           }
         }
       } else if (file === "Cartfile") {
-        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
         for (const line of pkg) {
           if (!line.trim() || line.trim().startsWith("#")) continue;
           const sep = line.trim().split(" ");
@@ -454,7 +478,7 @@ export async function detect_dependencies() {
           techstack_Set.add(depName);
         }
       } else if (file === "Podfile") {
-        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
         for (const line of pkg) {
           const trimmed = line.trim();
           if (trimmed.startsWith("pod")) {
@@ -470,7 +494,7 @@ export async function detect_dependencies() {
   } else if (isKotlin.length) {
     for (const file of isKotlin) {
       if (file === "build.gradle") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const dependenciesRegex =
           /(implementation|api|compile|testImplementation|runtimeOnly|annotationProcessor)\s+['"]([^'"]+)['"]/g;
         let match;
@@ -481,7 +505,7 @@ export async function detect_dependencies() {
           }
         }
       } else if (file === "build.gradle.kts") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const dependenciesRegex =
           /\b(?:implementation|api|compileOnly|runtimeOnly|testImplementation|annotationProcessor)\s*\(\s*["']([^"']+)["']\s*\)/g;
         let match;
@@ -496,8 +520,14 @@ export async function detect_dependencies() {
   } else if (isDart.length) {
     for (const file of isDart) {
       if (file === "pubspec.yaml") {
-        const pkg = fs.readFileSync(file, "utf-8");
-        const parsedFile = yaml.load(pkg);
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
+        let parsedFile;
+        try {
+          parsedFile = toml.parse(pkg);
+        } catch (e) {
+          console.error(`Error parsing ${file}: ${e.message}`);
+          continue;
+        }
         const dependenciesArray = parsedFile?.["dependencies"] || {};
         const devDependencyArray = parsedFile?.["dev_dependencies"] || {};
         for (const dep of Object.keys(dependenciesArray)) {
@@ -507,7 +537,7 @@ export async function detect_dependencies() {
           techstack_Set.add(dep);
         }
       } else if (file === "pubspec.lock") {
-        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
         const parsedFile = yaml.load(pkg);
         const dependencyObject = parsedFile?.packages || {};
         for (const dep of Object.keys(dependencyObject)) {
@@ -518,7 +548,7 @@ export async function detect_dependencies() {
   } else if (isElixir.length) {
     for (const file of isElixir) {
       if (file === "mix.exs") {
-        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
         const depRegex = /{:\s*([a-zA-Z0-9_]+)\s*,/;
         for (let line of pkg) {
           line = line.trim();
@@ -528,7 +558,7 @@ export async function detect_dependencies() {
           }
         }
       } else if (file === "mix.lock") {
-        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
         const depRegex = /"([^"]+)"\s*=>/g;
         let match;
         while ((match = depRegex.exec(pkg)) !== null) {
@@ -539,14 +569,14 @@ export async function detect_dependencies() {
   } else if (isScala.length) {
     for (const file of isScala) {
       if (file === "build.sbt") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const Scalaregex = /"[^"]+"\s*%%?\s*"([^"]+)"\s*%\s*"[^"]+"/g;
         let match;
         while ((match = Scalaregex.exec(pkg)) !== null) {
           techstack_Set.add(match[1]);
         }
       } else if (file === "build.gradle") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const dependenciesRegex =
           /(implementation|api|compile|testImplementation|runtimeOnly|annotationProcessor)\s+['"]([^'"]+)['"]/g;
         let match;
@@ -561,7 +591,7 @@ export async function detect_dependencies() {
   } else if (isHaskell.length) {
     for (const file of isHaskell) {
       if (file === "package.yaml") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const parsedFile = yaml.load(pkg);
         const dependenciesArray = parsedFile?.["dependencies"] || [];
         const subDependenciesArray = [
@@ -571,8 +601,7 @@ export async function detect_dependencies() {
           "benchmarks",
         ];
         for (const dep of dependenciesArray) {
-          const depName =
-            typeof dep === "string" ? dep.split(" ")[0] : dep?.package || dep;
+          const depName = (typeof dep === "string" ? dep.split(" ")[0] : dep?.package || dep).toString().trim();
           techstack_Set.add(depName);
         }
         for (const subDep of subDependenciesArray) {
@@ -601,7 +630,7 @@ export async function detect_dependencies() {
           }
         }
       } else if (file === "stack.yaml") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const parsedFile = yaml.load(pkg);
         const extraDepsDependency = parsedFile?.["extra-deps"] || [];
         for (const dep of extraDepsDependency) {
@@ -623,7 +652,7 @@ export async function detect_dependencies() {
           }
         }
       } else if (file === "cabal.project") {
-        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
         let inPackageSection = false;
         for (const line of pkg) {
           const trimmedLine = line.trim();
@@ -657,7 +686,7 @@ export async function detect_dependencies() {
   } else if (isPerl.length) {
     for (const file of isPerl) {
       if (file === "cpanfile") {
-        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
         const perlRegex =
           /^\s*(requires|recommends|suggests)\s+['"]([^'"]+)['"]/;
         for (let line of pkg) {
@@ -669,7 +698,7 @@ export async function detect_dependencies() {
           }
         }
       } else if (file === "Makefile.PL") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const perlRegex = /PREREQ_PM\s*=>\s*\{([\s\S]*?)\}/;
         const preDep = pkg.match(perlRegex);
         if (preDep) {
@@ -688,7 +717,7 @@ export async function detect_dependencies() {
   } else if (isR.length) {
     for (const file of isR) {
       if (file === "DESCRIPTION") {
-        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
         const dependenciesArray = [
           "Depends",
           "Imports",
@@ -704,13 +733,13 @@ export async function detect_dependencies() {
                 .split(",")
                 .map((d) => d.trim().split(" ")[0]);
               for (const dep of deps) {
-                if (dep && dep !== "R") techstack_Set.add(dep);
+                if (dep && dep !== "R" && /^[a-zA-Z]/.test(dep)) techstack_Set.add(dep);
               }
             }
           }
         }
       } else if (file === "renv.lock") {
-        const pkg = JSON.parse(fs.readFileSync(file, "utf-8"));
+        const pkg = JSON.parse(fs.readFileSync(path.join(workSpace, file), "utf-8"));
         const dependenciesObject = pkg?.Packages || {};
         for (const dep of Object.keys(dependenciesObject)) {
           techstack_Set.add(dep);
@@ -720,14 +749,14 @@ export async function detect_dependencies() {
   } else if (isJulia.length) {
     for (const file of isJulia) {
       if (file === "Project.toml") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const parsedFile = toml.parse(pkg);
         const dependencies = parsedFile?.["dependencies"] || {};
         for (const dep of Object.keys(dependencies)) {
           techstack_Set.add(dep);
         }
       } else if (file === "Manifest.toml") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const parsedFile = toml.parse(pkg);
         const packages = parsedFile || {};
         for (const key in packages) {
@@ -740,7 +769,7 @@ export async function detect_dependencies() {
   } else if (isObjective_C.length) {
     for (const file of isObjective_C) {
       if (file === "Podfile") {
-        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
         for (let line of pkg) {
           line = line.trim();
           if (line.startsWith("pod")) {
@@ -749,7 +778,7 @@ export async function detect_dependencies() {
           }
         }
       } else if (file === "Podfile.lock") {
-        const pkg = fs.readFileSync(file, "utf-8");
+        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const parsedFile = yaml.load(pkg);
         const dependenciesArray = parsedFile?.["DEPENDENCIES"] || [];
         for (const dep of dependenciesArray) {
@@ -761,6 +790,6 @@ export async function detect_dependencies() {
     techstack_Set = [];
     console.log("No common package dependency file found....");
   }
-
-  return Array.from(techstack_Set).filter(Boolean);
+// deduplication of set
+  return [...new Set(Array.from(techstack_Set).filter(Boolean))];
 }

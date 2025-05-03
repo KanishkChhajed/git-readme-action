@@ -711,18 +711,47 @@ export async function detect_dependencies() {
   } else if (isJulia.length) {
     for (const file of isJulia) {
       if (file === "Project.toml") {
-        
+        const pkg = fs.readFileSync(file,'utf-8')
+        const parsedFile = toml.parse(pkg)
+        const dependencies = parsedFile?.['dependencies'] || {}
+        for(const dep of Object.keys(dependencies)){
+          techstack_Set.add(dep)
+        }
       }
-      if (file === "Manifest.toml") {
+      else if (file === "Manifest.toml") {
+        const pkg = fs.readFileSync(file, 'utf-8');
+        const parsedFile = toml.parse(pkg);
+        const packages = parsedFile || {};
+        for (const key in packages) {
+            if (Array.isArray(packages[key])) {
+                        techstack_Set.add(key);
+            }
+        }
       }
     }
   } else if (isObjective_C.length) {
     for (const file of isObjective_C) {
       if (file === "Podfile") {
+        const pkg = fs.readFileSync(file,'utf-8').split('\n')
+        for(let line of pkg){
+          line = line.trim()
+          if(line.startsWith('pod')){
+            const dep = line.split(' ')[1].replace(/["',]/g,'')
+            techstack_Set.add(dep)
+          }
+        }
+
       } else if (file === "Podfile.lock") {
+        const pkg = fs.readFileSync(file,'utf-8')
+        const parsedFile = yaml.load(pkg)
+        const dependenciesArray = parsedFile?.['DEPENDENCIES']||[]
+        for(const dep of dependenciesArray){
+          techstack_Set.add(dep.split(' ')[0])
+        }
       }
     }
   } else {
+    techstack_Set = []
     console.log("No common package dependency file found....");
   }
 

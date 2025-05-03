@@ -10,7 +10,7 @@ let techstack_Set = new Set();
 
 function isInclude(allFiles, dependencyPackage) {
   if (!allFiles || !dependencyPackage) return [];
-  return dependencyPackage.filter((file) => allFiles.includes(path.join(workSpace, file)));
+  return dependencyPackage.filter((file) => allFiles.includes(path.basename(file)));
 }
 
 export async function detect_dependencies() {
@@ -155,7 +155,14 @@ export async function detect_dependencies() {
         });
       } else if (file === "pyproject.toml") {
         const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
-        const parsedFile = toml.parse(pkg);
+        // const parsedFile = toml.parse(pkg);
+        let parsedFile;
+        try {
+          parsedFile = toml.parse(pkg);
+        } catch (e) {
+          console.error(`Error parsing ${file}: ${e.message}`);
+          continue;
+        }
         const dependenciesObj = typeof parsedFile.tool?.poetry?.dependencies==='object' ? parsedFile.tool.poetry.dependencies : {};
         const dependenciesArray = typeof dependenciesObj === 'string' ? [dependenciesObj.split("=")[0].trim()] : Object.keys(dependenciesObj);
         const devDependencyObj = parsedFile.tool?.poetry?.["dev-dependencies"]||{};
@@ -220,7 +227,14 @@ export async function detect_dependencies() {
       if (file === "pom.xml") {
         const xmlString = fs.readFileSync(path.join(workSpace, file), "utf-8");
         const parsedFile = new xml2js.Parser();
-        const pkg = await parsedFile.parseStringPromise(xmlString);
+        // const pkg = await parsedFile.parseStringPromise(xmlString);
+        let pkg;
+        try {
+          pkg = await parsedFile.parseStringPromise(xmlString);
+        } catch (e) {
+          console.error(`Error parsing ${file}: ${e.message}`);
+          continue;
+        }
         const dependenciesArray = pkg.project.dependencies[0].dependency ||[];
         const deps = (dependenciesArray || []).map((dep) => 
           dep.artifactId?.[0]?.split(':')[0]).filter(Boolean);
@@ -284,7 +298,14 @@ export async function detect_dependencies() {
           techstack_Set.add(dep.split(":")[0]);
         }
       } else if (file === "composer.lock") {
-        const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
+        // const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
+        let pkg;
+        try {
+          pkg = JSON.parse(fs.readFileSync(path.join(workSpace, file), "utf-8"));
+        } catch (e) {
+          console.error(`Error parsing ${file}: ${e.message}`);
+          continue;
+        }
         const dependenciesArray = Object.keys(pkg.require) || {};
         const devDependencyArray = Object.keys(pkg?.["require-dev"]) || {};
         for (const dep of dependenciesArray) {
@@ -523,7 +544,8 @@ export async function detect_dependencies() {
         const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
         let parsedFile;
         try {
-          parsedFile = toml.parse(pkg);
+          // parsedFile = toml.parse(pkg);
+          parsedFile = yaml.load(pkg);
         } catch (e) {
           console.error(`Error parsing ${file}: ${e.message}`);
           continue;
@@ -791,5 +813,5 @@ export async function detect_dependencies() {
     console.log("No common package dependency file found....");
   }
 // deduplication of set
-  return [...new Set(Array.from(techstack_Set).filter(Boolean))];
+return Array.from(techstack_Set).filter(Boolean);
 }

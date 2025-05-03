@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding more packages to techStack.js file"
+  > "Adding more techStack to techStack.js file"
   
   ---
   

@@ -656,102 +656,108 @@ export async function detect_dependencies() {
   } else if (isPerl.length) {
     for (const file of isPerl) {
       if (file === "cpanfile") {
-        const pkg = fs.readFileSync(file,'utf-8').split('\n')
-        const perlRegex = /^\s*(requires|recommends|suggests)\s+['"]([^'"]+)['"]/
-        for(let line of pkg){
-            line = line.trim()
-            if(line.startsWith('#') || line=== '')continue
-            const match = line.match(perlRegex)
-            if(match){
-                techstack_Set.add(match[2])
-            }
+        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const perlRegex =
+          /^\s*(requires|recommends|suggests)\s+['"]([^'"]+)['"]/;
+        for (let line of pkg) {
+          line = line.trim();
+          if (line.startsWith("#") || line === "") continue;
+          const match = line.match(perlRegex);
+          if (match) {
+            techstack_Set.add(match[2]);
+          }
         }
       } else if (file === "Makefile.PL") {
-        const pkg = fs.readFileSync(file, 'utf-8');
+        const pkg = fs.readFileSync(file, "utf-8");
         const perlRegex = /PREREQ_PM\s*=>\s*\{([\s\S]*?)\}/;
-        const preDep =pkg.match(perlRegex)
+        const preDep = pkg.match(perlRegex);
         if (preDep) {
-            const prereqBlock = preDep[1].split('\n');
-            for (let line of prereqBlock) {
-                line = line.trim();
-                const lineRegex = /['"]([^'"]+)['"]\s*=>/
-                const match = line.match(lineRegex);
-                if (match) {
-                    techstack_Set.add(match[1]);
-                }
+          const prereqBlock = preDep[1].split("\n");
+          for (let line of prereqBlock) {
+            line = line.trim();
+            const lineRegex = /['"]([^'"]+)['"]\s*=>/;
+            const match = line.match(lineRegex);
+            if (match) {
+              techstack_Set.add(match[1]);
             }
+          }
         }
       }
     }
   } else if (isR.length) {
     for (const file of isR) {
       if (file === "DESCRIPTION") {
-        const pkg = fs.readFileSync(file,'utf-8').split('\n')
-        const dependenciesArray = ['Depends', 'Imports', 'Suggests', 'LinkingTo']
-        for(let line of pkg){
-            line = line.trim()
-            for(const dep of dependenciesArray){
-                if(line.startsWith(dep + ":")){
-                    const depList = line.split(":")[1];
-                    const deps = depList.split(',').map(d => d.trim().split(' ')[0]); 
-                for (const dep of deps) {
-                    if (dep && dep !== 'R') techstack_Set.add(dep); 
-                }
-                }
+        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        const dependenciesArray = [
+          "Depends",
+          "Imports",
+          "Suggests",
+          "LinkingTo",
+        ];
+        for (let line of pkg) {
+          line = line.trim();
+          for (const dep of dependenciesArray) {
+            if (line.startsWith(dep + ":")) {
+              const depList = line.split(":")[1];
+              const deps = depList
+                .split(",")
+                .map((d) => d.trim().split(" ")[0]);
+              for (const dep of deps) {
+                if (dep && dep !== "R") techstack_Set.add(dep);
+              }
             }
+          }
         }
       } else if (file === "renv.lock") {
-        const pkg = JSON.parse(fs.readFileSync(file,'utf-8'))
-        const dependenciesObject  = pkg?.Packages ||{}
-        for(const dep of Object.keys(dependenciesObject)){
-            techstack_Set.add(dep)
+        const pkg = JSON.parse(fs.readFileSync(file, "utf-8"));
+        const dependenciesObject = pkg?.Packages || {};
+        for (const dep of Object.keys(dependenciesObject)) {
+          techstack_Set.add(dep);
         }
       }
     }
   } else if (isJulia.length) {
     for (const file of isJulia) {
       if (file === "Project.toml") {
-        const pkg = fs.readFileSync(file,'utf-8')
-        const parsedFile = toml.parse(pkg)
-        const dependencies = parsedFile?.['dependencies'] || {}
-        for(const dep of Object.keys(dependencies)){
-          techstack_Set.add(dep)
+        const pkg = fs.readFileSync(file, "utf-8");
+        const parsedFile = toml.parse(pkg);
+        const dependencies = parsedFile?.["dependencies"] || {};
+        for (const dep of Object.keys(dependencies)) {
+          techstack_Set.add(dep);
         }
-      }
-      else if (file === "Manifest.toml") {
-        const pkg = fs.readFileSync(file, 'utf-8');
+      } else if (file === "Manifest.toml") {
+        const pkg = fs.readFileSync(file, "utf-8");
         const parsedFile = toml.parse(pkg);
         const packages = parsedFile || {};
         for (const key in packages) {
-            if (Array.isArray(packages[key])) {
-                        techstack_Set.add(key);
-            }
+          if (Array.isArray(packages[key])) {
+            techstack_Set.add(key);
+          }
         }
       }
     }
   } else if (isObjective_C.length) {
     for (const file of isObjective_C) {
       if (file === "Podfile") {
-        const pkg = fs.readFileSync(file,'utf-8').split('\n')
-        for(let line of pkg){
-          line = line.trim()
-          if(line.startsWith('pod')){
-            const dep = line.split(' ')[1].replace(/["',]/g,'')
-            techstack_Set.add(dep)
+        const pkg = fs.readFileSync(file, "utf-8").split("\n");
+        for (let line of pkg) {
+          line = line.trim();
+          if (line.startsWith("pod")) {
+            const dep = line.split(" ")[1].replace(/["',]/g, "");
+            techstack_Set.add(dep);
           }
         }
-
       } else if (file === "Podfile.lock") {
-        const pkg = fs.readFileSync(file,'utf-8')
-        const parsedFile = yaml.load(pkg)
-        const dependenciesArray = parsedFile?.['DEPENDENCIES']||[]
-        for(const dep of dependenciesArray){
-          techstack_Set.add(dep.split(' ')[0])
+        const pkg = fs.readFileSync(file, "utf-8");
+        const parsedFile = yaml.load(pkg);
+        const dependenciesArray = parsedFile?.["DEPENDENCIES"] || [];
+        for (const dep of dependenciesArray) {
+          techstack_Set.add(dep.split(" ")[0]);
         }
       }
     }
   } else {
-    techstack_Set = []
+    techstack_Set = [];
     console.log("No common package dependency file found....");
   }
 

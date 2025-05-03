@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Improving techStack.js file"
+  > "Adding error handling and improvements on techStack.js file"
   
   ---
   

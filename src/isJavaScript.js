@@ -31,7 +31,7 @@ export default async function detect_dependencies() {
       // const pkg = JSON.parse(fs.readFileSync(file, "utf-8"));
       let pkg;
       try {
-        pkg = JSON.parse(fs.readFileSync(path.join(workSpace, file), "utf-8"));
+        pkg = await JSON.parse(fs.readFileSync(path.join(workSpace, file), "utf-8"));
       } catch (e) {
         console.error(`Error parsing ${file}: ${e.message}`);
         continue;
@@ -89,7 +89,7 @@ export default async function detect_dependencies() {
       }
     } else {
         console.log("No common package dependency file found....");
-        return techstack_Set = [];
+        return [];
     }
   }
   return Array.from(techstack_Set).filter(Boolean);

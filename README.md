@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding calling function dynamically based on lang in main.js"
+  > "Adding import  pathToFileURL from url in main.js"
   
   ---
   

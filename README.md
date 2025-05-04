@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Comment-out techStack.js and make individual file for each"
+  > "Updating isJavaScrpit.js file for loop line 53"
   
   ---
   

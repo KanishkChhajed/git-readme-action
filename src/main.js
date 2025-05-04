@@ -12,7 +12,7 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const template_path = path.join(__dirname, "../templates/README_template3.ejs")
+const template_path = path.join(__dirname, "../temp/README_template3.ejs")
 const templateContent = fs.readFileSync(template_path, "utf-8");
 
 const output_path = 'README.md'

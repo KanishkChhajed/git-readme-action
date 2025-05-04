@@ -65,11 +65,13 @@ async function  generate_readme(){
             for (let lang of languageArray) {
                 try {
                     const modulePath = path.join(__dirname, `./is${lang}.js`)
-                    const module = await import(modulePath)
+                    const module = await import(pathToFileURL(modulePath).href)
                     const functionName = `${lang}_dependencies`;
                     if(module[functionName]){
                         const deps = await module[functionName]();
                         techStack.push(lang, ...deps);
+                    }else{
+                        console.log("No module is there")
                     }
                   } catch (err) {
                     console.log(`Could not load handler for ${lang}:`, err.message);

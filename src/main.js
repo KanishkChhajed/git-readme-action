@@ -123,8 +123,8 @@ async function  generate_readme(){
             console.log(readme_Info)
             console.log(techStack)
 
-            const template = fs.readFileSync(templateContent,'utf-8')
-            const render = ejs.render(template,readme_Info)
+            // const template = fs.readFileSync(templateContent,'utf-8')
+            const render = ejs.render(templateContent,readme_Info)
             fs.writeFileSync(output_path , render)
 
             console.log("Readme file successfully generated")

@@ -65,7 +65,7 @@ async function  generate_readme(){
                 try{
 
                     let funName = `${lang}_dependencies`
-                    const deps = await funName(); 
+                    const deps = await [funName](); 
                     techStack.push(lang, ...deps); 
                 }catch{
                     console.log(`No function specific to ${lang}`)

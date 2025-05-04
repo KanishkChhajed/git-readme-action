@@ -71,7 +71,7 @@ async function  generate_readme(){
                         const deps = await module[functionName]();
                         techStack.push(lang, ...deps);
                     }else{
-                        console.log("No module is there")
+                        console.log(`No module is there of ${lang}` )
                     }
                   } catch (err) {
                     console.log(`Could not load handler for ${lang}:`, err.message);

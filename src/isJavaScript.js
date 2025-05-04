@@ -11,7 +11,7 @@ function isInclude(allFiles, dependencyPackage) {
   );
 }
 
-export default async function detect_dependencies() {
+export default async function JavaScript_dependencies() {
   const workSpace = process.env.GITHUB_WORKSPACE;
   const files = fs.readdirSync(workSpace);
   // const lang = process.env.GITHUB_L;

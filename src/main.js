@@ -62,8 +62,15 @@ async function  generate_readme(){
             let techStack = []
             const languageArray  = Object.keys(languages);
             for (let lang of languageArray) {
-                const deps = await detect_dependencies(); 
-                techStack.push(lang, ...deps); 
+                try{
+
+                    let funName = `${lang}_dependencies`
+                    const deps = await funName(); 
+                    techStack.push(lang, ...deps); 
+                }catch{
+                    console.log(`No function specific to ${lang}`)
+                    techStack.push(lang)
+                }
             }
 
             const {data: contributors} = await octokit.request(`GET ${repo_contributors}`)

@@ -6,7 +6,7 @@ import fs from 'fs'
 import path from 'path'
 import  { execSync } from "child_process"
 import { fileURLToPath } from 'url';
-// import detect_dependencies from './isJavaScript.js'
+import JavaScript_dependencies from './isJavaScript.js'
 
 
 
@@ -64,17 +64,9 @@ async function  generate_readme(){
             const languageArray  = Object.keys(languages);
             for (let lang of languageArray) {
                 try {
-                    const modulePath = `./is${lang}.js`;
-                    const module = await import(modulePath); // dynamic import
-                
                     const functionName = `${lang}_dependencies`;
-                    if (module[functionName]) {
-                      const deps = await module[functionName]();
+                      const deps = await functionName();
                       techStack.push(lang, ...deps);
-                    } else {
-                      console.log(`No function ${functionName} found in ${modulePath}`);
-                      techStack.push(lang);
-                    }
                   } catch (err) {
                     console.log(`Could not load handler for ${lang}:`, err.message);
                     techStack.push(lang);

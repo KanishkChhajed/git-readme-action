@@ -1,11 +1,11 @@
-import github  from ("@actions/github")
-import  core  from ('@actions/core')
-import {Octokit} from ('octokit')
-import  ejs from ('ejs')
-import fs from ('fs')
-import path from ('path')
-import  { execSync } from ("child_process")
-import detect_dependencies from ('./isJavaScript.js')
+import github  from "@actions/github"
+import  core  from '@actions/core'
+import {Octokit} from 'octokit'
+import  ejs from 'ejs'
+import fs from 'fs'
+import path from 'path'
+import  { execSync } from "child_process"
+import detect_dependencies from './isJavaScript.js'
 
 const template_path = './temp/README_template3.ejs'
 const output_path = 'README.md'

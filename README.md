@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding calling function dynamically based on lang in main.js"
+  > "Error handling for git commit execution from main.js"
   
   ---
   

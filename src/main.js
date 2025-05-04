@@ -5,7 +5,7 @@ const ejs = require('ejs')
 const fs = require('fs')
 const path = require('path')
 const { execSync } = require("child_process")
-const detect_dependencies = require('/src/isJavaScript.js')
+const detect_dependencies = require('./isJavaScript.js')
 
 const template_path = './temp/README_template3.ejs'
 const output_path = 'README.md'

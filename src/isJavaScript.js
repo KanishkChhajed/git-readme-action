@@ -50,8 +50,8 @@ export default async function detect_dependencies() {
       );
       const dependencies =
         pkg.dependencies || pkg.packages?.[""]?.dependencies || {};
-      for (const dep of dependencies) {
-        techstack_Set.add(dep.split(":")[0]);
+      for (const dep of Object.keys(dependencies)) {
+        techstack_Set.add(dep);
       }
     } else if (file === "yarn.lock") {
       const output = execSync(`yarn list`, {

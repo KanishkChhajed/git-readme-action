@@ -64,7 +64,7 @@ async function  generate_readme(){
             const languageArray  = Object.keys(languages);
             for (let lang of languageArray) {
                 try {
-                    const modulePath = `./is${lang}.js`
+                    const modulePath = path.join(__dirname, `./is${lang}.js`)
                     const module = await import(modulePath)
                     const functionName = `${lang}_dependencies`;
                     if(module[functionName]){

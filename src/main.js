@@ -141,11 +141,30 @@ async function  generate_readme(){
             fs.writeFileSync(output_path , render)
 
             console.log("Readme file successfully generated")
-            execSync(`git config --global user.email "${reposData.owner.email}"`)
-            execSync(`git config --global user.name "${reposData.owner.login}"`)
-            execSync(`git add README.md`)
-            execSync(`git commit -m "📚 Auto-generation README"`)
-            execSync(`git push -u origin main`)
+            // execSync(`git config --global user.email "${reposData.owner.email}"`)
+            // execSync(`git config --global user.name "${reposData.owner.login}"`)
+            // execSync(`git add README.md`)
+            // execSync(`git commit -m "📚 Auto-generation README"`)
+            // execSync(`git push -u origin main`)
+
+            try {
+                execSync(`git config --global user.email "${reposData.owner.email}"`);
+                execSync(`git config --global user.name "${reposData.owner.login}"`);
+              
+                execSync(`git add README.md`);
+              
+                const status = execSync('git status --porcelain').toString().trim();
+              
+                if (status) {
+                  execSync(`git commit -m "📚 Auto-generation README"`);
+                  execSync(`git push -u origin main`);
+                } else {
+                  console.log("✅ Nothing to commit — working tree clean.");
+                }
+              } catch (err) {
+                console.error("🚫 Git command failed:", err.message);
+              }
+
             console.log("Successfully pushed to README.md")
             // console.log(`Repos Languages : ${JSON.stringify(languages)}`)
             // console.log(`Issues : ${JSON.stringify(issueData)}`)

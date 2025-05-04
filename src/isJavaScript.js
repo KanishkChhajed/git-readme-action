@@ -1,6 +1,6 @@
-const fs = require("fs");
-const { execSync } = require("child_process");
-const path = require("path");
+const { execSync } = require("child_process")
+const fs = require('fs')
+const path = require('path')
 
 let techstack_Set = new Set();
 

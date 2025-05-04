@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding more error handling in techStack.js file"
+  > "Comment-out techStack.js and make individual file for each"
   
   ---
   

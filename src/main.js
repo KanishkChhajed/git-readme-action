@@ -1,11 +1,11 @@
-const github  = require("@actions/github")
-const  core  =  require('@actions/core')
-const {Octokit} = require('octokit')
-const ejs = require('ejs')
-const fs = require('fs')
-const path = require('path')
-const { execSync } = require("child_process")
-const detect_dependencies = require('./isJavaScript.js')
+import github  from ("@actions/github")
+import  core  from ('@actions/core')
+import {Octokit} from ('octokit')
+import  ejs from ('ejs')
+import fs from ('fs')
+import path from ('path')
+import  { execSync } from ("child_process")
+import detect_dependencies from ('./isJavaScript.js')
 
 const template_path = './temp/README_template3.ejs'
 const output_path = 'README.md'

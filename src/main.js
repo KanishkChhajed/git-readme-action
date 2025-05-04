@@ -59,14 +59,23 @@ async function  generate_readme(){
 
             const {data : languages} = await octokit.request(`GET ${repo_language}`);
 
+            const languageHandlers = {
+                JavaScript_dependencies: () => {
+                  console.log("Handling JavaScript dependencies");
+                },
+                // add more languages as needed
+              };
+
             let techStack = []
             const languageArray  = Object.keys(languages);
             for (let lang of languageArray) {
                 try{
 
                     let funName = `${lang}_dependencies`
-                    const deps = await [funName](); 
-                    techStack.push(lang, ...deps); 
+                    if (languageHandlers[funName]) {
+                        const deps = await languageHandlers[funName](); 
+                        techStack.push(lang, ...deps); 
+                      } 
                 }catch{
                     console.log(`No function specific to ${lang}`)
                     techStack.push(lang)

@@ -5,8 +5,8 @@ import  ejs from 'ejs'
 import fs from 'fs'
 import path from 'path'
 import  { execSync } from "child_process"
-import detect_dependencies from './isJavaScript.js'
 import { fileURLToPath } from 'url';
+// import detect_dependencies from './isJavaScript.js'
 
 
 
@@ -59,27 +59,26 @@ async function  generate_readme(){
 
             const {data : languages} = await octokit.request(`GET ${repo_language}`);
 
-            const languageHandlers = {
-                JavaScript_dependencies: () => {
-                  console.log("Handling JavaScript dependencies");
-                },
-                // add more languages as needed
-              };
 
             let techStack = []
             const languageArray  = Object.keys(languages);
             for (let lang of languageArray) {
-                try{
-
-                    let funName = `${lang}_dependencies`
-                    if (languageHandlers[funName]) {
-                        const deps = await languageHandlers[funName](); 
-                        techStack.push(lang, ...deps); 
-                      } 
-                }catch{
-                    console.log(`No function specific to ${lang}`)
-                    techStack.push(lang)
-                }
+                try {
+                    const modulePath = `./is${lang}.js`;
+                    const module = await import(modulePath); // dynamic import
+                
+                    const functionName = `${lang}_dependencies`;
+                    if (module[functionName]) {
+                      const deps = await module[functionName]();
+                      techStack.push(lang, ...deps);
+                    } else {
+                      console.log(`No function ${functionName} found in ${modulePath}`);
+                      techStack.push(lang);
+                    }
+                  } catch (err) {
+                    console.log(`Could not load handler for ${lang}:`, err.message);
+                    techStack.push(lang);
+                  }
             }
 
             const {data: contributors} = await octokit.request(`GET ${repo_contributors}`)

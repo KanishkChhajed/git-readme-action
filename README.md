@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Updating isJavaScrpit.js file for loop line 53"
+  > "Updating techstack loop from sync -&gt; async function"
   
   ---
   

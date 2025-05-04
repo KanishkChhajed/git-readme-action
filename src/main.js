@@ -5,9 +5,7 @@ const ejs = require('ejs')
 const fs = require('fs')
 const path = require('path')
 const { execSync } = require("child_process")
-// const os = require('os')
-// const {execSync} = require('node:child_process')
-// const { formatWithOptions } = require("node:util")
+const detect_dependencies = require('/src/isJavaScript.js')
 
 const template_path = './temp/README_template3.ejs'
 const output_path = 'README.md'
@@ -54,7 +52,11 @@ async function  generate_readme(){
 
             const {data : languages} = await octokit.request(`GET ${repo_language}`);
 
+            let techStack = []
             const languageArray  = Object.keys(languages);
+            for(let lang of languageArray){
+                techStack += lang + detect_dependencies()
+            }
 
             const {data: contributors} = await octokit.request(`GET ${repo_contributors}`)
 
@@ -111,7 +113,7 @@ async function  generate_readme(){
             }
             
             console.log(readme_Info)
-            // console.log(techStack)
+            console.log(techStack)
 
             const template = fs.readFileSync(template_path,'utf-8')
             const render = ejs.render(template,readme_Info)

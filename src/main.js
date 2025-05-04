@@ -7,7 +7,8 @@ import path from 'path'
 import  { execSync } from "child_process"
 import detect_dependencies from './isJavaScript.js'
 
-const template_path = './temp/README_template3.ejs'
+const template_path = path.join(__dirname, "../templates/README_template3.ejs")
+const templateContent = fs.readFileSync(template_path, "utf-8");
 const output_path = 'README.md'
 
 
@@ -116,7 +117,7 @@ async function  generate_readme(){
             console.log(readme_Info)
             console.log(techStack)
 
-            const template = fs.readFileSync(template_path,'utf-8')
+            const template = fs.readFileSync(templateContent,'utf-8')
             const render = ejs.render(template,readme_Info)
             fs.writeFileSync(output_path , render)
 

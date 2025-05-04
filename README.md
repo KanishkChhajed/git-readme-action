@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Updating template_path in main.js"
+  > "Adding calling function dynamically based on lang in main.js"
   
   ---
   

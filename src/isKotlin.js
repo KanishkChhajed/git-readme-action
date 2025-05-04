@@ -1,0 +1,58 @@
+const fs = require("fs");
+const { execSync } = require("child_process");
+const path = require("path");
+const os = require("os");
+const toml = require("toml");
+const xml2js = require("xml2js");
+const yaml = require("js-yaml");
+
+
+let techstack_Set = new Set();
+
+function isInclude(allFiles, dependencyPackage) {
+  if (!allFiles || !dependencyPackage) return [];
+  return dependencyPackage.filter((file) => allFiles.includes(path.basename(file)));
+}
+
+export async function detect_dependencies() {
+  const workSpace = process.env.GITHUB_WORKSPACE;
+  const files = fs.readdirSync(workSpace);
+  // const lang = process.env.GITHUB_L;
+
+  // Identify which language is used in the project
+
+  const Kotlin = ["build.gradle", "build.gradle.kts"];
+  let isKotlin = isInclude(files, Kotlin);
+
+  if (isKotlin.length) {
+      for (const file of isKotlin) {
+        if (file === "build.gradle") {
+          const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
+          const dependenciesRegex =
+            /(implementation|api|compile|testImplementation|runtimeOnly|annotationProcessor)\s+['"]([^'"]+)['"]/g;
+          let match;
+          while ((match = dependenciesRegex.exec(pkg)) !== null) {
+            const dep = match[2].split(":");
+            if (dep.length >= 2) {
+              techstack_Set.add(dep[1]);
+            }
+          }
+        } else if (file === "build.gradle.kts") {
+          const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
+          const dependenciesRegex =
+            /\b(?:implementation|api|compileOnly|runtimeOnly|testImplementation|annotationProcessor)\s*\(\s*["']([^"']+)["']\s*\)/g;
+          let match;
+          while ((match = dependenciesRegex.exec(pkg)) !== null) {
+            const dep = match[1].split(":");
+            if (dep.length >= 2) {
+              techstack_Set.add(dep[1]);
+            }
+          }
+        }
+      }
+    }else {
+        techstack_Set = [];
+        console.log("No common package dependency file found....");
+      }
+    return Array.from(techstack_Set).filter(Boolean);
+}

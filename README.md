@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Making basic changes in isPython.js file"
+  > "Making changes in main.js file"
   
   ---
   

@@ -117,19 +117,19 @@ async function  generate_readme(){
             // })
 
             const readme_Info = {
-                repoFullName: reposData.full_name,
-                repoName: reposData.name,
-                owner: reposData.owner.login,
-                owner_avatar:reposData.owner.avatar_url,
+                repoFullName: reposData?.full_name,
+                repoName: reposData?.name,
+                owner: reposData.owner?.login,
+                owner_avatar:reposData.owner?.avatar_url,
                 language: languageArray,
                 contributors: contributorArray,
-                stars: reposData.stargazers_count,
-                forks: reposData.forks_count,
-                watchs: reposData.watchers_count,
-                open_issues: reposData.open_issues_count,
+                stars: reposData?.stargazers_count,
+                forks: reposData?.forks_count,
+                watchs: reposData?.watchers_count,
+                open_issues: reposData?.open_issues_count,
                 closed_issues: issueDataClosed.length,
-                visibility: reposData.visibility,
-                user_view_type: commitData.committer.user_view_type, 
+                visibility: reposData?.visibility,
+                user_view_type: commitData.committer?.user_view_type, 
                 LastCommitMessage : last_commit_message,
             }
             

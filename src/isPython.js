@@ -1,6 +1,6 @@
-const fs = require("fs");
-const path = require("path");
-const toml = require("toml");
+import  fs from "fs";
+import  path from "path";
+import toml from "toml";
 
 
 let techstack_Set = new Set();
@@ -10,7 +10,7 @@ function isInclude(allFiles, dependencyPackage) {
   return dependencyPackage.filter((file) => allFiles.includes(path.basename(file)));
 }
 
-export async function detect_dependencies() {
+export async function Python_dependencies() {
   const workSpace = process.env.GITHUB_WORKSPACE;
   const files = fs.readdirSync(workSpace);
   // const lang = process.env.GITHUB_L;

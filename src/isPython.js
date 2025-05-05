@@ -43,9 +43,9 @@ if (isPython.length) {
               continue;
             }
             const dependenciesObj = typeof parsedFile.tool?.poetry?.dependencies==='object' ? parsedFile.tool.poetry.dependencies : {};
-            const dependenciesArray = typeof dependenciesObj === 'string' ? [dependenciesObj.split("=")[0].trim()] : Object.keys(dependenciesObj);
+            const dependenciesArray = typeof dependenciesObj === 'string' ? [dependenciesObj.trim().split("=")[0]] : Object.keys(dependenciesObj);
             const devDependencyObj = parsedFile.tool?.poetry?.["dev-dependencies"]||{};
-            const devDependencyArray = typeof devDependencyObj ==="string"?[devDependencyObj.split("=")[0].trim()] : Object.keys(devDependencyObj)
+            const devDependencyArray = typeof devDependencyObj ==="string"?[devDependencyObj.trim().split("=")[0]] : Object.keys(devDependencyObj)
             for (const dep of dependenciesArray) {
               techstack_Set.add(dep);
             }

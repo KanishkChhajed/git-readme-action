@@ -63,7 +63,8 @@ async function  generate_readme(){
             let techStack = []
             const languageArray  = Object.keys(languages);
             for (let lang of languageArray) {
-                if(lang === 'Objective-C'){
+                try {
+                    if(lang === 'Objective-C'){
                     lang = 'ObjectiveC';
                 }
                 if(lang === 'C++'){
@@ -75,7 +76,6 @@ async function  generate_readme(){
                 if(lang === 'F#'){
                     lang = 'Fhash'
                 }
-                try {
                     const modulePath = path.join(__dirname, `./is${lang}.js`)
                     const module = await import(pathToFileURL(modulePath).href)
                     const functionName = `${lang}_dependencies`;

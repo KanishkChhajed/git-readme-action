@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Making changes in main.js file"
+  > "Adding correct name for all dependencies file in src"
   
   ---
   

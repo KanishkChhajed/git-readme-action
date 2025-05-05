@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Error handling for git commit execution from main.js"
+  > "Updating isPython.js file"
   
   ---
   

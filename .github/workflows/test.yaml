@@ -1,52 +1,101 @@
+# name: 'Generate a readme file for a repo'
+# on:
+#     workflow_dispatch:
+#     push:
+#         branches:
+#             - 'main'
+#         paths-ignore:
+#             - '**.md'
+#             - '.github/workflows/*'
+#     # schedule:
+#         # - cron : '0 * * * *'   #Run every hour
+
+# permissions:
+#     contents: write
+#     # models: read
+
+# jobs:
+#     # first_job:
+#     #     runs-on: ubuntu-latest
+#     #     steps:
+#     #         - name : My first job
+#     #           run : |
+#     #              echo "Hello World!!!"
+#     #             #  echo $GITHUB_CONTEXT
+
+#     generate_readme:
+#         runs-on: ubuntu-latest
+#         steps:
+#             - name : Checkout my repository
+#               uses : actions/checkout@v4
+
+#             - name: Install Node on image machine
+#             uses: actions/setup-node@v4
+#             with:
+#                 node-version: 20
+#                 cache: 'npm'
+                
+#             # - name: Install dependencies
+#             - run: |npm ci
+#                    echo "Node installed successfully"
+#             #   run : |
+#             #    npm init -y
+#             # - uses: actions/setup-node@v4
+#             #   with:
+#             #         node-version: 20
+#             #         cache: 'npm'
+#             # - run : |
+#             #     npm ci 
+#             #     echo "Node installed successfully"
+             
+#             #    npm install @actions/core
+#             #    echo "@actions/core installed successfully" 
+#             #    npm install octokit
+#             #    echo "octokit installed successfully" 
+#             #    npm install @actions/github
+#             #    echo "@actions/github installed successfully" 
+            
+#             - name : Initalize my build action
+#               uses : KanishkChhajed/git-readme-action@main
+#               with :
+#                 token : ${{secrets.GITHUB_TOKEN}}
 name: 'Generate a readme file for a repo'
+
 on:
-    workflow_dispatch:
-    push:
-        branches:
-            - 'main'
-        paths-ignore:
-            - '**.md'
-            - '.github/workflows/*'
-    # schedule:
-        # - cron : '0 * * * *'   #Run every hour
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '.github/workflows/*'
+  # schedule:
+  #   - cron: '0 * * * *'  # Run every hour
 
 permissions:
-    contents: write
-    # models: read
+  contents: write
+  # models: read
 
 jobs:
-    # first_job:
-    #     runs-on: ubuntu-latest
-    #     steps:
-    #         - name : My first job
-    #           run : |
-    #              echo "Hello World!!!"
-    #             #  echo $GITHUB_CONTEXT
+  generate_readme:
+    runs-on: ubuntu-latest
 
-    generate_readme:
-        runs-on: ubuntu-latest
-        steps:
-            - name : Checkout my repository
-              uses : actions/checkout@v4
+    steps:
+      - name: Checkout my repository
+        uses: actions/checkout@v4
 
-            - name: Install Node on image machine
-              run : |
-               npm init -y
-            - uses: actions/setup-node@v4
-              with:
-                    node-version: 20
-                    cache: 'npm'
-            - run : |
-                npm ci 
-                echo "Node installed successfully" 
-            #    npm install @actions/core
-            #    echo "@actions/core installed successfully" 
-            #    npm install octokit
-            #    echo "octokit installed successfully" 
-            #    npm install @actions/github
-            #    echo "@actions/github installed successfully" 
-            
-            - name : Initalize my build action
-              uses : KanishkChhajed/git-readme-action@main
-              with :
-                token : ${{secrets.GITHUB_TOKEN}}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          echo "Node installed successfully"
+
+      - name: Initialize my build action
+        uses: KanishkChhajed/git-readme-action@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

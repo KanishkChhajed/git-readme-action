@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding correct name for all dependencies file in src"
+  > "Updating isPython.js file"
   
   ---
   

@@ -58,7 +58,7 @@
 #             - name : Initalize my build action
 #               uses : KanishkChhajed/git-readme-action@main
 #               with :
-#                 token : ${{secrets.GITHUB_TOKEN}}
+#                 token : ${{secrets.GITHUB_TOKEN}
 name: 'Generate a readme file for a repo'
 
 on:

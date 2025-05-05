@@ -1,10 +1,6 @@
 const fs = require("fs");
-const { execSync } = require("child_process");
 const path = require("path");
-const os = require("os");
 const toml = require("toml");
-const xml2js = require("xml2js");
-const yaml = require("js-yaml");
 
 
 let techstack_Set = new Set();

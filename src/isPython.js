@@ -45,6 +45,13 @@ if (isPython.length) {
             // const dependenciesObj = typeof parsedFile.tool?.poetry?.dependencies==='object' ? parsedFile.tool.poetry.dependencies : {};
             // const dependenciesObj = parsedFile?.tool?.poetry?.dependencies || {};
             const dependenciesObj = parsedFile?.project?.dependencies || {};
+
+            for (const dep of dependenciesObj) {
+              const match = dep.match(/^([\w\-_.]+)/);
+              if (match) {
+                techstack_Set.add(match[1]);
+              }
+            }
             // let dependenciesArray =   []
             // if(typeof dependenciesObj === 'string'){
               // dependenciesArray =  dependenciesObj.split("=")[0].trim()
@@ -59,13 +66,13 @@ if (isPython.length) {
             // }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
               // devDependencyArray = Object.keys(devDependencyObj);
             // }
-            let splitRegex = /^([\w\-_.]+)/
-            for (const dep of Object.keys(dependenciesObj)){
-              const match = dep.match(splitRegex)
+            // let splitRegex = /^([\w\-_.]+)/
+            // for (const dep of Object.keys(dependenciesObj)){
+              // const match = dep.match(splitRegex)
               // let depName = dep.split(' ')[0].trim()
               // depName = depName.replace(/(?=\s*(0-9|>|<|=|!|$|;))/g,'')
-              techstack_Set.add(match[0]);
-            }
+              // techstack_Set.add(match[0]);
+            // }
             // for (const dep of Object.keys(devDependencyObj)) {
               // techstack_Set.add(dep);
             // }

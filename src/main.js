@@ -161,7 +161,7 @@ async function  generate_readme(){
               
                 if (status) {
                   execSync(`git commit -m "📚 Auto-generation README"`);
-                  execSync(`git push -u origin main`);
+                  execSync(`git push -u origin ${reposData.default_branch}`);
                 } else {
                   console.log("✅ Nothing to commit — working tree clean.");
                 }

@@ -55,9 +55,13 @@ if (isPython.length) {
               // console.log("It's an array")
               // console.log(Array.from(techstack_Set))
             }else if(typeof dependenciesObj === "string"){
-              const match = dep.match(/^([\w\-_.]+)/);
-              if (match) {
-                techstack_Set.add(match[1]);
+              for(const dep of dependenciesArray){
+                let depName = dep.split(" ")[0].trim()
+                depName = depName.match(/^([\w\-_.]+)/);
+                if(depName.startsWith("#")) continue
+                if (depName) {
+                techstack_Set.add(depName[1]);
+              }
               }
               // console.log("It's a string")
               // console.log(Array.from(techstack_Set))
@@ -108,6 +112,7 @@ if (isPython.length) {
             const dependenciesArray = parsedFile?.["dev-packages"] || {};
             if(Array.isArray(dependenciesArray)){
               for (const dep of dependenciesArray) {
+                if(dep.startsWith("#")) continue
                 const depName = dep.split("=")[0].trim()
                 techstack_Set.add(depName);
               }
@@ -116,13 +121,18 @@ if (isPython.length) {
             }else if (typeof dependenciesArray === 'object'&& dependenciesArray !== null){
               for (const dep of Object.keys(dependenciesArray)) {
                 // const depName = dep.split("=")[0].trim()
+                if(dep.startsWith("#")) continue
                 techstack_Set.add(dep);
               }
               console.log("It's an object")
               console.log(Array.from(techstack_Set))
             }else if(typeof dependenciesArray==='string'){
-              const depName = dependenciesArray.split("=")[0].trim()
-              techstack_Set.add(depName)
+              for(const dep of dependenciesArray){
+                let depName = dep.split(" ")[0].trim()
+                if(depName.startsWith("#")) continue
+                techstack_Set.add(depName)
+
+              }
             }
             console.log("It's a string")
             console.log(techstack_Set)

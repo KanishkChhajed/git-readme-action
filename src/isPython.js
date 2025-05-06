@@ -105,10 +105,27 @@ if (isPython.length) {
           } else if (file === "Pipfile") {
             const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
             const parsedFile = toml.parse(pkg);
-            const dependenciesArray = parsedFile?.["dev-packages"].split("=")[0].trim() || {};
-            for (const dep of dependenciesArray) {
-              techstack_Set.add(dep);
+            const dependenciesArray = parsedFile?.["dev-packages"] || {};
+            if(Array.isArray(dependenciesArray)){
+              for (const dep of dependenciesArray) {
+                const depName = dep.split("=")[0].trim()
+                techstack_Set.add(depName);
+              }
+              console.log("It's an array")
+              console.log(Array.from(techstack_Set))
+            }else if (typeof dependenciesArray === 'object'&& dependenciesArray !== null){
+              for (const dep of Object.keys(dependenciesArray)) {
+                // const depName = dep.split("=")[0].trim()
+                techstack_Set.add(dep);
+              }
+              console.log("It's an object")
+              console.log(Array.from(techstack_Set))
+            }else if(typeof dependenciesArray==='string'){
+              const depName = dependenciesArray.split("=")[0].trim()
+              techstack_Set.add(depName)
             }
+            console.log("It's a string")
+            console.log(techstack_Set)
           } else if (file === "poetry.lock") {
             const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
             const parsedFile = toml.parse(pkg);

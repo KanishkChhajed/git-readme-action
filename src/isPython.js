@@ -113,8 +113,10 @@ if (isPython.length) {
             if(Array.isArray(dependenciesArray)){
               for (const dep of dependenciesArray) {
                 if(dep.startsWith("#")) continue
-                const depName = dep.split("=")[0].trim()
-                techstack_Set.add(depName);
+                else{
+                  const depName = dep.split("=")[0].trim()
+                  techstack_Set.add(depName);
+                }
               }
               console.log("It's an array")
               console.log(Array.from(techstack_Set))
@@ -122,7 +124,9 @@ if (isPython.length) {
               for (const dep of Object.keys(dependenciesArray)) {
                 // const depName = dep.split("=")[0].trim()
                 if(dep.startsWith("#")) continue
-                techstack_Set.add(dep);
+                else{
+                  techstack_Set.add(dep);
+                }
               }
               console.log("It's an object")
               console.log(Array.from(techstack_Set))
@@ -130,7 +134,9 @@ if (isPython.length) {
               for(const dep of dependenciesArray){
                 let depName = dep.split(" ")[0].trim()
                 if(depName.startsWith("#")) continue
-                techstack_Set.add(depName)
+                else{
+                  techstack_Set.add(depName)
+                }
 
               }
             }

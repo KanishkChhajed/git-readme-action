@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Recorrect the commit commands in main.js"
+  > "Adding  double quote -&gt; single quote in main.js"
   
   ---
   

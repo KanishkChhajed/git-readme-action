@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Modify pyproject.toml code in isPython.js file"
+  > "Updating more dependencies in depenences.js file"
   
   ---
   

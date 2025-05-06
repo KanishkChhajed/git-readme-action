@@ -44,24 +44,24 @@ if (isPython.length) {
             }
             // const dependenciesObj = typeof parsedFile.tool?.poetry?.dependencies==='object' ? parsedFile.tool.poetry.dependencies : {};
             const dependenciesObj = parsedFile?.tool?.poetry?.dependencies || {};
-            let dependenciesArray =   []
-            if(typeof dependenciesObj === 'string'){
-              dependenciesArray =  dependenciesObj.split("=")[0].trim()
-            }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
-              dependenciesArray = Object.keys(dependenciesObj);
-            }
+            // let dependenciesArray =   []
+            // if(typeof dependenciesObj === 'string'){
+              // dependenciesArray =  dependenciesObj.split("=")[0].trim()
+            // }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
+              // dependenciesArray = Object.keys(dependenciesObj);
+            // }
               
             const devDependencyObj = parsedFile.tool?.poetry?.["dev-dependencies"]||{};
-            let devDependencyArray =  []
-            if(typeof devDependencyObj ==="string"){
-              devDependencyArray = devDependencyObj.split("=")[0].trim()
-            }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
-              devDependencyArray = Object.keys(devDependencyObj);
-            }
-            for (const dep of dependenciesArray) {
+            // let devDependencyArray =  []
+            // if(typeof devDependencyObj ==="string"){
+              // devDependencyArray = devDependencyObj.split("=")[0].trim()
+            // }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
+              // devDependencyArray = Object.keys(devDependencyObj);
+            // }
+            for (const dep of Object.keys(dependenciesObj)) {
               techstack_Set.add(dep);
             }
-            for (const dep of devDependencyArray) {
+            for (const dep of Object.keys(devDependencyObj)) {
               techstack_Set.add(dep);
             }
           } else if (file === "Pipfile") {

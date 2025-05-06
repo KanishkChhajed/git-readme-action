@@ -29,9 +29,13 @@ if (isPython.length) {
      for (const file of isPython) {
           if (file === "requirements.txt") {
             const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
-            pkg.forEach((line) => {
-              techstack_Set.add(line.split("==")[0].trim());
-            });
+            for(const line of pkg){
+              const dep = line.trim()
+              if(dep===''||dep.startsWith('#')) continue
+              const depName = dep.split(/[=<> ]+/).trim()
+              techstack_Set.add(depName);
+            }
+
           } else if (file === "pyproject.toml") {
             const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
             // const parsedFile = toml.parse(pkg);

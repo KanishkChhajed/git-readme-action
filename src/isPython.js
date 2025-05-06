@@ -47,7 +47,7 @@ if (isPython.length) {
             let dependenciesArray =   []
             if(typeof dependenciesObj === 'string'){
               dependenciesArray =  dependenciesObj.split("=")[0].trim()
-            }else{
+            }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
               dependenciesArray = Object.keys(dependenciesObj);
             }
               
@@ -55,7 +55,7 @@ if (isPython.length) {
             let devDependencyArray =  []
             if(typeof devDependencyObj ==="string"){
               devDependencyArray = devDependencyObj.split("=")[0].trim()
-            }else{
+            }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
               devDependencyArray = Object.keys(devDependencyObj);
             }
             for (const dep of dependenciesArray) {

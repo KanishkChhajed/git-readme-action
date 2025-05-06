@@ -43,7 +43,8 @@ if (isPython.length) {
               continue;
             }
             // const dependenciesObj = typeof parsedFile.tool?.poetry?.dependencies==='object' ? parsedFile.tool.poetry.dependencies : {};
-            const dependenciesObj = parsedFile?.tool?.poetry?.dependencies || {};
+            // const dependenciesObj = parsedFile?.tool?.poetry?.dependencies || {};
+            const dependenciesObj = parsedFile?.project?.dependencies || {};
             // let dependenciesArray =   []
             // if(typeof dependenciesObj === 'string'){
               // dependenciesArray =  dependenciesObj.split("=")[0].trim()
@@ -51,7 +52,7 @@ if (isPython.length) {
               // dependenciesArray = Object.keys(dependenciesObj);
             // }
               
-            const devDependencyObj = parsedFile.tool?.poetry?.["dev-dependencies"]||{};
+            // const devDependencyObj = parsedFile.tool?.poetry?.["dev-dependencies"]||{};
             // let devDependencyArray =  []
             // if(typeof devDependencyObj ==="string"){
               // devDependencyArray = devDependencyObj.split("=")[0].trim()
@@ -61,9 +62,9 @@ if (isPython.length) {
             for (const dep of Object.keys(dependenciesObj)) {
               techstack_Set.add(dep);
             }
-            for (const dep of Object.keys(devDependencyObj)) {
-              techstack_Set.add(dep);
-            }
+            // for (const dep of Object.keys(devDependencyObj)) {
+              // techstack_Set.add(dep);
+            // }
           } else if (file === "Pipfile") {
             const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
             const parsedFile = toml.parse(pkg);
@@ -76,8 +77,8 @@ if (isPython.length) {
             const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
             const parsedFile = toml.parse(pkg);
             const packages = parsedFile?.package || {};
-            for(const pkg of packages){
-              const dependenciesObj = pkg?.dependencies || {};
+            for(const pkgs of packages){
+              const dependenciesObj = pkgs?.dependencies || {};
               for (const dep of Object.keys(dependenciesObj)) {
                 techstack_Set.add(dep);
               }

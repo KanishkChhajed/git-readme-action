@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding all cases like string,object and array in poetry.lock fun in python.js"
+  > "Changing hardcore ref to default branch in commit code of main.js file"
   
   ---
   

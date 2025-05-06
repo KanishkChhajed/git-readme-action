@@ -61,12 +61,12 @@ if (isPython.length) {
               }
             }
 
-            for (const dep of dependenciesArray) {
-              const match = dep.match(/^([\w\-_.]+)/);
-              if (match) {
-                techstack_Set.add(match[1]);
-              }
-            }
+            // for (const dep of dependenciesArray) {
+            //   const match = dep.match(/^([\w\-_.]+)/);
+            //   if (match) {
+            //     techstack_Set.add(match[1]);
+            //   }
+            // }
             // let dependenciesArray =   []
             // if(typeof dependenciesObj === 'string'){
               // dependenciesArray =  dependenciesObj.split("=")[0].trim()

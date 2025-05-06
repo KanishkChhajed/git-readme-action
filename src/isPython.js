@@ -123,9 +123,10 @@ if (isPython.length) {
             }else if (typeof dependenciesArray === 'object'&& dependenciesArray !== null){
               for (const dep of Object.keys(dependenciesArray)) {
                 // const depName = dep.split("=")[0].trim()
-                if(dep.startsWith("#")) continue
+                if(dep.startsWith("#") || dep === '') continue
                 else{
-                  techstack_Set.add(dep);
+                  const depName = dep.split(/[=<> ]+/)[0].trim()
+                  techstack_Set.add(depName);
                 }
               }
               console.log("It's an object")

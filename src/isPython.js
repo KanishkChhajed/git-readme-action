@@ -45,15 +45,20 @@ if (isPython.length) {
             // const dependenciesObj = typeof parsedFile.tool?.poetry?.dependencies==='object' ? parsedFile.tool.poetry.dependencies : {};
             // const dependenciesObj = parsedFile?.tool?.poetry?.dependencies || {};
             const dependenciesObj = parsedFile?.project?.dependencies || {};
-            if(typeof dependenciesObj ==="string"){
-              for (const dep of dependenciesObj) {
+            if(typeof dependenciesObj === "string"){
+                const match = dep.match(/^([\w\-_.]+)/);
+                if (match) {
+                  techstack_Set.add(match[1]);
+                }
+            }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
+              for (const dep of Object.keys(dependenciesObj)) {
                 const match = dep.match(/^([\w\-_.]+)/);
                 if (match) {
                   techstack_Set.add(match[1]);
                 }
               }
-            }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
-              for (const dep of Object.keys(dependenciesObj)) {
+            }else if(Array.isArray(dependenciesObj)){
+              for (const dep of dependenciesObj) {
                 const match = dep.match(/^([\w\-_.]+)/);
                 if (match) {
                   techstack_Set.add(match[1]);

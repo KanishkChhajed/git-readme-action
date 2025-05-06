@@ -180,7 +180,7 @@ if (isPython.length) {
                 .map((dep) => dep.trim().replace(/['"]/g, ""))
                 .filter(Boolean);
               deps.forEach((dep) => {
-                techstack_Set.add(dep);
+                techstack_Set.add(dep[0]);
               });
             }
             if (match) {
@@ -189,7 +189,7 @@ if (isPython.length) {
                 .map((dep) => dep.trim().replace(/['"]/g, ""))
                 .filter(Boolean);
               deps.forEach((dep) => {
-                techstack_Set.add(dep);
+                techstack_Set.add(dep[0]);
               });
             }
             if (match1) {
@@ -198,7 +198,7 @@ if (isPython.length) {
                 .map((dep) => dep.trim().replace(/['"]/g, ""))
                 .filter(Boolean);
               deps.forEach((dep) => {
-                techstack_Set.add(dep);
+                techstack_Set.add(dep[0]);
               });
             }
           }

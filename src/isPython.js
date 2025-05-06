@@ -3,6 +3,7 @@ import  path from "path";
 import toml from "toml";
 
 
+let techstack_Set = new Set();
 
 function isInclude(allFiles, dependencyPackage) {
   if (!allFiles || !dependencyPackage) return [];
@@ -10,7 +11,6 @@ function isInclude(allFiles, dependencyPackage) {
 }
 
 export async function Python_dependencies() {
-  let techstack_Set = new Set();
   const workSpace = process.env.GITHUB_WORKSPACE;
   const files = fs.readdirSync(workSpace);
   // const lang = process.env.GITHUB_L;
@@ -75,9 +75,8 @@ if (isPython.length) {
           } else if (file === "poetry.lock") {
             const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
             const parsedFile = toml.parse(pkg);
-            const dependenciesArray =
-              parsedFile?.["package.dependencies"].split("=")[0].trim() || {};
-            for (const dep of dependenciesArray) {
+            const dependenciesObj = parsedFile?.["package.dependencies"] || {};
+            for (const dep of Object.keys(dependenciesObj)) {
               techstack_Set.add(dep);
             }
           } else if (file === "setup.py") { 

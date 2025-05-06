@@ -32,7 +32,7 @@ if (isPython.length) {
             for(const line of pkg){
               const dep = line.trim()
               if(dep===''||dep.startsWith('#')) continue
-              const depName = dep.split(/[=<> ]+/)
+              const depName = dep.split(/[=<>,' ']+/)
               techstack_Set.add(depName);
             }
 

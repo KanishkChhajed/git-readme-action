@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Changing commit code in main.js file"
+  > "Recorrect the commit commands in main.js"
   
   ---
   

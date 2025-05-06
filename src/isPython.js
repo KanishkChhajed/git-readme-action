@@ -46,7 +46,7 @@ if (isPython.length) {
             // const dependenciesObj = parsedFile?.tool?.poetry?.dependencies || {};
             const dependenciesObj = parsedFile?.project?.dependencies || {};
 
-            for (const dep of dependenciesObj) {
+            for (const dep of Object.keys(dependenciesObj)) {
               const match = dep.match(/^([\w\-_.]+)/);
               if (match) {
                 techstack_Set.add(match[1]);

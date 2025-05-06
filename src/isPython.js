@@ -177,10 +177,10 @@ if (isPython.length) {
             if (match) {
               const deps = match[1]
                 .split(",")
-                .map((dep) => dep.trim().replace(/['"]/g, ""))
+                .map((dep) => dep.trim().replace(/['" <>= 0-9 ~]+/g, ""))
                 .filter(Boolean);
               deps.forEach((dep) => {
-                techstack_Set.add(dep[0]);
+                techstack_Set.add(dep);
               });
             }
             if (match) {
@@ -189,7 +189,7 @@ if (isPython.length) {
                 .map((dep) => dep.trim().replace(/['"]/g, ""))
                 .filter(Boolean);
               deps.forEach((dep) => {
-                techstack_Set.add(dep[0]);
+                techstack_Set.add(dep);
               });
             }
             if (match1) {
@@ -198,7 +198,7 @@ if (isPython.length) {
                 .map((dep) => dep.trim().replace(/['"]/g, ""))
                 .filter(Boolean);
               deps.forEach((dep) => {
-                techstack_Set.add(dep[0]);
+                techstack_Set.add(dep);
               });
             }
           }

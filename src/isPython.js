@@ -131,15 +131,15 @@ if (isPython.length) {
               console.log("It's an object")
               console.log(Array.from(techstack_Set))
             }else if(typeof dependenciesArray==='string'){
-              for(const dep of dependenciesArray){
-                let depName = dep.split(" ")[0].trim()
-                if(depName.startsWith("#")) continue
+              const lines = dependenciesArray.split('\n')
+              for(const line of lines){
+                if(line === ''||line.startsWith("#")) continue
                 else{
+                  let depName = line.split(" ")[0].trim()
                   techstack_Set.add(depName)
                 }
-
               }
-            }
+              }
             console.log("It's a string")
             console.log(techstack_Set)
           } else if (file === "poetry.lock") {

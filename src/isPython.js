@@ -59,12 +59,12 @@ if (isPython.length) {
             // }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
               // devDependencyArray = Object.keys(devDependencyObj);
             // }
-            // let splitRegex = /"(?=\s*(=|<|>|!|;|$))/g
-            for (const dep of dependenciesObj){
-              // const match = dep.match(splitRegex)
-              let depName = dep.split(' ')[0].trim()
-              depName = depName.replace(/(?=\s*(0-9|>|<|=|!|$|;))/g,'')
-              techstack_Set.add(depName);
+            let splitRegex = /^([\w\-_.]+)/
+            for (const dep of Object.keys(dependenciesObj)){
+              const match = dep.match(splitRegex)
+              // let depName = dep.split(' ')[0].trim()
+              // depName = depName.replace(/(?=\s*(0-9|>|<|=|!|$|;))/g,'')
+              techstack_Set.add(match[1]);
             }
             // for (const dep of Object.keys(devDependencyObj)) {
               // techstack_Set.add(dep);

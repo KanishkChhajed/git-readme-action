@@ -62,7 +62,8 @@ if (isPython.length) {
             // let splitRegex = /"(?=\s*(=|<|>|!|;|$))/g
             for (const dep of dependenciesObj){
               // const match = dep.match(splitRegex)
-              const depName = dep.split(' ')[0].trim().replace(/(?=\s*(=|<|>|!|;|$))/g,'')
+              let depName = dep.split(' ')[0].trim()
+              depName = depName.replace(/(?=\s*(0-9|>|<|=|!|$|;))/g,'')
               techstack_Set.add(depName);
             }
             // for (const dep of Object.keys(devDependencyObj)) {

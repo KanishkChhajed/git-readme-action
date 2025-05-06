@@ -40,7 +40,7 @@ async function  generate_readme(){
             const {data : commitData} =  await octokit.rest.repos.getCommit({
                 owner,
                 repo,
-                ref: "main",
+                ref: reposData.default_branch,
             });
 
             // const {data: issueData} = await  octokit.rest.issues.listForRepo({

@@ -47,7 +47,7 @@ if (isPython.length) {
             const dependenciesObj = parsedFile?.project?.dependencies || {};
             let dependenciesArray = []
             if(typeof dependenciesObj ==="string"){
-              dependenciesArray = dependenciesObj
+              dependenciesArray = [dependenciesObj]
             }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
               dependenciesArray = Object.keys(dependenciesObj);
             }

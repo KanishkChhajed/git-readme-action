@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Removing .split() from pyproject.toml code of python.js file"
+  > "Modify pyproject.toml code in isPython.js file"
   
   ---
   

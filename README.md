@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Updating isPython.js file"
+  > "Modify techStack code in main.js file"
   
   ---
   

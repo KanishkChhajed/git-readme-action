@@ -32,8 +32,8 @@ if (isPython.length) {
             for(const line of pkg){
               const dep = line.trim()
               if(dep===''||dep.startsWith('#')) continue
-              const depName = dep.split(/[=<> ]+/).trim()
-              techstack_Set.add(depName);
+              const depName = dep.split(/[=<> ]+/)
+              techstack_Set.add(depName.trim());
             }
 
           } else if (file === "pyproject.toml") {

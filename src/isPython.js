@@ -52,15 +52,15 @@ if (isPython.length) {
                   techstack_Set.add(match[1]);
                 }
               }
-              console.log("It's an array")
-              console.log(Array.from(techstack_Set))
+              // console.log("It's an array")
+              // console.log(Array.from(techstack_Set))
             }else if(typeof dependenciesObj === "string"){
               const match = dep.match(/^([\w\-_.]+)/);
               if (match) {
                 techstack_Set.add(match[1]);
               }
-              console.log("It's a string")
-              console.log(Array.from(techstack_Set))
+              // console.log("It's a string")
+              // console.log(Array.from(techstack_Set))
             }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
               for (const dep of Object.keys(dependenciesObj)) {
                 const match = dep.match(/^([\w\-_.]+)/);
@@ -68,8 +68,8 @@ if (isPython.length) {
                   techstack_Set.add(match[1]);
                 }
               }
-              console.log("It's an object")
-              console.log(Array.from(techstack_Set))
+              // console.log("It's an object")
+              // console.log(Array.from(techstack_Set))
             }
 
             // for (const dep of dependenciesArray) {
@@ -105,8 +105,7 @@ if (isPython.length) {
           } else if (file === "Pipfile") {
             const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
             const parsedFile = toml.parse(pkg);
-            const dependenciesArray =
-              parsedFile?.["dev-packages"].split("=")[0].trim() || {};
+            const dependenciesArray = parsedFile?.["dev-packages"].split("=")[0].trim() || {};
             for (const dep of dependenciesArray) {
               techstack_Set.add(dep);
             }
@@ -116,8 +115,22 @@ if (isPython.length) {
             const packages = parsedFile?.package || {};
             for(const pkgs of packages){
               const dependenciesObj = pkgs?.dependencies || {};
-              for (const dep of Object.keys(dependenciesObj)) {
-                techstack_Set.add(dep);
+              if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
+                for (const dep of Object.keys(dependenciesObj)) {
+                  techstack_Set.add(dep);
+                }
+                console.log("It's an object")
+                console.log(Array.from(techstack_Set))
+              }else if(Array.isArray(dependenciesObj)){
+                for(const dep of dependenciesObj){
+                  techstack_Set.add(dep)
+                }
+                console.log("It's an array")
+                console.log(techstack_Set)
+              }else if(typeof dependenciesObj === "string"){
+                techstack_Set.add(dependenciesObj)
+                console.log("It's a string")
+                console.log(Array.from(techstack_Set))
               }
             }
           } else if (file === "setup.py") { 

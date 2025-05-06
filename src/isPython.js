@@ -59,11 +59,11 @@ if (isPython.length) {
             // }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
               // devDependencyArray = Object.keys(devDependencyObj);
             // }
-            let splitRegex = /"(?=\s*(=|<|>|!|;|$))/g
+            // let splitRegex = /"(?=\s*(=|<|>|!|;|$))/g
             for (const dep of dependenciesObj){
-              const match = dep.match(splitRegex)
-              // const depName = dep.split(' ')[0].trim()
-              techstack_Set.add(match[0]);
+              // const match = dep.match(splitRegex)
+              const depName = dep.split(' ')[0].trim()
+              techstack_Set.add(depName);
             }
             // for (const dep of Object.keys(devDependencyObj)) {
               // techstack_Set.add(dep);

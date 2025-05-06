@@ -76,7 +76,7 @@ if (isPython.length) {
             const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
             const parsedFile = toml.parse(pkg);
             const dependenciesObj = parsedFile?.["package.dependencies"] || {};
-            for (const dep of dependenciesObj) {
+            for (const dep of Object.keys(dependenciesObj)) {
               const depName = dep.split('=')[0].trim()
               techstack_Set.add(depName);
             }

@@ -133,11 +133,10 @@ if (isPython.length) {
             }else if(typeof dependenciesArray==='string'){
               const lines = dependenciesArray.split('\n')
               for(const line of lines){
-                if(line === ''||line.startsWith("#")) continue
-                else{
-                  let depName = line.split(" ")[0].trim()
-                  techstack_Set.add(depName)
-                }
+                const dep = line.trim()
+                if(dep === ''||dep.startsWith("#")) continue
+                const depName = dep.split(/[=<> ]+/)[0].trim()
+                techstack_Set.add(depName)
               }
               }
             console.log("It's a string")

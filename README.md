@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Modify isPyhton.js file"
+  > "Testing pyproject.toml file"
   
   ---
   

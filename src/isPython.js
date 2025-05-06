@@ -63,7 +63,7 @@ if (isPython.length) {
             for (const dep of dependenciesObj){
               const match = dep.match(splitRegex)
               // const depName = dep.split('>')[0].trim()
-              techstack_Set.add(match[1]);
+              techstack_Set.add(match[0]);
             }
             // for (const dep of Object.keys(devDependencyObj)) {
               // techstack_Set.add(dep);

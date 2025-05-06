@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Updating requirements.txt code in isPython.js"
+  > "Updating setup.py  code in isPython.js"
   
   ---
   

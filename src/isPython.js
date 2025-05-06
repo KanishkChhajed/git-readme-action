@@ -75,10 +75,9 @@ if (isPython.length) {
           } else if (file === "poetry.lock") {
             const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
             const parsedFile = toml.parse(pkg);
-            const dependenciesObj = parsedFile?.["package.dependencies"] || {};
+            const dependenciesObj = parsedFile?.package?.dependencies || {};
             for (const dep of Object.keys(dependenciesObj)) {
-              const depName = dep.split('=')[0].trim()
-              techstack_Set.add(depName);
+              techstack_Set.add(dep);
             }
           } else if (file === "setup.py") { 
             const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");

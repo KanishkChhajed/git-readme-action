@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Changing hardcore ref to default branch in commit code of main.js file"
+  > "Adding cases of array,object,string in Pipfile code in isPython.js file"
   
   ---
   

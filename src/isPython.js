@@ -76,8 +76,9 @@ if (isPython.length) {
             const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
             const parsedFile = toml.parse(pkg);
             const dependenciesObj = parsedFile?.["package.dependencies"] || {};
-            for (const dep of Object.keys(dependenciesObj)) {
-              techstack_Set.add(dep);
+            for (const dep of dependenciesObj) {
+              const depName = dep.split('=')[0].trim()
+              techstack_Set.add(depName);
             }
           } else if (file === "setup.py") { 
             const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");

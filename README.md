@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding  double quote -&gt; single quote in main.js"
+  > "Adding else statement for commenting statement"
   
   ---
   

@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Modify techStack code in main.js file"
+  > "Removing .split() from pyproject.toml code of python.js file"
   
   ---
   

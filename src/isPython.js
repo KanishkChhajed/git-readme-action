@@ -42,10 +42,22 @@ if (isPython.length) {
               console.error(`Error parsing ${file}: ${e.message}`);
               continue;
             }
-            const dependenciesObj = typeof parsedFile.tool?.poetry?.dependencies==='object' ? parsedFile.tool.poetry.dependencies : {};
-            const dependenciesArray = typeof dependenciesObj === 'string' ? [dependenciesObj.trim()] : Object.keys(dependenciesObj);
+            // const dependenciesObj = typeof parsedFile.tool?.poetry?.dependencies==='object' ? parsedFile.tool.poetry.dependencies : {};
+            const dependenciesObj = parsedFile?.tool?.poetry?.dependencies || {};
+            let dependenciesArray =   []
+            if(typeof dependenciesObj === 'string'){
+              dependenciesArray =  dependenciesObj.split("=")[0].trim()
+            }else{
+              dependenciesArray = Object.keys(dependenciesObj);
+            }
+              
             const devDependencyObj = parsedFile.tool?.poetry?.["dev-dependencies"]||{};
-            const devDependencyArray = typeof devDependencyObj ==="string"?[devDependencyObj.trim()] : Object.keys(devDependencyObj)
+            let devDependencyArray =  []
+            if(typeof devDependencyObj ==="string"){
+              devDependencyArray = devDependencyObj.split("=")[0].trim()
+            }else{
+              devDependencyArray = Object.keys(devDependencyObj);
+            }
             for (const dep of dependenciesArray) {
               techstack_Set.add(dep);
             }

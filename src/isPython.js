@@ -60,7 +60,8 @@ if (isPython.length) {
               // devDependencyArray = Object.keys(devDependencyObj);
             // }
             for (const dep of dependenciesObj){
-              techstack_Set.add(dep);
+              const depName = dep.split('>')[0].trim()
+              techstack_Set.add(depName);
             }
             // for (const dep of Object.keys(devDependencyObj)) {
               // techstack_Set.add(dep);

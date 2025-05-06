@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Modify poetry.lock code in isPython.js file"
+  > "Modify pyproject.toml code in isPython.js file"
   
   ---
   

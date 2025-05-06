@@ -59,7 +59,7 @@ if (isPython.length) {
             // }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
               // devDependencyArray = Object.keys(devDependencyObj);
             // }
-            for (const dep of Object.keys(dependenciesObj)) {
+            for (const dep of dependenciesObj){
               techstack_Set.add(dep);
             }
             // for (const dep of Object.keys(devDependencyObj)) {

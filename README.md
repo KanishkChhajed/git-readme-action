@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Testing pyproject.toml file"
+  > "Adding all cases like string,object and array in poetry.lock fun in python.js"
   
   ---
   

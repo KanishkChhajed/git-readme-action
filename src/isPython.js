@@ -45,6 +45,7 @@ if (isPython.length) {
             // const dependenciesObj = typeof parsedFile.tool?.poetry?.dependencies==='object' ? parsedFile.tool.poetry.dependencies : {};
             // const dependenciesObj = parsedFile?.tool?.poetry?.dependencies || {};
             const dependenciesObj = parsedFile?.project?.dependencies || {};
+            let dependenciesArray = []
             if(typeof dependenciesObj ==="string"){
               dependenciesArray = dependenciesObj
             }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){

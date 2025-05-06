@@ -177,7 +177,7 @@ if (isPython.length) {
             if (match) {
               const deps = match[1]
                 .split(",")
-                .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[0])
+                .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/))
                 .filter(Boolean);
               deps.forEach((dep) => {
                 techstack_Set.add(dep);
@@ -186,7 +186,7 @@ if (isPython.length) {
             if (match) {
               const deps = match[1]
                 .split(",")
-                .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[0])
+                .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/))
                 .filter(Boolean);
               deps.forEach((dep) => {
                 techstack_Set.add(dep);
@@ -195,7 +195,7 @@ if (isPython.length) {
             if (match1) {
               const deps = match1[1]
                 .split(",")
-                .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[0])
+                .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/))
                 .filter(Boolean);
               deps.forEach((dep) => {
                 techstack_Set.add(dep);

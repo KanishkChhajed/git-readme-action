@@ -3,7 +3,6 @@ import  path from "path";
 import toml from "toml";
 
 
-let techstack_Set = new Set();
 
 function isInclude(allFiles, dependencyPackage) {
   if (!allFiles || !dependencyPackage) return [];
@@ -11,6 +10,7 @@ function isInclude(allFiles, dependencyPackage) {
 }
 
 export async function Python_dependencies() {
+  let techstack_Set = new Set();
   const workSpace = process.env.GITHUB_WORKSPACE;
   const files = fs.readdirSync(workSpace);
   // const lang = process.env.GITHUB_L;

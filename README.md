@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Updating more dependencies in depenences.js file"
+  > "Modify poetry.lock code in isPython.js file"
   
   ---
   

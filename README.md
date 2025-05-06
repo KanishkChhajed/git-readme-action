@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Changing commit code ref and add condition to Pipfile"
+  > "Changing commit code in main.js file"
   
   ---
   

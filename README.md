@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Correcting string type case code of Pipfile"
+  > "Updating requirements.txt code in isPython.js"
   
   ---
   

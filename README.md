@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding else statement for commenting statement"
+  > "Correcting string type case code of Pipfile"
   
   ---
   

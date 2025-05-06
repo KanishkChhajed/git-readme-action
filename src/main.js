@@ -64,24 +64,21 @@ async function  generate_readme(){
             const languageArray  = Object.keys(languages);
             for (let lang of languageArray) {
                 try {
-                    if(lang === 'Objective-C'){
-                    lang = 'ObjectiveC';
-                }
-                if(lang === 'C++'){
-                    lang = 'Cpp'
-                }
-                if(lang === 'C#'){
-                    lang = 'Chash'
-                }
-                if(lang === 'F#'){
-                    lang = 'Fhash'
-                }
+                    if(lang === 'Objective-C') lang = 'ObjectiveC';
+                if(lang === 'C++') lang = 'Cpp'
+                if(lang === 'C#') lang = 'Chash'
+                if(lang === 'F#') lang = 'Fhash'
                     const modulePath = path.join(__dirname, `./is${lang}.js`)
                     const module = await import(pathToFileURL(modulePath).href)
                     const functionName = `${lang}_dependencies`;
-                    if(module[functionName]){
+                    if(module && typeof module[functionName] === 'function'){
                         const deps = await module[functionName]();
-                        techStack.push(lang, ...deps);
+                        if (Array.isArray(deps)) {
+                            techStack.push(lang, ...deps);
+                        } else {
+                            console.warn(`Dependencies for ${lang} are not an array.`);
+                            techStack.push(lang);
+                        }
                     }else{
                         console.log(`No module is there of ${lang}` )
                     }

@@ -45,11 +45,22 @@ if (isPython.length) {
             // const dependenciesObj = typeof parsedFile.tool?.poetry?.dependencies==='object' ? parsedFile.tool.poetry.dependencies : {};
             // const dependenciesObj = parsedFile?.tool?.poetry?.dependencies || {};
             const dependenciesObj = parsedFile?.project?.dependencies || {};
-            if(typeof dependenciesObj === "string"){
+            if(Array.isArray(dependenciesObj)){
+              for (const dep of dependenciesObj) {
                 const match = dep.match(/^([\w\-_.]+)/);
                 if (match) {
                   techstack_Set.add(match[1]);
                 }
+              }
+              console.log("It's an array")
+              console.log(Array.from(techstack_Set))
+            }else if(typeof dependenciesObj === "string"){
+              const match = dep.match(/^([\w\-_.]+)/);
+              if (match) {
+                techstack_Set.add(match[1]);
+              }
+              console.log("It's a string")
+              console.log(Array.from(techstack_Set))
             }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
               for (const dep of Object.keys(dependenciesObj)) {
                 const match = dep.match(/^([\w\-_.]+)/);
@@ -57,13 +68,8 @@ if (isPython.length) {
                   techstack_Set.add(match[1]);
                 }
               }
-            }else if(Array.isArray(dependenciesObj)){
-              for (const dep of dependenciesObj) {
-                const match = dep.match(/^([\w\-_.]+)/);
-                if (match) {
-                  techstack_Set.add(match[1]);
-                }
-              }
+              console.log("It's an object")
+              console.log(Array.from(techstack_Set))
             }
 
             // for (const dep of dependenciesArray) {

@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding cases of array,object,string in Pipfile code in isPython.js file"
+  > "Changing commit code ref and add condition to Pipfile"
   
   ---
   

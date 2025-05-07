@@ -145,9 +145,15 @@ export async function JavaScript_dependencies() {
         console.error(`Error occured ${fileName}:`,err.message())
       }
     } else if (fileName === "pnpm-lock.yaml") {
-      let pkg
       try{
-        pkg = JSON.parse(fs.readFileSync(file,"utf-8"));
+        const originalDir = process.cwd();
+        process.chdir(path.dirname(filePath));
+        const output = execSync(`pnpm list --json`, {
+            encoding: "utf-8",
+            timeout: 10000,
+          });
+      let pkg
+        pkg = JSON.parse(output);
       }catch(err){
         console.error(`Error parsing ${file}: ${err.message}`)
       }
@@ -164,7 +170,7 @@ export async function JavaScript_dependencies() {
       }catch(err){
         console.error(`Error occured ${fileName}:`,err.message())
       }
-    } else {
+    }else{
       techstack_Set.clear();
       console.log("No common package dependency file found....");
       return [];

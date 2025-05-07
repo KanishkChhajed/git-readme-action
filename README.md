@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Modify isPython.js files isInclude and pyproject.toml function"
+  > "Modify isPython.js files"
   
   ---
   

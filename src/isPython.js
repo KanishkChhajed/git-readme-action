@@ -17,10 +17,9 @@ const techstack_Set = new Set();
 
 function isInclude(allFiles, dependencyPackage) {
   try{
-  if (!allFiles || !dependencyPackage) return [];
-  return dependencyPackage.filter((file) =>
-    allFiles.split('/')[allFiles.length - 1].includes(path.basename(file))
-  );
+
+    if (!allFiles || !dependencyPackage) return [];
+    return allFiles.filter((file) => dependencyPackage.includes(path.basename(file))).map(file => path.basename(file));
   }catch (err){
     console.error(`Error in isInclude function:`,err.message)
   }

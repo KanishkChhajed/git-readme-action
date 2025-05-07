@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding try and catch error handling in isPython.js all  functions"
+  > "Debugging techStack_set in main.js and isPython.js file"
   
   ---
   

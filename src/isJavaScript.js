@@ -145,66 +145,26 @@ export async function JavaScript_dependencies() {
         console.error(`Error occured ${fileName}:`,err.message())
       }
     } else if (fileName === "pnpm-lock.yaml") {
-    //   try{
-    //     const originalDir = process.cwd();
-    //     process.chdir(path.dirname(filePath));
-    //     const output = execSync(`pnpm list --json`, {
-    //         encoding: "utf-8",
-    //         timeout: 10000,
-    //       });
-    //   let pkg
-    //     pkg = JSON.parse(output);
-    //   }catch(err){
-    //     console.error(`Error parsing ${file}: ${err.message}`)
-    //   }
-    //   try{
-
-    //     let dependencyArray = Object.keys(pkg.dependencies || {});
-    //     let devDependencyArray = Object.keys(pkg.devDependencies || {});
-    //     for (const dep of dependencyArray) {
-    //       techstack_Set.add(dep.split(":")[0]);
-    //     }
-    //     for (const dep of devDependencyArray) {
-    //       techstack_Set.add(dep.split(":")[0]);
-    //     }
-    //   }catch(err){
-    //     console.error(`Error occured ${fileName}:`,err.message())
-    //   }
-    try {
-      const originalDir = process.cwd();
-      process.chdir(path.dirname(file));
-      
-      try {
-        const output = execSync(`pnpm list --json`, {
-          encoding: "utf-8",
-          timeout: 10000,
-        });
-        
-        const data = JSON.parse(output);
-        if (data.dependencies) {
-          Object.keys(data.dependencies).forEach(dep => techstack_Set.add(dep));
-        }
-        console.log(`Processed pnpm-lock.yaml using pnpm list command`);
-      } catch (cmdErr) {
-        console.error(`Error running pnpm list command:`, cmdErr.message);
-
-        const packageJsonPath = path.join(path.dirname(file), 'package.json');
-        if (fs.existsSync(packageJsonPath)) {
-          const pkgContent = fs.readFileSync(packageJsonPath, 'utf-8');
-          const pkg = JSON.parse(pkgContent);
-          const deps = Object.keys(pkg.dependencies || {});
-          const devDeps = Object.keys(pkg.devDependencies || {});
-          deps.forEach(dep => techstack_Set.add(dep));
-          devDeps.forEach(dep => techstack_Set.add(dep));
-          console.log(`Used package.json as fallback for pnpm-lock.yaml`);
-        }
-      } finally {
-        process.chdir(originalDir);
+      let pkg
+      try{
+        pkg = JSON.parse(fs.readFileSync(file,"utf-8"));
+      }catch(err){
+        console.error(`Error parsing ${file}: ${err.message}`)
       }
-    } catch (err) {
-      console.error(`Error processing pnpm-lock.yaml at ${file}:`, err.message);
-    }
-    }else{
+      try{
+
+        let dependencyArray = Object.keys(pkg.dependencies || {});
+        let devDependencyArray = Object.keys(pkg.devDependencies || {});
+        for (const dep of dependencyArray) {
+          techstack_Set.add(dep.split(":")[0]);
+        }
+        for (const dep of devDependencyArray) {
+          techstack_Set.add(dep.split(":")[0]);
+        }
+      }catch(err){
+        console.error(`Error occured ${fileName}:`,err.message())
+      }
+    } else {
       techstack_Set.clear();
       console.log("No common package dependency file found....");
       return [];

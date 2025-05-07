@@ -377,10 +377,10 @@ export function Python_dependencies() {
                 if (Array.isArray(subDeps)) {
                   allFiles.push(...subDeps)
                 }
-                console.log(`Successfully recursion on path:${Path}`)
+                // console.log(`Successfully recursion on path:${Path}`)
               }else if(Pathstat.isFile()){
                 allFiles.push(Path)
-                console.log(`Successfully push path on allFiles:${Path}`)
+                // console.log(`Successfully push path on allFiles:${Path}`)
               } 
             }
             const check =  isInclude(allFiles,Python)

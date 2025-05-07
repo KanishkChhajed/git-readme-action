@@ -16,15 +16,24 @@ const techstack_Set = new Set();
 // const workSpace = process.env.GITHUB_WORKSPACE || process.cwd()
 
 function isInclude(allFiles, dependencyPackage) {
-  try{
-    const fileName  = []
-    if (!allFiles || !dependencyPackage) return [];
-    fileName.push(dependencyPackage.filter((file) =>
-        allFiles.includes(path.basename(file))
-      ));
-      return fileName;
-  }catch (err){
-    console.error(`Error in isInclude function:`,err.message)
+  // try{
+  //   const fileName  = []
+  //   if (!allFiles || !dependencyPackage) return [];
+  //   fileName.push(dependencyPackage.filter((file) =>
+  //       allFiles.includes(path.basename(file))
+  //     ));
+  //     return fileName;
+  // }catch (err){
+  //   console.error(`Error in isInclude function:`,err.message)
+  // }
+  try {
+    if (!allFiles || !dependencyFiles) return [];
+    return allFiles.filter(filePath =>
+      dependencyFiles.includes(path.basename(filePath))
+    );
+  } catch (err) {
+    console.error(`Error in isInclude function:`, err.message);
+    return [];
   }
 }
 
@@ -250,7 +259,7 @@ function Python_dependencies(check) {
               } 
             }
             const check =  isInclude(allFiles,Python)
-            return  Python_dependencies(check) 
+            Python_dependencies(check) 
           }catch(err){
             console.error(`Error occured in Python_dir function`,err.message)
           }

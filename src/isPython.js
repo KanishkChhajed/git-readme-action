@@ -252,10 +252,10 @@ export async function Python_dir(dir = process.cwd()){
               if(Pathstat.isDirectory()){
                 const subDeps = await Python_dir(Path)
                 allFiles.push(...subDeps.files)
-                console.log(`Successfully recursion on path:${Path}`)
+                // console.log(`Successfully recursion on path:${Path}`)
               }else if(Pathstat.isFile()){
                 allFiles.push(Path)
-                console.log(`Successfully push path on allFiles:${Path}`)
+                // console.log(`Successfully push path on allFiles:${Path}`)
               } 
             }
             const check =  isInclude(allFiles,Python)

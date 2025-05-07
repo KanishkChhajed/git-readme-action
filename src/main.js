@@ -76,10 +76,10 @@ async function  generate_readme(){
                         techStack.push(lang, ...deps);
                     }else{
                         console.log(`No module is there of ${lang}` )
+                        techStack.push(lang);
                     }
                   } catch (err) {
                     console.log(`Could not load handler for ${lang}:`, err.message);
-                    techStack.push(lang);
                   }
             }
 

@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Modify recursive and include functions code of isPython.js file"
+  > "Replace techstack_Set.add -&gt; techstack_Set.push in isPython.js file"
   
   ---
   

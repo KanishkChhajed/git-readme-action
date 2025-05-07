@@ -112,9 +112,11 @@ export async function JavaScript_dependencies() {
         console.error(`Error occured ${fileName}:`,err.message())
       }
     } else if (fileName === "yarn.lock") {
+      const originalDir = process.cwd()
+      process.chdir(path.dirname(file))
       let output
       try{
-        output = execSync(`yarn list`, {
+        output = execSync(`yarn list --json`, {
           encoding: "utf-8",
           timeout: 5000,
         });
@@ -132,7 +134,7 @@ export async function JavaScript_dependencies() {
             console.error(`Error parsing ${file}: ${e.message}`);
             continue;
           }
-          if (parseLine.type === "tree") {
+          if (parseLine.type === "tree"&& parseLine.data && parseLine.data.trees) {
             for (const dep of parseLine.data.trees) {
               const depName = dep.name.split("@")[0];
               techstack_Set.add(depName);

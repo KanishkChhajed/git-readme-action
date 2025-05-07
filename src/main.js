@@ -73,11 +73,7 @@ async function  generate_readme(){
                     const functionName = `${lang}_dependencies`;
                     if(module && typeof module[functionName] === 'function'){
                         const deps = await module[functionName]();
-                        try{
-                            techStack.push(lang, ...deps);
-                        }catch(err){
-                            console.error(`deps is not an array deps is ${typeof deps} type: Error:${err.message}`)
-                        }
+                        techStack.push(lang, ...deps);
                     }else{
                         console.log(`No module is there of ${lang}` )
                         techStack.push(lang);

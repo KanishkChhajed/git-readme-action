@@ -25,7 +25,7 @@ function isInclude(allFiles, dependencyPackage) {
 }
 
 
-function JavaScript_dir(dir = process.cwd()){
+async function JavaScript_dir(dir = process.cwd()){
           // const dir = process.cwd()
            try{
             const folder = fs.readdirSync(dir)
@@ -34,7 +34,7 @@ function JavaScript_dir(dir = process.cwd()){
               const Path = path.join(dir,file)
               const Pathstat = fs.statSync(Path)
               if(Pathstat.isDirectory()){
-                const subDeps = JavaScript_dir(Path)
+                const subDeps = await JavaScript_dir(Path)
                 if (Array.isArray(subDeps)) {
                   allFiles.push(...subDeps)
                 }
@@ -63,7 +63,7 @@ export async function JavaScript_dependencies() {
   // let isJavaScript = isInclude(files, JavaScript);
   try{
 
-    const check = JavaScript_dir()
+    const check = await JavaScript_dir()
     
   if(check && check.length){
     

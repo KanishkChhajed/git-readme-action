@@ -2,33 +2,43 @@ import  fs from "fs";
 import  path from "path";
 import toml from "toml";
 
+const Python = [
+  "requirements.txt",
+  "pyproject.toml",
+  "Pipfile",
+  "poetry.lock",
+  "setup.py",
+];
 
 let techstack_Set = new Set();
+// const workSpace = process.env.GITHUB_WORKSPACE || process.cwd()
 
 function isInclude(allFiles, dependencyPackage) {
   if (!allFiles || !dependencyPackage) return [];
   return dependencyPackage.filter((file) => allFiles.includes(path.basename(file)));
 }
 
-export async function Python_dependencies() {
-  const workSpace = process.env.GITHUB_WORKSPACE;
-  const files = fs.readdirSync(workSpace);
+
+
+function Python_dependencies(check) {
+  // const workSpace = process.env.GITHUB_WORKSPACE;
+  // const files = fs.readdirSync(workSpace);
   // const lang = process.env.GITHUB_L;
 
   // Identify which language is used in the project
-  const Python = [
-    "requirements.txt",
-    "pyproject.toml",
-    "Pipfile",
-    "poetry.lock",
-    "setup.py",
-  ];
+  // const Python = [
+  //   "requirements.txt",
+  //   "pyproject.toml",
+  //   "Pipfile",
+  //   "poetry.lock",
+  //   "setup.py",
+  // ];
 
-  let isPython = isInclude(files, Python);
-if (isPython.length) {
-     for (const file of isPython) {
+  // let isPython = isInclude(files, Python);
+if (check.length) {
+     for (const file of check) {
           if (file === "requirements.txt") {
-            const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
+            const pkg = fs.readFileSync(path.join(process.cwd(), file), "utf-8").split("\n");
             for(const line of pkg){
               const dep = line.trim()
               if(dep===''||dep.startsWith('#')) continue
@@ -37,7 +47,7 @@ if (isPython.length) {
             }
 
           } else if (file === "pyproject.toml") {
-            const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
+            const pkg = fs.readFileSync(path.join(process.cwd(), file), "utf-8");
             // const parsedFile = toml.parse(pkg);
             let parsedFile;
             try {
@@ -59,10 +69,11 @@ if (isPython.length) {
               // console.log("It's an array")
               // console.log(Array.from(techstack_Set))
             }else if(typeof dependenciesObj === "string"){
-              for(const dep of dependenciesArray){
+              let line = dependenciesObj.split('\n')
+              for(const dep of line){
                 let depName = dep.split(" ")[0].trim()
-                depName = depName.match(/^([\w\-_.]+)/);
                 if(depName.startsWith("#")) continue
+                depName = depName.match(/^([\w\-_.]+)/);
                 if (depName) {
                 techstack_Set.add(depName[1]);
               }
@@ -111,7 +122,7 @@ if (isPython.length) {
               // techstack_Set.add(dep);
             // }
           } else if (file === "Pipfile") {
-            const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
+            const pkg = fs.readFileSync(path.join(process.cwd(), file), "utf-8");
             const parsedFile = toml.parse(pkg);
             const dependenciesArray = parsedFile?.["dev-packages"] || {};
             if(Array.isArray(dependenciesArray)){
@@ -147,7 +158,7 @@ if (isPython.length) {
             console.log("It's a string")
             console.log(techstack_Set)
           } else if (file === "poetry.lock") {
-            const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
+            const pkg = fs.readFileSync(path.join(process.cwd(), file), "utf-8");
             const parsedFile = toml.parse(pkg);
             const packages = parsedFile?.package || {};
             for(const pkgs of packages){
@@ -171,7 +182,7 @@ if (isPython.length) {
               }
             }
           } else if (file === "setup.py") { 
-            const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
+            const pkg = fs.readFileSync(path.join(process.cwd(), file), "utf-8");
             const match = pkg.match(/install_requires\s*=\s*\[([^\]]+)\]/m);
             const match1 = pkg.match(/extras_require\s*=\s*\[([^\]]+)\]/);
             if (match) {
@@ -183,15 +194,15 @@ if (isPython.length) {
                 techstack_Set.add(dep);
               });
             }
-            if (match) {
-              const deps = match[1]
-                .split(",")
-                .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[1])
-                .filter(Boolean);
-              deps.forEach((dep) => {
-                techstack_Set.add(dep);
-              });
-            }
+            // if (match) {
+            //   const deps = match[1]
+            //     .split(",")
+            //     .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[1])
+            //     .filter(Boolean);
+            //   deps.forEach((dep) => {
+            //     techstack_Set.add(dep);
+            //   });
+            // }
             if (match1) {
               const deps = match1[1]
                 .split(",")
@@ -204,8 +215,25 @@ if (isPython.length) {
           }
         }
       }else {
-        techstack_Set = [];
+        techstack_Set.clear();
         console.log("No common package dependency file found....");
       }
     return Array.from(techstack_Set).filter(Boolean);
+}
+
+export function Python_dir(dir = process.cwd()){
+  // const dir = process.cwd()
+  const folder = fs.readdirSync(dir)
+  const allFiles = []
+  for(const file of folder){
+    const Path = path.join(dir,file)
+    const Pathstat = fs.statSync(Path)
+    if(Pathstat.isDirectory()){
+      allFiles.push(...Python_dir(Path))
+    }else if(Pathstat.isFile()){
+      allFiles.push(Path)
+    } 
+  }
+  const check =  isInclude(allFiles,Python)
+  return  Python_dependencies(check) 
 }

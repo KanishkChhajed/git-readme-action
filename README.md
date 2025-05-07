@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Debugging techStack_set in main.js and isPython.js file"
+  > "Modify isPython.js files isInclude function"
   
   ---
   

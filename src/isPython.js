@@ -45,7 +45,7 @@ function Python_dependencies(check) {
               const dep = line.trim()
               if(dep===''||dep.startsWith('#')) continue
               const depName = dep.split(/[=<>,' ']+/)
-              techstack_Set.push(depName[0]);
+              techstack_Set.add(depName[0]);
             }
             
           } else if (file === "pyproject.toml") {
@@ -65,7 +65,7 @@ function Python_dependencies(check) {
               for (const dep of dependenciesObj) {
                 const match = dep.match(/^([\w\-_.]+)/);
                 if (match) {
-                  techstack_Set.push(match[1]);
+                  techstack_Set.add(match[1]);
                 }
               }
               // console.log("It's an array")
@@ -77,7 +77,7 @@ function Python_dependencies(check) {
                 if(depName.startsWith("#")) continue
                 depName = depName.match(/^([\w\-_.]+)/);
                 if (depName) {
-                  techstack_Set.push(depName[1]);
+                  techstack_Set.add(depName[1]);
                 }
               }
               // console.log("It's a string")
@@ -86,7 +86,7 @@ function Python_dependencies(check) {
               for (const dep of Object.keys(dependenciesObj)) {
                 const match = dep.match(/^([\w\-_.]+)/);
                 if (match) {
-                  techstack_Set.push(match[1]);
+                  techstack_Set.add(match[1]);
                 }
               }
               // console.log("It's an object")
@@ -96,7 +96,7 @@ function Python_dependencies(check) {
             // for (const dep of dependenciesArray) {
               //   const match = dep.match(/^([\w\-_.]+)/);
               //   if (match) {
-            //     techstack_Set.push(match[1]);
+            //     techstack_Set.add(match[1]);
             //   }
             // }
             // let dependenciesArray =   []
@@ -118,10 +118,10 @@ function Python_dependencies(check) {
                     // const match = dep.match(splitRegex)
                     // let depName = dep.split(' ')[0].trim()
                     // depName = depName.replace(/(?=\s*(0-9|>|<|=|!|$|;))/g,'')
-                    // techstack_Set.push(match[0]);
+                    // techstack_Set.add(match[0]);
                     // }
                     // for (const dep of Object.keys(devDependencyObj)) {
-              // techstack_Set.push(dep);
+              // techstack_Set.add(dep);
               // }
             } else if (file === "Pipfile") {
             const pkg = fs.readFileSync(path.join(process.cwd(), file), "utf-8");
@@ -132,7 +132,7 @@ function Python_dependencies(check) {
                 if(dep.startsWith("#")) continue
                 else{
                   const depName = dep.split("=")[0].trim()
-                  techstack_Set.push(depName);
+                  techstack_Set.add(depName);
                 }
               }
               console.log("It's an array")
@@ -143,7 +143,7 @@ function Python_dependencies(check) {
                 if(dep.startsWith("#") || dep === '') continue
                 else{
                   const depName = dep.split(/[=<> ]+/)[0].trim()
-                  techstack_Set.push(depName);
+                  techstack_Set.add(depName);
                 }
               }
               console.log("It's an object")
@@ -154,7 +154,7 @@ function Python_dependencies(check) {
                 const dep = line.trim()
                 if(dep === ''||dep.startsWith("#")) continue
                 const depName = dep.split(/[=<> ]+/)[0].trim()
-                techstack_Set.push(depName)
+                techstack_Set.add(depName)
               }
             }
             console.log("It's a string")
@@ -167,18 +167,18 @@ function Python_dependencies(check) {
               const dependenciesObj = pkgs?.dependencies || {};
               if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
                 for (const dep of Object.keys(dependenciesObj)) {
-                  techstack_Set.push(dep);
+                  techstack_Set.add(dep);
                 }
                 console.log("It's an object")
                 console.log(Array.from(techstack_Set))
               }else if(Array.isArray(dependenciesObj)){
                 for(const dep of dependenciesObj){
-                  techstack_Set.push(dep)
+                  techstack_Set.add(dep)
                 }
                 console.log("It's an array")
                 console.log(techstack_Set)
               }else if(typeof dependenciesObj === "string"){
-                techstack_Set.push(dependenciesObj)
+                techstack_Set.add(dependenciesObj)
                 console.log("It's a string")
                 console.log(Array.from(techstack_Set))
               }
@@ -188,12 +188,9 @@ function Python_dependencies(check) {
             const match = pkg.match(/install_requires\s*=\s*\[([^\]]+)\]/m);
             const match1 = pkg.match(/extras_require\s*=\s*\[([^\]]+)\]/);
             if (match) {
-              const deps = match[1]
-              .split(",")
-              .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[1])
-              .filter(Boolean);
+              const deps = match[1].split(",").map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[1]).filter(Boolean);
               deps.forEach((dep) => {
-                techstack_Set.push(dep);
+                techstack_Set.add(dep);
               });
             }
             // if (match) {
@@ -202,7 +199,7 @@ function Python_dependencies(check) {
               //     .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[1])
               //     .filter(Boolean);
               //   deps.forEach((dep) => {
-                //     techstack_Set.push(dep);
+                //     techstack_Set.add(dep);
                 //   });
                 // }
                 if (match1) {
@@ -211,7 +208,7 @@ function Python_dependencies(check) {
                   .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[1])
                   .filter(Boolean);
                   deps.forEach((dep) => {
-                    techstack_Set.push(dep);
+                    techstack_Set.add(dep);
                   });
                 }
               }

@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding an array for storing files in isInclude function of isPython"
+  > "Comment console.log() statements in dir function"
   
   ---
   

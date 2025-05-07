@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding error handling and recursive code in isJavaScript.js file"
+  > "📚 Auto-generation README"
   
   ---
   

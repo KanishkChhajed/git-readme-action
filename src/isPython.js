@@ -259,13 +259,10 @@ export async function Python_dir(dir = process.cwd()){
               } 
             }
             const check =  isInclude(allFiles,Python)
-            if(check.length === 0){
-              console.log("No deps from this directory")
-            }
-            const deps = Python_dependencies(check)
-            return {files:allFiles,deps} 
+            Python_dependencies(check);
+            return allFiles;  
           }catch(err){
             console.error(`Error occured in Python_dir function`,err.message)
-            return {files: [], deps:[]}
+            return []
           }
 }

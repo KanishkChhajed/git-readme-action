@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Comment console.log() statements in dir function"
+  > "Correcting recursive code in isPython.js file"
   
   ---
   

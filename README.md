@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Updating isPython.js file"
+  > "Adding error handling and recursive code in isJavaScript.js file"
   
   ---
   

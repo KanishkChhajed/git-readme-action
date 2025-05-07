@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding recursive subfolder iteration code in isPython.js file"
+  > "Modify recursive and include functions code of isPython.js file"
   
   ---
   

@@ -241,7 +241,7 @@ function Python_dependencies(check) {
       }
     }
         
-export function Python_dir(dir = process.cwd()){
+export async function Python_dir(dir = process.cwd()){
           // const dir = process.cwd()
            try{
             const folder = fs.readdirSync(dir)
@@ -250,7 +250,8 @@ export function Python_dir(dir = process.cwd()){
               const Path = path.join(dir,file)
               const Pathstat = fs.statSync(Path)
               if(Pathstat.isDirectory()){
-                allFiles.push(...Python_dir(Path))
+                const subDeps = await Python_dir(Path)
+                allFiles.push(...subDeps.files)
                 console.log(`Successfully recursion on path:${Path}`)
               }else if(Pathstat.isFile()){
                 allFiles.push(Path)
@@ -258,8 +259,13 @@ export function Python_dir(dir = process.cwd()){
               } 
             }
             const check =  isInclude(allFiles,Python)
-            Python_dependencies(check) 
+            if(check.length === 0){
+              console.log("No deps from this directory")
+            }
+            const deps = Python_dependencies(check)
+            return {files:allFiles,deps} 
           }catch(err){
             console.error(`Error occured in Python_dir function`,err.message)
+            return {files: [], deps:[]}
           }
 }

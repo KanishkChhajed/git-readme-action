@@ -271,7 +271,6 @@
 // }
 
 
-
 import fs from "fs";
 import path from "path";
 import toml from "toml";
@@ -563,7 +562,7 @@ function findPythonDepFiles(dir = process.cwd()) {
  * Main function to extract Python dependencies
  * @returns {string[]} - Array of unique dependencies
  */
-export function Python_dependencies() {
+export function extractPythonDependencies() {
   try {
     // Clear any previous results
     techStack.clear();
@@ -608,7 +607,10 @@ export function Python_dependencies() {
 }
 
 // For testing purposes
-if (require.main === module) {
-  const dependencies = Python_dependencies();
+// In ES modules, we can check if this is the main module
+// by comparing import.meta.url to process.argv[1]
+const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+if (isMainModule) {
+  const dependencies = extractPythonDependencies();
   console.log("Found Python dependencies:", dependencies);
 }

@@ -251,7 +251,7 @@ export async function Python_dir(dir = process.cwd()){
               const Pathstat = fs.statSync(Path)
               if(Pathstat.isDirectory()){
                 const subDeps = await Python_dir(Path)
-                allFiles.push(...subDeps.files)
+                allFiles.push(...subDeps)
                 // console.log(`Successfully recursion on path:${Path}`)
               }else if(Pathstat.isFile()){
                 allFiles.push(Path)

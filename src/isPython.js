@@ -36,8 +36,9 @@ function Python_dependencies(check) {
   // ];
 
   // let isPython = isInclude(files, Python);
-if (check.length) {
-     for (const file of check) {
+  try{
+    if (check.length) {
+      for (const file of check) {
           if (file === "requirements.txt") {
             const pkg = fs.readFileSync(path.join(process.cwd(), file), "utf-8").split("\n");
             for(const line of pkg){
@@ -46,7 +47,7 @@ if (check.length) {
               const depName = dep.split(/[=<>,' ']+/)
               techstack_Set.push(depName[0]);
             }
-
+            
           } else if (file === "pyproject.toml") {
             const pkg = fs.readFileSync(path.join(process.cwd(), file), "utf-8");
             // const parsedFile = toml.parse(pkg);
@@ -76,8 +77,8 @@ if (check.length) {
                 if(depName.startsWith("#")) continue
                 depName = depName.match(/^([\w\-_.]+)/);
                 if (depName) {
-                techstack_Set.push(depName[1]);
-              }
+                  techstack_Set.push(depName[1]);
+                }
               }
               // console.log("It's a string")
               // console.log(Array.from(techstack_Set))
@@ -91,38 +92,38 @@ if (check.length) {
               // console.log("It's an object")
               // console.log(Array.from(techstack_Set))
             }
-
+            
             // for (const dep of dependenciesArray) {
-            //   const match = dep.match(/^([\w\-_.]+)/);
-            //   if (match) {
+              //   const match = dep.match(/^([\w\-_.]+)/);
+              //   if (match) {
             //     techstack_Set.push(match[1]);
             //   }
             // }
             // let dependenciesArray =   []
             // if(typeof dependenciesObj === 'string'){
               // dependenciesArray =  dependenciesObj.split("=")[0].trim()
-            // }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
+              // }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
               // dependenciesArray = Object.keys(dependenciesObj);
-            // }
+              // }
               
-            // const devDependencyObj = parsedFile.tool?.poetry?.["dev-dependencies"]||{};
-            // let devDependencyArray =  []
-            // if(typeof devDependencyObj ==="string"){
-              // devDependencyArray = devDependencyObj.split("=")[0].trim()
-            // }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
-              // devDependencyArray = Object.keys(devDependencyObj);
-            // }
-            // let splitRegex = /^([\w\-_.]+)/
-            // for (const dep of Object.keys(dependenciesObj)){
-              // const match = dep.match(splitRegex)
-              // let depName = dep.split(' ')[0].trim()
-              // depName = depName.replace(/(?=\s*(0-9|>|<|=|!|$|;))/g,'')
-              // techstack_Set.push(match[0]);
-            // }
-            // for (const dep of Object.keys(devDependencyObj)) {
+              // const devDependencyObj = parsedFile.tool?.poetry?.["dev-dependencies"]||{};
+              // let devDependencyArray =  []
+              // if(typeof devDependencyObj ==="string"){
+                // devDependencyArray = devDependencyObj.split("=")[0].trim()
+                // }else if(typeof dependenciesObj === 'object' && dependenciesObj !== null){
+                  // devDependencyArray = Object.keys(devDependencyObj);
+                  // }
+                  // let splitRegex = /^([\w\-_.]+)/
+                  // for (const dep of Object.keys(dependenciesObj)){
+                    // const match = dep.match(splitRegex)
+                    // let depName = dep.split(' ')[0].trim()
+                    // depName = depName.replace(/(?=\s*(0-9|>|<|=|!|$|;))/g,'')
+                    // techstack_Set.push(match[0]);
+                    // }
+                    // for (const dep of Object.keys(devDependencyObj)) {
               // techstack_Set.push(dep);
-            // }
-          } else if (file === "Pipfile") {
+              // }
+            } else if (file === "Pipfile") {
             const pkg = fs.readFileSync(path.join(process.cwd(), file), "utf-8");
             const parsedFile = toml.parse(pkg);
             const dependenciesArray = parsedFile?.["dev-packages"] || {};
@@ -155,7 +156,7 @@ if (check.length) {
                 const depName = dep.split(/[=<> ]+/)[0].trim()
                 techstack_Set.push(depName)
               }
-              }
+            }
             console.log("It's a string")
             console.log(techstack_Set)
           } else if (file === "poetry.lock") {
@@ -188,50 +189,54 @@ if (check.length) {
             const match1 = pkg.match(/extras_require\s*=\s*\[([^\]]+)\]/);
             if (match) {
               const deps = match[1]
-                .split(",")
-                .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[1])
-                .filter(Boolean);
+              .split(",")
+              .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[1])
+              .filter(Boolean);
               deps.forEach((dep) => {
                 techstack_Set.push(dep);
               });
             }
             // if (match) {
-            //   const deps = match[1]
-            //     .split(",")
-            //     .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[1])
-            //     .filter(Boolean);
-            //   deps.forEach((dep) => {
-            //     techstack_Set.push(dep);
-            //   });
-            // }
-            if (match1) {
-              const deps = match1[1]
-                .split(",")
-                .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[1])
-                .filter(Boolean);
-              deps.forEach((dep) => {
-                techstack_Set.push(dep);
-              });
+              //   const deps = match[1]
+              //     .split(",")
+              //     .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[1])
+              //     .filter(Boolean);
+              //   deps.forEach((dep) => {
+                //     techstack_Set.push(dep);
+                //   });
+                // }
+                if (match1) {
+                  const deps = match1[1]
+                  .split(",")
+                  .map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[1])
+                  .filter(Boolean);
+                  deps.forEach((dep) => {
+                    techstack_Set.push(dep);
+                  });
+                }
+              }
             }
           }
-        }
-      }else {
-        techstack_Set = [];
-        console.log("No common package dependency file found....");
+          // else {
+          //   techstack_Set = [];
+          //   console.log("No common package dependency file found....");
+          // }
+          return Array.from(techstack_Set).filter(Boolean);
+        }catch (err){
+          console.error(`Error occured:`,err.message)
       }
-    return Array.from(techstack_Set).filter(Boolean);
-}
-
-export function Python_dir(dir = process.cwd()){
-  // const dir = process.cwd()
-  const folder = fs.readdirSync(dir)
-  const allFiles = []
-  for(const file of folder){
-    const Path = path.join(dir,file)
-    const Pathstat = fs.statSync(Path)
-    if(Pathstat.isDirectory()){
-      allFiles.push(...Python_dir(Path))
-    }else if(Pathstat.isFile()){
+    }
+        
+        export function Python_dir(dir = process.cwd()){
+          // const dir = process.cwd()
+          const folder = fs.readdirSync(dir)
+          const allFiles = []
+          for(const file of folder){
+            const Path = path.join(dir,file)
+            const Pathstat = fs.statSync(Path)
+            if(Pathstat.isDirectory()){
+              allFiles.push(...Python_dir(Path))
+            }else if(Pathstat.isFile()){
       allFiles.push(Path)
     } 
   }

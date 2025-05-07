@@ -10,14 +10,15 @@ const Python = [
   "setup.py",
 ];
 
+
 let techstack_Set = new Set();
+
 // const workSpace = process.env.GITHUB_WORKSPACE || process.cwd()
 
 function isInclude(allFiles, dependencyPackage) {
   if (!allFiles || !dependencyPackage) return [];
   return allFiles.filter((file) => dependencyPackage.includes(path.basename(file))).map(file => path.basename(file));
 }
-
 
 
 function Python_dependencies(check) {

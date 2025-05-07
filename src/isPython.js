@@ -19,7 +19,10 @@ function isInclude(allFiles, dependencyPackage) {
   try{
 
     if (!allFiles || !dependencyPackage) return [];
-    return dependencyPackage.filter(file => allFiles.includes(file));
+    return allFiles.filter(file => {
+      const fileName = path.basename(file)
+      dependencyPackage.includes(fileName)
+    });
   }catch (err){
     console.error(`Error in isInclude function:`,err.message)
   }
@@ -45,7 +48,7 @@ function Python_dependencies(check) {
     if (check.length) {
       for (const file of check) {
           if (file === "requirements.txt") {
-            const pkg = fs.readFileSync(path.join(process.cwd(), file), "utf-8").split("\n");
+            const pkg = fs.readFileSync(file, "utf-8").split("\n");
             for(const line of pkg){
               const dep = line.trim()
               if(dep===''||dep.startsWith('#')) continue
@@ -54,7 +57,7 @@ function Python_dependencies(check) {
             }
             
           } else if (file === "pyproject.toml") {
-            const pkg = fs.readFileSync(path.join(process.cwd(), file), "utf-8");
+            const pkg = fs.readFileSync( file, "utf-8");
             // const parsedFile = toml.parse(pkg);
             let parsedFile;
             try {
@@ -129,7 +132,7 @@ function Python_dependencies(check) {
               // techstack_Set.add(dep);
               // }
             } else if (file === "Pipfile") {
-            const pkg = fs.readFileSync(path.join(process.cwd(), file), "utf-8");
+            const pkg = fs.readFileSync(file, "utf-8");
             const parsedFile = toml.parse(pkg);
             const dependenciesArray = parsedFile?.["dev-packages"] || {};
             if(Array.isArray(dependenciesArray)){
@@ -165,7 +168,7 @@ function Python_dependencies(check) {
             console.log("It's a string")
             console.log(techstack_Set)
           } else if (file === "poetry.lock") {
-            const pkg = fs.readFileSync(path.join(process.cwd(), file), "utf-8");
+            const pkg = fs.readFileSync(file, "utf-8");
             const parsedFile = toml.parse(pkg);
             const packages = parsedFile?.package || {};
             for(const pkgs of packages){
@@ -189,9 +192,9 @@ function Python_dependencies(check) {
               }
             }
           } else if (file === "setup.py") { 
-            const pkg = fs.readFileSync(path.join(process.cwd(), file), "utf-8");
+            const pkg = fs.readFileSync(file, "utf-8");
             const match = pkg.match(/install_requires\s*=\s*\[([^\]]+)\]/m);
-            const match1 = pkg.match(/extras_require\s*=\s*\[([^\]]+)\]/);
+            const match1 = pkg.match(/extras_require\s*=\s*\{([^}]+)\}/m);
             if (match) {
               const deps = match[1].split(",").map((dep) => dep.trim().split(/[^a-zA-Z0-9_-]/)[1]).filter(Boolean);
               deps.forEach((dep) => {

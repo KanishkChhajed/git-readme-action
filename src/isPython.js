@@ -15,7 +15,7 @@ let techstack_Set = new Set();
 
 function isInclude(allFiles, dependencyPackage) {
   if (!allFiles || !dependencyPackage) return [];
-  return dependencyPackage.filter((file) => allFiles.includes(path.basename(file)));
+  return allFiles.filter((file) => dependencyPackage.includes(path.basename(file))).map(file => path.basename(file));
 }
 
 
@@ -215,7 +215,7 @@ if (check.length) {
           }
         }
       }else {
-        techstack_Set.clear();
+        techstack_Set = [];
         console.log("No common package dependency file found....");
       }
     return Array.from(techstack_Set).filter(Boolean);

@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Replace techstack_Set.push -&gt; techstack_Set.add in isPython.js file"
+  > "Adding try and catch error handling in isPython.js all  functions"
   
   ---
   

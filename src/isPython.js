@@ -17,12 +17,12 @@ const techstack_Set = new Set();
 
 function isInclude(allFiles, dependencyPackage) {
   try{
-
+    const fileName  = []
     if (!allFiles || !dependencyPackage) return [];
-    return allFiles.filter(file => {
-      const fileName = path.basename(file)
-      dependencyPackage.includes(fileName)
-    });
+    fileName.push(dependencyPackage.filter((file) =>
+        allFiles.includes(path.basename(file))
+      ));
+      return fileName;
   }catch (err){
     console.error(`Error in isInclude function:`,err.message)
   }

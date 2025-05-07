@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Update isPython.js file"
+  > "Updating isPython.js file"
   
   ---
   

@@ -70,7 +70,7 @@ async function  generate_readme(){
                 if(lang === 'F#') lang = 'Fhash'
                     const modulePath = path.join(__dirname, `./is${lang}.js`)
                     const module = await import(pathToFileURL(modulePath).href)
-                    const functionName = `${lang}_dir`;
+                    const functionName = `${lang}_dependencies`;
                     if(module && typeof module[functionName] === 'function'){
                         const deps = await module[functionName]();
                         techStack.push(lang, ...deps);

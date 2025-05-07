@@ -16,30 +16,30 @@ const techstack_Set = new Set();
 // const workSpace = process.env.GITHUB_WORKSPACE || process.cwd()
 
 function isInclude(allFiles, dependencyPackage) {
-  try{
-    const fileName  = []
-    if (!allFiles || !dependencyPackage) return [];
-    fileName.push(dependencyPackage.filter((file) =>
-        allFiles.includes(path.basename(file))
-      ));
-      return fileName;
-  }catch (err){
-    console.error(`Error in isInclude function:`,err.message)
-    return []
-  }
-  // try {
+  // try{
+  //   const fileName  = []
   //   if (!allFiles || !dependencyPackage) return [];
-  //   return allFiles.filter(filePath =>
-  //     dependencyPackage.includes(path.basename(filePath))
-  //   );
-  // } catch (err) {
-  //   console.error(`Error in isInclude function:`, err.message);
-  //   return [];
+  //   fileName.push(dependencyPackage.filter((file) =>
+  //       allFiles.includes(path.basename(file))
+  //     ));
+  //     return fileName;
+  // }catch (err){
+  //   console.error(`Error in isInclude function:`,err.message)
+  //   return []
   // }
+  try {
+    if (!allFiles || !dependencyPackage) return [];
+    return allFiles.filter(filePath =>
+      dependencyPackage.includes(path.basename(filePath))
+    );
+  } catch (err) {
+    console.error(`Error in isInclude function:`, err.message);
+    return [];
+  }
 }
 
 
-function Python_dependencies(check) {
+export function Python_dependencies() {
   // const workSpace = process.env.GITHUB_WORKSPACE;
   // const files = fs.readdirSync(workSpace);
   // const lang = process.env.GITHUB_L;
@@ -54,6 +54,7 @@ function Python_dependencies(check) {
   // ];
 
   // let isPython = isInclude(files, Python);
+  const check = Python_dir()
   try{
     if (check.length) {
       for (const file of check) {
@@ -242,7 +243,7 @@ function Python_dependencies(check) {
       }
     }
         
-export async function Python_dir(dir = process.cwd()){
+ async function Python_dir(dir = process.cwd()){
           // const dir = process.cwd()
            try{
             const folder = fs.readdirSync(dir)
@@ -252,7 +253,9 @@ export async function Python_dir(dir = process.cwd()){
               const Pathstat = fs.statSync(Path)
               if(Pathstat.isDirectory()){
                 const subDeps = await Python_dir(Path)
-                allFiles.push(...subDeps)
+                if (Array.isArray(subDeps)) {
+                  allFiles.push(...subDeps)
+                }
                 console.log(`Successfully recursion on path:${Path}`)
               }else if(Pathstat.isFile()){
                 allFiles.push(Path)
@@ -260,7 +263,7 @@ export async function Python_dir(dir = process.cwd()){
               } 
             }
             const check =  isInclude(allFiles,Python)
-            return Python_dependencies(check);  
+            return check;  
           }catch(err){
             console.error(`Error occured in Python_dir function`,err.message)
             return []

@@ -563,7 +563,7 @@ function findPythonDepFiles(dir = process.cwd()) {
  * Main function to extract Python dependencies
  * @returns {string[]} - Array of unique dependencies
  */
-export function extractPythonDependencies() {
+export function Python_dependencies() {
   try {
     // Clear any previous results
     techStack.clear();
@@ -609,6 +609,6 @@ export function extractPythonDependencies() {
 
 // For testing purposes
 if (require.main === module) {
-  const dependencies = extractPythonDependencies();
+  const dependencies = Python_dependencies();
   console.log("Found Python dependencies:", dependencies);
 }

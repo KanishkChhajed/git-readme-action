@@ -19,7 +19,7 @@ function isInclude(allFiles, dependencyPackage) {
   try{
 
     if (!allFiles || !dependencyPackage) return [];
-    return allFiles.filter((file) => dependencyPackage.includes(path.basename(file))).map(file => path.basename(file));
+    return dependencyPackage.filter(file => allFiles.includes(file));
   }catch (err){
     console.error(`Error in isInclude function:`,err.message)
   }
@@ -65,7 +65,7 @@ function Python_dependencies(check) {
             }
             // const dependenciesObj = typeof parsedFile.tool?.poetry?.dependencies==='object' ? parsedFile.tool.poetry.dependencies : {};
             // const dependenciesObj = parsedFile?.tool?.poetry?.dependencies || {};
-            const dependenciesObj = parsedFile?.project?.dependencies || {};
+            const dependenciesObj = parsedFile?.project?.dependencies ||parsedFile?.tool?.poetry?.dependencies || {};
             if(Array.isArray(dependenciesObj)){
               for (const dep of dependenciesObj) {
                 const match = dep.match(/^([\w\-_.]+)/);

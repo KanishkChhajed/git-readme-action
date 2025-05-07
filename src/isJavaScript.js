@@ -162,7 +162,7 @@ export async function JavaScript_dependencies() {
           techstack_Set.add(dep.split(":")[0]);
         }
       }catch(err){
-        console.error(`Error occured ${fileName}:`,err.message())
+        console.error(`Error occured ${fileName}:`,err.message)
       }
     } else {
       techstack_Set.clear();

@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding try and catch error handling in Python_dependencies function"
+  > "Replace techstack_Set.push -&gt; techstack_Set.add in isPython.js file"
   
   ---
   

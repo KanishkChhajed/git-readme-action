@@ -172,7 +172,7 @@ export async function JavaScript_dependencies() {
     //   }
     try {
       const originalDir = process.cwd();
-      process.chdir(path.dirname(filePath));
+      process.chdir(path.dirname(file));
       
       try {
         const output = execSync(`pnpm list --json`, {
@@ -187,8 +187,8 @@ export async function JavaScript_dependencies() {
         console.log(`Processed pnpm-lock.yaml using pnpm list command`);
       } catch (cmdErr) {
         console.error(`Error running pnpm list command:`, cmdErr.message);
-        
-        const packageJsonPath = path.join(path.dirname(filePath), 'package.json');
+
+        const packageJsonPath = path.join(path.dirname(file), 'package.json');
         if (fs.existsSync(packageJsonPath)) {
           const pkgContent = fs.readFileSync(packageJsonPath, 'utf-8');
           const pkg = JSON.parse(pkgContent);
@@ -202,7 +202,7 @@ export async function JavaScript_dependencies() {
         process.chdir(originalDir);
       }
     } catch (err) {
-      console.error(`Error processing pnpm-lock.yaml at ${filePath}:`, err.message);
+      console.error(`Error processing pnpm-lock.yaml at ${file}:`, err.message);
     }
     }else{
       techstack_Set.clear();

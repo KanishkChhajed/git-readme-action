@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Modify isPython.js files"
+  > "Adding an array for storing files in isInclude function of isPython"
   
   ---
   

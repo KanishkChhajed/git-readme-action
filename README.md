@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Correcting recursive code in isPython.js file"
+  > "Adding new code in isPython.js file"
   
   ---
   

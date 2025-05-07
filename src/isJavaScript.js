@@ -166,8 +166,8 @@ export async function JavaScript_dependencies() {
       return [];
     }
   }
-  return Array.from(techstack_Set).filter(Boolean);
 }
+return Array.from(techstack_Set).filter(Boolean);
 }catch(err){
   console.error(`Error occured:`,err.message)
 }

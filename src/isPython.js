@@ -27,9 +27,9 @@ function isInclude(allFiles, dependencyPackage) {
   //   console.error(`Error in isInclude function:`,err.message)
   // }
   try {
-    if (!allFiles || !dependencyFiles) return [];
+    if (!allFiles || !dependencyPackage) return [];
     return allFiles.filter(filePath =>
-      dependencyFiles.includes(path.basename(filePath))
+      dependencyPackage.includes(path.basename(filePath))
     );
   } catch (err) {
     console.error(`Error in isInclude function:`, err.message);

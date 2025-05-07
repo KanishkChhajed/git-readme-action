@@ -241,10 +241,9 @@ function Python_dependencies(check) {
       }
     }
         
-        export function Python_dir(dir = process.cwd()){
+export function Python_dir(dir = process.cwd()){
           // const dir = process.cwd()
-          try{
-
+           try{
             const folder = fs.readdirSync(dir)
             const allFiles = []
             for(const file of folder){

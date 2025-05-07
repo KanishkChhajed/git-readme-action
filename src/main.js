@@ -139,6 +139,9 @@ async function  generate_readme(){
             
             console.log(readme_Info)
             console.log(techStack)
+            console.log("Type of techstack_Set:", typeof techStack);
+            console.log("Is Set?", techStack instanceof Set);
+
 
             // const template = fs.readFileSync(templateContent,'utf-8')
             const render = ejs.render(templateContent,readme_Info)

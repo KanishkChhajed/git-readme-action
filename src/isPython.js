@@ -11,7 +11,7 @@ const Python = [
 ];
 
 
-let techstack_Set = new Set();
+const techstack_Set = new Set();
 
 // const workSpace = process.env.GITHUB_WORKSPACE || process.cwd()
 
@@ -220,7 +220,7 @@ function Python_dependencies(check) {
             }
           }
           else {
-            techstack_Set = [];
+            techstack_Set.clear();
             console.log("No common package dependency file found....");
           }
           return Array.from(techstack_Set).filter(Boolean);

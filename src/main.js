@@ -13,7 +13,7 @@ import { fileURLToPath ,pathToFileURL } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const template_path = path.join(__dirname, "../temp/README_template3.ejs")
-const templateContent = fs.readFileSync(template_path, "utf-8");
+// const templateContent = fs.readFileSync(template_path, "utf-8");
 
 const output_path = 'README.md'
 
@@ -25,10 +25,10 @@ async function  generate_readme(){
     try{
         // Authentication process
         const octokit = new Octokit({auth : token})
+        // Get repository {owner}/{repo} info
+        const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
+        
         try{
-            // Get repository {owner}/{repo} info
-            const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
-           
             // Create an API using {owner}/{repo}
             const {data : reposData} = await octokit.rest.repos.get({
                 owner,
@@ -66,17 +66,23 @@ async function  generate_readme(){
                 try {
                     if(lang === 'Objective-C') lang = 'ObjectiveC';
                 if(lang === 'C++') lang = 'Cpp'
-                if(lang === 'C#') lang = 'Chash'
-                if(lang === 'F#') lang = 'Fhash'
+                if(lang === 'C#') lang = 'Csharp'
+                if(lang === 'F#') lang = 'Fsharp'
                     const modulePath = path.join(__dirname, `./is${lang}.js`)
-                    const module = await import(pathToFileURL(modulePath).href)
-                    const functionName = `${lang}_dependencies`;
-                    if(module && typeof module[functionName] === 'function'){
-                        const deps = await module[functionName]();
-                        techStack.push(lang, ...deps);
-                    }else{
-                        console.log(`No module is there of ${lang}` )
-                        techStack.push(lang);
+
+                    if(fs.existsSync(modulePath)){
+
+                        const module = await import(pathToFileURL(modulePath).href)
+                        const functionName = `${lang}_dependencies`;
+                        if(module && typeof module[functionName] === 'function'){
+                            const deps = await module[functionName]();
+                            if(Array.isArray(deps) && deps.length > 0){
+                                techStack.push(lang, ...deps);
+                            }else{
+                                console.log(`No module is there of ${lang}` )
+                                techStack.push(lang);
+                            }
+                        }
                     }
                   } catch (err) {
                     console.log(`Could not load handler for ${lang}:`, err.message);

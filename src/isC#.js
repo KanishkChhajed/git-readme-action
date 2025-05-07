@@ -10,7 +10,7 @@ function isInclude(allFiles, dependencyPackage) {
   return dependencyPackage.filter((file) => allFiles.includes(path.basename(file)));
 }
 
-export async function Chash_dependencies() {
+export async function Csharp_dependencies() {
   const workSpace = process.env.GITHUB_WORKSPACE;
   const files = fs.readdirSync(workSpace);
   // const lang = process.env.GITHUB_L;

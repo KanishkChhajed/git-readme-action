@@ -2,7 +2,7 @@ import { execSync } from "child_process"
 import fs from 'fs'
 import path from 'path'
 
-let techstack_Set = new Set();
+const techstack_Set = new Set();
 
 const JavaScript = [
   "package.json",
@@ -15,8 +15,8 @@ function isInclude(allFiles, dependencyPackage) {
   try{
 
     if (!allFiles || !dependencyPackage) return [];
-    return dependencyPackage.filter((file) =>
-      allFiles.includes(path.basename(file))
+    return allFiles.filter((file) =>
+      dependencyPackage.includes(path.basename(file))
   );
 }catch(err){
   console.error(`Error in isInclude function:`, err.message);
@@ -34,13 +34,14 @@ async function JavaScript_dir(dir = process.cwd()){
               const Path = path.join(dir,file)
               const Pathstat = fs.statSync(Path)
               if(Pathstat.isDirectory()){
+                if(file ==='node_modules') continue
                 const subDeps = await JavaScript_dir(Path)
-                if (Array.isArray(subDeps)) {
                   allFiles.push(...subDeps)
-                }
                 // console.log(`Successfully recursion on path:${Path}`)
               }else if(Pathstat.isFile()){
-                allFiles.push(Path)
+                if(JavaScript.includes(file)){
+                  allFiles.push(Path)
+                }
                 // console.log(`Successfully push path on allFiles:${Path}`)
               } 
             }
@@ -68,11 +69,12 @@ export async function JavaScript_dependencies() {
   if(check && check.length){
     
     for (const file of check) {
-      if (file === "package.json") {
+      const fileName = path.basename(file)
+      if (fileName === "package.json") {
         // const pkg = JSON.parse(fs.readFileSync(file, "utf-8"));
         let pkg;
         try {
-          pkg = await JSON.parse(fs.readFileSync(file, "utf-8"));
+          pkg = JSON.parse(fs.readFileSync(file, "utf-8"));
         } catch (e) {
         console.error(`Error parsing ${file}: ${e.message}`);
         continue;
@@ -90,7 +92,7 @@ export async function JavaScript_dependencies() {
       }catch(err){
         console.error(`Error occured ${fileName}:`,err.message())
       }
-    } else if (file === "package-lock.json") {
+    } else if (fileName === "package-lock.json") {
       let pkg
       try{
         pkg = JSON.parse(
@@ -109,7 +111,7 @@ export async function JavaScript_dependencies() {
       }catch(err){
         console.error(`Error occured ${fileName}:`,err.message())
       }
-    } else if (file === "yarn.lock") {
+    } else if (fileName === "yarn.lock") {
       let output
       try{
         output = execSync(`yarn list`, {
@@ -140,7 +142,7 @@ export async function JavaScript_dependencies() {
       }catch(err){
         console.error(`Error occured ${fileName}:`,err.message())
       }
-    } else if (file === "pnpm-lock.yaml") {
+    } else if (fileName === "pnpm-lock.yaml") {
       let pkg
       try{
         pkg = JSON.parse(fs.readFileSync(file,"utf-8"));

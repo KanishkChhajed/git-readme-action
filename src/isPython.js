@@ -16,8 +16,13 @@ let techstack_Set = new Set();
 // const workSpace = process.env.GITHUB_WORKSPACE || process.cwd()
 
 function isInclude(allFiles, dependencyPackage) {
-  if (!allFiles || !dependencyPackage) return [];
-  return allFiles.filter((file) => dependencyPackage.includes(path.basename(file))).map(file => path.basename(file));
+  try{
+
+    if (!allFiles || !dependencyPackage) return [];
+    return allFiles.filter((file) => dependencyPackage.includes(path.basename(file))).map(file => path.basename(file));
+  }catch (err){
+    console.error(`Error in isInclude function:`,err.message)
+  }
 }
 
 
@@ -214,10 +219,10 @@ function Python_dependencies(check) {
               }
             }
           }
-          // else {
-          //   techstack_Set = [];
-          //   console.log("No common package dependency file found....");
-          // }
+          else {
+            techstack_Set = [];
+            console.log("No common package dependency file found....");
+          }
           return Array.from(techstack_Set).filter(Boolean);
         }catch (err){
           console.error(`Error occured:`,err.message)
@@ -226,17 +231,24 @@ function Python_dependencies(check) {
         
         export function Python_dir(dir = process.cwd()){
           // const dir = process.cwd()
-          const folder = fs.readdirSync(dir)
-          const allFiles = []
-          for(const file of folder){
-            const Path = path.join(dir,file)
-            const Pathstat = fs.statSync(Path)
-            if(Pathstat.isDirectory()){
-              allFiles.push(...Python_dir(Path))
-            }else if(Pathstat.isFile()){
-      allFiles.push(Path)
-    } 
-  }
-  const check =  isInclude(allFiles,Python)
-  return  Python_dependencies(check) 
+          try{
+
+            const folder = fs.readdirSync(dir)
+            const allFiles = []
+            for(const file of folder){
+              const Path = path.join(dir,file)
+              const Pathstat = fs.statSync(Path)
+              if(Pathstat.isDirectory()){
+                allFiles.push(...Python_dir(Path))
+                console.log(`Successfully recursion on path:${Path}`)
+              }else if(Pathstat.isFile()){
+                allFiles.push(Path)
+                console.log(`Successfully push path on allFiles:${Path}`)
+              } 
+            }
+            const check =  isInclude(allFiles,Python)
+            return  Python_dependencies(check) 
+          }catch(err){
+            console.error(`Error occured in Python_dir function`,err.message)
+          }
 }

@@ -29,12 +29,12 @@ async function R_dir(dir = process.cwd()){
                 if(file ==='workflows') continue
                 const subDeps = await R_dir(Path)
                   allFiles.push(...subDeps)
-                console.log(`Successfully recursion on path:${Path}`)
+                // console.log(`Successfully recursion on path:${Path}`)
               }else if(Pathstat.isFile()){
                 if(R.includes(file)){
                   allFiles.push(Path)
                 }
-                console.log(`Successfully push path on allFiles:${Path}`)
+                // console.log(`Successfully push path on allFiles:${Path}`)
               } 
             }
             const check =  isInclude(allFiles,R)
@@ -92,12 +92,12 @@ export async function R_dependencies() {
           }catch(err){
             console.error(`Error occured ${fileName}:`,err.message())
           }
+        }else {
+          techstack_Set.clear();
+          console.log("No common package dependency file found....");
+          return []
         }
       }
-    }else {
-        techstack_Set.clear();
-        console.log("No common package dependency file found....");
-        return []
-      }
+    }
     return Array.from(techstack_Set).filter(Boolean);
 }

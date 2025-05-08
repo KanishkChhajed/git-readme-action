@@ -94,8 +94,9 @@ export async function ObjectiveC_dependencies() {
             console.error(`Error occured ${fileName}:`,err.message())
           }
         }else {
-          techstack_Set = [];
+          techstack_Set.clear();
           console.log("No common package dependency file found....");
+          return [];
         }
       }
     }

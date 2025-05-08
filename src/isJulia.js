@@ -26,8 +26,7 @@ async function Julia_dir(dir = process.cwd()){
               const Path = path.join(dir,file)
               const Pathstat = fs.statSync(Path)
               if(Pathstat.isDirectory()){
-                if(file ==='node_modules') continue
-                if(file ==='.github/workflows') continue
+                if(file ==='workflows') continue
                 const subDeps = await Julia_dir(Path)
                   allFiles.push(...subDeps)
                 console.log(`Successfully recursion on path:${Path}`)
@@ -54,7 +53,7 @@ export async function Julia_dependencies() {
   // Identify which language is used in the project
 try{
 
-  const check = Julia_dir();
+  const check = await Julia_dir();
   
   if (check && check.length) {
     for (const file of check) {
@@ -68,7 +67,7 @@ try{
           console.error(`Error parsing ${file}: ${err.message}`)
         }
         try{
-          const dependencies = parsedFile?.["dependencies"] || {};
+          const dependencies = parsedFile?.deps || {};
           for (const dep of Object.keys(dependencies)) {
             techstack_Set.add(dep);
           }
@@ -95,8 +94,9 @@ try{
           console.error(`Error occured ${fileName}:`,err.message())
         }
       }else {
-        techstack_Set = [];
+        techstack_Set.clear();
         console.log("No common package dependency file found....");
+        return []
       }
     }
   }

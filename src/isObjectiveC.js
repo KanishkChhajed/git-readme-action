@@ -77,7 +77,7 @@ export async function ObjectiveC_dependencies() {
           }catch(err){
             console.error(`Error occured ${fileName}:`,err.message())
           }
-        } else if (fileName === "Podfile.lock") {
+        } else if (fileName === "Podfile.lock"){
           let parsedFile
           try{
            const pkg = fs.readFileSync(file, "utf-8");

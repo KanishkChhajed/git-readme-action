@@ -1,48 +1,106 @@
-const fs = require("fs");
-const path = require("path");
-const toml = require("toml");
+import fs from "fs";
+import path from "path";
+import toml from "toml";
 
 
-let techstack_Set = new Set();
+const Julia = ["Project.toml", "Manifest.toml"];
+
+const  techstack_Set = new Set();
 
 function isInclude(allFiles, dependencyPackage) {
   if (!allFiles || !dependencyPackage) return [];
-  return dependencyPackage.filter((file) => allFiles.includes(path.basename(file)));
+  try{
+
+    return allFiles.filter((file) => dependencyPackage.includes(path.basename(file)));
+  }catch{}
+}
+
+async function Julia_dir(dir = process.cwd()){
+          // const dir = process.cwd()
+           try{
+            const folder = fs.readdirSync(dir)
+            const allFiles = []
+            for(const file of folder){
+              const Path = path.join(dir,file)
+              const Pathstat = fs.statSync(Path)
+              if(Pathstat.isDirectory()){
+                if(file ==='node_modules') continue
+                if(file ==='.github/workflows') continue
+                const subDeps = await Julia_dir(Path)
+                  allFiles.push(...subDeps)
+                // console.log(`Successfully recursion on path:${Path}`)
+              }else if(Pathstat.isFile()){
+                if(Julia.includes(file)){
+                  allFiles.push(Path)
+                }
+                // console.log(`Successfully push path on allFiles:${Path}`)
+              } 
+            }
+            const check =  isInclude(allFiles,Julia)
+            return check;  
+          }catch(err){
+            console.error(`Error occured in ObjectiveC_dir function`,err.message)
+            return []
+          }
 }
 
 export async function Julia_dependencies() {
-  const workSpace = process.env.GITHUB_WORKSPACE;
-  const files = fs.readdirSync(workSpace);
+  // const workSpace = process.env.GITHUB_WORKSPACE;
+  // const files = fs.readdirSync(workSpace);
   // const lang = process.env.GITHUB_L;
 
   // Identify which language is used in the project
+try{
 
-  const Julia = ["Project.toml", "Manifest.toml"];
-  let isJulia = isInclude(files, Julia);
+  const check = Julia_dir();
+  
+  if (check && check.length) {
+    for (const file of check) {
+      const fileName = path.basename(file)
+      if (fileName === "Project.toml") {
+        let parsedFile
+        try{
+          const pkg = fs.readFileSync(file, "utf-8");
+          parsedFile = toml.parse(pkg);
+        }catch(err){
+          console.error(`Error parsing ${file}: ${err.message}`)
+        }
+        try{
 
-  if (isJulia.length) {
-      for (const file of isJulia) {
-        if (file === "Project.toml") {
-          const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
-          const parsedFile = toml.parse(pkg);
           const dependencies = parsedFile?.["dependencies"] || {};
           for (const dep of Object.keys(dependencies)) {
             techstack_Set.add(dep);
           }
-        } else if (file === "Manifest.toml") {
-          const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
-          const parsedFile = toml.parse(pkg);
+        }catch(err){
+          console.error(`Error occured ${fileName}:`,err.message())
+        }
+      } else if (fileName === "Manifest.toml") {
+        let parsedFile
+        try{
+          const pkg = fs.readFileSync(file, "utf-8");
+           parsedFile = toml.parse(pkg);
+        }catch(err){
+          console.error(`Error parsing ${file}: ${err.message}`)
+        }
+        try{
+
           const packages = parsedFile || {};
           for (const key in packages) {
             if (Array.isArray(packages[key])) {
               techstack_Set.add(key);
             }
           }
+        }catch (err){
+          console.error(`Error occured ${fileName}:`,err.message())
         }
-      }
-    }else {
+      }else {
         techstack_Set = [];
         console.log("No common package dependency file found....");
       }
-    return Array.from(techstack_Set).filter(Boolean);
+    }
+  }
+  return Array.from(techstack_Set).filter(Boolean);
+}catch (err){
+  console.error(`Error occured:`,err.message)
+}
 }

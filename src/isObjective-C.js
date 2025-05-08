@@ -2,39 +2,96 @@ const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
 
-let techstack_Set = new Set();
+const Objective_C = ["Podfile", "Podfile.lock"];
+
+const techstack_Set = new Set();
 
 function isInclude(allFiles, dependencyPackage) {
   if (!allFiles || !dependencyPackage) return [];
-  return dependencyPackage.filter((file) => allFiles.includes(path.basename(file)));
+  try{
+    return allFiles.filter((file) => dependencyPackage.includes(path.basename(file)));
+  }catch(err){
+    console.error(`Error in isInclude function:`, err.message);
+      return [];
+  }
 }
 
+async function ObjectiveC_dir(dir = process.cwd()){
+          // const dir = process.cwd()
+           try{
+            const folder = fs.readdirSync(dir)
+            const allFiles = []
+            for(const file of folder){
+              const Path = path.join(dir,file)
+              const Pathstat = fs.statSync(Path)
+              if(Pathstat.isDirectory()){
+                if(file ==='node_modules') continue
+                if(file ==='.github/workflows') continue
+                const subDeps = await ObjectiveC_dir(Path)
+                  allFiles.push(...subDeps)
+                // console.log(`Successfully recursion on path:${Path}`)
+              }else if(Pathstat.isFile()){
+                if(Objective_C.includes(file)){
+                  allFiles.push(Path)
+                }
+                // console.log(`Successfully push path on allFiles:${Path}`)
+              } 
+            }
+            const check =  isInclude(allFiles,Objective_C)
+            return check;  
+          }catch(err){
+            console.error(`Error occured in ObjectiveC_dir function`,err.message)
+            return []
+          }
+}
+
+
 export async function ObjectiveC_dependencies() {
-  const workSpace = process.env.GITHUB_WORKSPACE;
-  const files = fs.readdirSync(workSpace);
+  // const workSpace = process.env.GITHUB_WORKSPACE;
+  // const files = fs.readdirSync(workSpace);
   // const lang = process.env.GITHUB_L;
 
   // Identify which language is used in the project
+  try{
+    const check = await ObjectiveC_dir()
 
-  const Objective_C = ["Podfile", "Podfile.lock"];
-  let isObjective_C = isInclude(files, Objective_C);
-  if (isObjective_C.length) {
-      for (const file of isObjective_C) {
-        if (file === "Podfile") {
-          const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
-          for (let line of pkg) {
-            line = line.trim();
-            if (line.startsWith("pod")) {
-              const dep = line.split(" ")[1].replace(/["',]/g, "");
-              techstack_Set.add(dep);
-            }
+  if (check && check.length) {
+      for (const file of check) {
+        const fileName = path.basename(file)
+        if (fileName === "Podfile") {
+          let pkg
+          try{
+            pkg = fs.readFileSync(file, "utf-8").split("\n");
+          }catch(err){
+            console.error(`Error parsing ${file}: ${err.message}`)
           }
-        } else if (file === "Podfile.lock") {
-          const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
-          const parsedFile = yaml.load(pkg);
-          const dependenciesArray = parsedFile?.["DEPENDENCIES"] || [];
-          for (const dep of dependenciesArray) {
-            techstack_Set.add(dep.split(" ")[0]);
+          try{
+
+            for (let line of pkg) {
+              line = line.trim();
+              if (line.startsWith("pod")) {
+                const dep = line.split(" ")[1].replace(/["',]/g, "");
+                techstack_Set.add(dep);
+              }
+            }
+          }catch(err){
+            console.error(`Error occured ${fileName}:`,err.message())
+          }
+        } else if (fileName === "Podfile.lock") {
+          let parsedFile
+          try{
+           const pkg = fs.readFileSync(file, "utf-8");
+            parsedFile = yaml.load(pkg);
+          }catch(err){
+            console.error(`Error parsing ${file}: ${err.message}`)
+          }
+          try{
+            const dependenciesArray = parsedFile?.["DEPENDENCIES"] || [];
+            for (const dep of dependenciesArray) {
+              techstack_Set.add(dep.split(" ")[0]);
+            }
+          }catch(err){
+            console.error(`Error occured ${fileName}:`,err.message())
           }
         }
       }
@@ -43,4 +100,7 @@ export async function ObjectiveC_dependencies() {
         console.log("No common package dependency file found....");
       }
     return Array.from(techstack_Set).filter(Boolean);
+  }catch(err){
+    console.error(`Error occured:`,err.message)
   }
+}

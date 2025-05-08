@@ -59,24 +59,67 @@ export async function R_dependencies() {
       for (const file of check) {
         const fileName = path.basename(file)
         if (fileName === "DESCRIPTION") {
-          try{
+          // try{
+          //   const pkg = fs.readFileSync(file, "utf-8").split("\n");
+          //   const dependenciesArray = ["Depends","Imports","Suggests","LinkingTo",];
+          //   for (let line of pkg) {
+          //     line = line.trim();
+          //     for (const dep of dependenciesArray) {
+          //       if (line.startsWith(dep + ":")) {
+          //         const depList = line.split(":")[1];
+          //         const deps = depList.join(" ").map((d) => d.trim().split(",")[0]);
+          //         for (const dep of deps) {
+          //           if (dep && dep !== "R" && /^[a-zA-Z]/.test(dep)) techstack_Set.add(dep);
+          //         }
+          //       }
+          //     }
+          //     console.log(`Deps:${Array.from(techstack_Set)}`)
+          //   }
+          // }catch(err){
+          //   console.error(`Error occured ${fileName}:`,err.message)
+          // }
+          try {
             const pkg = fs.readFileSync(file, "utf-8").split("\n");
-            const dependenciesArray = ["Depends","Imports","Suggests","LinkingTo",];
+            const dependenciesArray = ["Depends", "Imports", "Suggests", "LinkingTo"];
+            
+            let currentDepField = null;
+            let depLines = [];
+        
             for (let line of pkg) {
               line = line.trim();
-              for (const dep of dependenciesArray) {
-                if (line.startsWith(dep + ":")) {
-                  const depList = line.split(":")[1];
-                  const deps = depList.join(" ").map((d) => d.trim().split(",")[0]);
-                  for (const dep of deps) {
-                    if (dep && dep !== "R" && /^[a-zA-Z]/.test(dep)) techstack_Set.add(dep);
-                  }
+              if (!line) continue;
+        
+              // Match fields like "Depends:", "Imports:", etc.
+              const match = line.match(/^([A-Za-z]+):\s*(.*)/);
+              if (match) {
+                const field = match[1];
+                const rest = match[2];
+        
+                if (dependenciesArray.includes(field)) {
+                  currentDepField = field;
+                  depLines.push(rest);
+                } else {
+                  currentDepField = null;
                 }
+              } else if (currentDepField && dependenciesArray.includes(currentDepField)) {
+                depLines.push(line); // continuation line
               }
-              console.log(`Deps:${Array.from(techstack_Set)}`)
             }
-          }catch(err){
-            console.error(`Error occured ${fileName}:`,err.message)
+        
+            // Process all collected dependency lines
+            const depListStr = depLines.join(" ");
+            const deps = depListStr
+              .split(",")
+              .map((d) => d.trim().split(" ")[0])
+              .filter((dep) => dep && dep !== "R" && /^[a-zA-Z]/.test(dep));
+        
+            for (const dep of deps) {
+              techstack_Set.add(dep);
+            }
+        
+            console.log("Deps:", Array.from(techstack_Set));
+          } catch (err) {
+            console.error(`Error occurred ${fileName}:`, err.message);
           }
         } else if (fileName === "renv.lock") {
           try{

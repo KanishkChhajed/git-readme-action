@@ -26,7 +26,8 @@ async function Perl_dir(dir = process.cwd()){
               const Path = path.join(dir,file)
               const Pathstat = fs.statSync(Path)
               if(Pathstat.isDirectory()){
-                if(file ==='workflows') continue
+                if(file ==='.github/workflows') continue
+                if(file ==='node_modules') continue
                 const subDeps = await Perl_dir(Path)
                   allFiles.push(...subDeps)
                 console.log(`Successfully recursion on path:${Path}`)

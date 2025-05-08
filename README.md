@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding object logic to Manifest.toml of julia file"
+  > "Correcting logic in Manifest.toml of julia file"
   
   ---
   

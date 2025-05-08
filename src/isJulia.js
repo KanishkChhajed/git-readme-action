@@ -10,9 +10,11 @@ const  techstack_Set = new Set();
 function isInclude(allFiles, dependencyPackage) {
   if (!allFiles || !dependencyPackage) return [];
   try{
-
     return allFiles.filter((file) => dependencyPackage.includes(path.basename(file)));
-  }catch{}
+  }catch{
+    console.error(`Error in isInclude function:`, err.message);
+    return [];
+  }
 }
 
 async function Julia_dir(dir = process.cwd()){
@@ -28,12 +30,12 @@ async function Julia_dir(dir = process.cwd()){
                 if(file ==='.github/workflows') continue
                 const subDeps = await Julia_dir(Path)
                   allFiles.push(...subDeps)
-                // console.log(`Successfully recursion on path:${Path}`)
+                console.log(`Successfully recursion on path:${Path}`)
               }else if(Pathstat.isFile()){
                 if(Julia.includes(file)){
                   allFiles.push(Path)
                 }
-                // console.log(`Successfully push path on allFiles:${Path}`)
+                console.log(`Successfully push path on allFiles:${Path}`)
               } 
             }
             const check =  isInclude(allFiles,Julia)
@@ -66,7 +68,6 @@ try{
           console.error(`Error parsing ${file}: ${err.message}`)
         }
         try{
-
           const dependencies = parsedFile?.["dependencies"] || {};
           for (const dep of Object.keys(dependencies)) {
             techstack_Set.add(dep);

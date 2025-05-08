@@ -80,7 +80,7 @@ export async function R_dependencies() {
                   }
                 }
               }
-              console.log(`Deps:${techstack_Set}`)
+              console.log(`Deps:${Array.from(techstack_Set)}`)
             }
           }catch(err){
             console.error(`Error occured ${fileName}:`,err.message())

@@ -147,14 +147,14 @@ export async function JavaScript_dependencies() {
         console.error(`Error occured ${fileName}:`,err.message())
       }
     } else if (fileName === "pnpm-lock.yaml") {
+      let parsedFile
       try{
         const pkg = fs.readFileSync(file,"utf-8");
-        const parsedFile = yaml.load(pkg)
+        parsedFile = yaml.load(pkg)
       }catch(err){
         console.error(`Error parsing ${file}: ${err.message}`)
       }
       try{
-
         let dependencyArray = Object.keys(parsedFile?.dependencies || {});
         let devDependencyArray = Object.keys(parsedFile?.devDependencies || {});
         for (const dep of dependencyArray) {

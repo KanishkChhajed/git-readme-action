@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding recursive and error handling code in isPerl.js file"
+  > "Updating isPerl.js file logic"
   
   ---
   

@@ -71,7 +71,8 @@ export async function Perl_dependencies() {
               if (line.startsWith("#") || line === "") continue;
               const match = line.match(perlRegex);
               if (match) {
-                techstack_Set.add(match[2]);
+                const dep = match[2].split("::")[match[2].length - 1]
+                techstack_Set.add(dep.trim());
               }
             }
           }catch(err){

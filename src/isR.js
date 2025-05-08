@@ -1,58 +1,103 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
 
 
-let techstack_Set = new Set();
+const R = ["DESCRIPTION", "renv.lock"];
+
+const techstack_Set = new Set();
 
 function isInclude(allFiles, dependencyPackage) {
   if (!allFiles || !dependencyPackage) return [];
-  return dependencyPackage.filter((file) => allFiles.includes(path.basename(file)));
+  try{
+
+    return allFiles.filter((file) => dependencyPackage.includes(path.basename(file)));
+  }catch(err){
+    console.error(`Error in isInclude function:`, err.message);
+    return [];
+  }
+}
+
+async function R_dir(dir = process.cwd()){
+          // const dir = process.cwd()
+           try{
+            const folder = fs.readdirSync(dir)
+            const allFiles = []
+            for(const file of folder){
+              const Path = path.join(dir,file)
+              const Pathstat = fs.statSync(Path)
+              if(Pathstat.isDirectory()){
+                if(file ==='workflows') continue
+                const subDeps = await R_dir(Path)
+                  allFiles.push(...subDeps)
+                console.log(`Successfully recursion on path:${Path}`)
+              }else if(Pathstat.isFile()){
+                if(R.includes(file)){
+                  allFiles.push(Path)
+                }
+                console.log(`Successfully push path on allFiles:${Path}`)
+              } 
+            }
+            const check =  isInclude(allFiles,R)
+            return check;  
+          }catch(err){
+            console.error(`Error occured in R_dir function`,err.message)
+            return []
+          }
 }
 
 export async function R_dependencies() {
-  const workSpace = process.env.GITHUB_WORKSPACE;
-  const files = fs.readdirSync(workSpace);
+  // const workSpace = process.env.GITHUB_WORKSPACE;
+  // const files = fs.readdirSync(workSpace);
   // const lang = process.env.GITHUB_L;
 
   // Identify which language is used in the project
-  const R = ["DESCRIPTION", "renv.lock"];
-  let isR = isInclude(files, R);
+  const check = await R_dir()
 
-  if (isR.length) {
-      for (const file of isR) {
-        if (file === "DESCRIPTION") {
-          const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
-          const dependenciesArray = [
-            "Depends",
-            "Imports",
-            "Suggests",
-            "LinkingTo",
-          ];
-          for (let line of pkg) {
-            line = line.trim();
-            for (const dep of dependenciesArray) {
-              if (line.startsWith(dep + ":")) {
-                const depList = line.split(":")[1];
-                const deps = depList
+  if (check && check.length) {
+      for (const file of check) {
+        const fileName = path.basename(file)
+        if (fileName === "DESCRIPTION") {
+          try{
+            const pkg = fs.readFileSync(file, "utf-8").split("\n");
+            const dependenciesArray = [
+              "Depends",
+              "Imports",
+              "Suggests",
+              "LinkingTo",
+            ];
+            for (let line of pkg) {
+              line = line.trim();
+              for (const dep of dependenciesArray) {
+                if (line.startsWith(dep + ":")) {
+                  const depList = line.split(":")[1];
+                  const deps = depList
                   .split(",")
                   .map((d) => d.trim().split(" ")[0]);
-                for (const dep of deps) {
-                  if (dep && dep !== "R" && /^[a-zA-Z]/.test(dep)) techstack_Set.add(dep);
+                  for (const dep of deps) {
+                    if (dep && dep !== "R" && /^[a-zA-Z]/.test(dep)) techstack_Set.add(dep);
+                  }
                 }
               }
             }
+          }catch(err){
+            console.error(`Error occured ${fileName}:`,err.message())
           }
-        } else if (file === "renv.lock") {
-          const pkg = JSON.parse(fs.readFileSync(path.join(workSpace, file), "utf-8"));
-          const dependenciesObject = pkg?.Packages || {};
-          for (const dep of Object.keys(dependenciesObject)) {
-            techstack_Set.add(dep);
+        } else if (fileName === "renv.lock") {
+          try{
+            const pkg = JSON.parse(fs.readFileSync(file, "utf-8"));
+            const dependenciesObject = pkg?.Packages || {};
+            for (const dep of Object.keys(dependenciesObject)) {
+              techstack_Set.add(dep);
+            }
+          }catch(err){
+            console.error(`Error occured ${fileName}:`,err.message())
           }
         }
       }
     }else {
-        techstack_Set = [];
+        techstack_Set.clear();
         console.log("No common package dependency file found....");
+        return []
       }
     return Array.from(techstack_Set).filter(Boolean);
 }

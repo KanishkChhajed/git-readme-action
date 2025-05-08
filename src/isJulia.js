@@ -40,7 +40,7 @@ async function Julia_dir(dir = process.cwd()){
             const check =  isInclude(allFiles,Julia)
             return check;  
           }catch(err){
-            console.error(`Error occured in ObjectiveC_dir function`,err.message)
+            console.error(`Error occured in Julia_dir function`,err.message)
             return []
           }
 }

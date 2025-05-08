@@ -1,6 +1,7 @@
 import { execSync } from "child_process"
 import fs from 'fs'
 import path from 'path'
+import yaml from "js-yaml"
 
 const techstack_Set = new Set();
 
@@ -35,6 +36,7 @@ async function JavaScript_dir(dir = process.cwd()){
               const Pathstat = fs.statSync(Path)
               if(Pathstat.isDirectory()){
                 if(file ==='node_modules') continue
+                if(file ==='.github/workflows') continue
                 const subDeps = await JavaScript_dir(Path)
                   allFiles.push(...subDeps)
                 // console.log(`Successfully recursion on path:${Path}`)
@@ -145,16 +147,16 @@ export async function JavaScript_dependencies() {
         console.error(`Error occured ${fileName}:`,err.message())
       }
     } else if (fileName === "pnpm-lock.yaml") {
-      let pkg
       try{
-        pkg = JSON.parse(fs.readFileSync(file,"utf-8"));
+        const pkg = fs.readFileSync(file,"utf-8");
+        const parsedFile = yaml.load(pkg)
       }catch(err){
         console.error(`Error parsing ${file}: ${err.message}`)
       }
       try{
 
-        let dependencyArray = Object.keys(pkg.dependencies || {});
-        let devDependencyArray = Object.keys(pkg.devDependencies || {});
+        let dependencyArray = Object.keys(parsedFile?.dependencies || {});
+        let devDependencyArray = Object.keys(parsedFile?.devDependencies || {});
         for (const dep of dependencyArray) {
           techstack_Set.add(dep.split(":")[0]);
         }

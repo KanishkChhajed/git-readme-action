@@ -373,6 +373,7 @@ export function Python_dependencies() {
               const Path = path.join(dir,file)
               const Pathstat = fs.statSync(Path)
               if(Pathstat.isDirectory()){
+                if(file ==='.github/workflows') continue
                 const subDeps = Python_dir(Path)
                 if (Array.isArray(subDeps)) {
                   allFiles.push(...subDeps)

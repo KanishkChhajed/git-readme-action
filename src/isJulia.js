@@ -29,12 +29,12 @@ async function Julia_dir(dir = process.cwd()){
                 if(file ==='workflows') continue
                 const subDeps = await Julia_dir(Path)
                   allFiles.push(...subDeps)
-                console.log(`Successfully recursion on path:${Path}`)
+                // console.log(`Successfully recursion on path:${Path}`)
               }else if(Pathstat.isFile()){
                 if(Julia.includes(file)){
                   allFiles.push(Path)
                 }
-                console.log(`Successfully push path on allFiles:${Path}`)
+                // console.log(`Successfully push path on allFiles:${Path}`)
               } 
             }
             const check =  isInclude(allFiles,Julia)

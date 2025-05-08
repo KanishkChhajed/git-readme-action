@@ -84,10 +84,10 @@ try{
         }
         try{
 
-          const packages = parsedFile?.packages || [];
+          const packages = parsedFile?.deps || [];
           if (Array.isArray(packages)) {
           for (const key of packages) {
-            if(key.name) techstack_Set.add(key.name);
+            if(key.deps) techstack_Set.add(key.deps);
             }
           }
         }catch (err){

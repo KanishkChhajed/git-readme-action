@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding catch in isInclude and adding logs in dir function of isJulia.js file"
+  > "Correcting else statement in Julia and ObjectiveC as well as await for dir function to give path in julia"
   
   ---
   

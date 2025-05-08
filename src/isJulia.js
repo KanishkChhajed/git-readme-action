@@ -84,15 +84,10 @@ try{
         }
         try{
 
-          const packages = parsedFile || {};
+          const packages = parsedFile?.packages || [];
+          if (Array.isArray(packages)) {
           for (const key in packages) {
-            if (Array.isArray(packages[key])) {
-               techstack_Set.add(key);
-            }else if(Object.keys(packages[key])){
-              const dep = key?.deps || {}
-              for(const dev of Object.keys(dep)){
-                techstack_Set.add(dev)
-              }
+            if(key.name) techstack_Set.add(key.name);
             }
           }
         }catch (err){

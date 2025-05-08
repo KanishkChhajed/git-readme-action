@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Commenting condition for techstack in main.js"
+  > "UnCommenting condition for techstack in main.js"
   
   ---
   

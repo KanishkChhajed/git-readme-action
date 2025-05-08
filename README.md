@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "UnCommenting condition for techstack in main.js"
+  > "Adding catch in isInclude and adding logs in dir function of isJulia.js file"
   
   ---
   

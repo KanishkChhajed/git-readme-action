@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Correcting else position in ObjjectiveC.js file"
+  > "Add recursive and error handling code in isJulia.js file"
   
   ---
   

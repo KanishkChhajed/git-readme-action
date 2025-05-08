@@ -70,9 +70,8 @@ export async function Perl_dependencies() {
               line = line.trim();
               if (line.startsWith("#") || line === "") continue;
               const match = line.match(perlRegex);
-              if (match) {
-                const dep = match[2].split("::")[match[2].length - 1]
-                techstack_Set.add(dep.trim());
+              if (match && match[2]!='perl') {
+                techstack_Set.add(match[2]);
               }
             }
           }catch(err){

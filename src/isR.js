@@ -38,7 +38,7 @@ async function R_dir(dir = process.cwd()){
               } 
             }
             const check =  isInclude(allFiles,R)
-            console.log(`Included Files: ${check}`)
+            // console.log(`Included Files: ${check}`)
             return check;  
           }catch(err){
             console.error(`Error occured in R_dir function`,err.message)
@@ -53,7 +53,7 @@ export async function R_dependencies() {
 
   // Identify which language is used in the project
   const check = await R_dir()
-  console.log(`Checks:${check}`)
+  // console.log(`Checks:${check}`)
 
   if (check && check.length) {
       for (const file of check) {
@@ -117,7 +117,7 @@ export async function R_dependencies() {
               techstack_Set.add(dep);
             }
         
-            console.log("Deps:", Array.from(techstack_Set));
+            // console.log("Deps:", Array.from(techstack_Set));
           } catch (err) {
             console.error(`Error occurred ${fileName}:`, err.message);
           }

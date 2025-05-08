@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Correcting logic in isR.js file"
+  > "Changing err.message() -&gt; err.message in every file"
   
   ---
   

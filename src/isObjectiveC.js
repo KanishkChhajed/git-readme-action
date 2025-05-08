@@ -93,12 +93,12 @@ export async function ObjectiveC_dependencies() {
           }catch(err){
             console.error(`Error occured ${fileName}:`,err.message())
           }
+        }else {
+          techstack_Set = [];
+          console.log("No common package dependency file found....");
         }
       }
-    }else {
-        techstack_Set = [];
-        console.log("No common package dependency file found....");
-      }
+    }
     return Array.from(techstack_Set).filter(Boolean);
   }catch(err){
     console.error(`Error occured:`,err.message)

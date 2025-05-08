@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Comment log code in isJulia.js file"
+  > "UnComment log code in isJulia.js file for Manifest.toml"
   
   ---
   

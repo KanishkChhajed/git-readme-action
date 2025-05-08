@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Correcting logic in isR.js file"
+  > "Comment logs in isR.js file"
   
   ---
   

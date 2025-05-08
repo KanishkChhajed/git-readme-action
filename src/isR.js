@@ -61,12 +61,7 @@ export async function R_dependencies() {
         if (fileName === "DESCRIPTION") {
           try{
             const pkg = fs.readFileSync(file, "utf-8").split("\n");
-            const dependenciesArray = [
-              "Depends",
-              "Imports",
-              "Suggests",
-              "LinkingTo",
-            ];
+            const dependenciesArray = ["Depends","Imports","Suggests","LinkingTo",];
             for (let line of pkg) {
               line = line.trim();
               for (const dep of dependenciesArray) {

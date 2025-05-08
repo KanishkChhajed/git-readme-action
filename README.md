@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Correcting else statement in Julia and ObjectiveC as well as await for dir function to give path in julia"
+  > "Comment log code in isJulia.js file"
   
   ---
   

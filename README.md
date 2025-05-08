@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Add recursive and error handling code in isObjectiveC.js file and rename file C++,C#,F# also"
+  > "Convert into type: module syntax in ObjectiveC and Ruby file"
   
   ---
   

@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Add recursive and error handling code in isJulia.js file"
+  > "Commenting condition for techstack in main.js"
   
   ---
   

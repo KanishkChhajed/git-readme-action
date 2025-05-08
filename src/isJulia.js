@@ -86,7 +86,7 @@ try{
 
           const packages = parsedFile?.packages || [];
           if (Array.isArray(packages)) {
-          for (const key in packages) {
+          for (const key of packages) {
             if(key.name) techstack_Set.add(key.name);
             }
           }

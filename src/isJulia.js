@@ -87,8 +87,12 @@ try{
           const packages = parsedFile || {};
           for (const key in packages) {
             if (Array.isArray(packages[key])) {
-              const dep = key.deps || {}
-              if(dep) techstack_Set.add(dep);
+               techstack_Set.add(key);
+            }else if(Object.keys(packages[key])){
+              const dep = key?.deps || {}
+              for(const dev of Object.keys(dep)){
+                techstack_Set.add(dev)
+              }
             }
           }
         }catch (err){

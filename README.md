@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Convert into type: module syntax in ObjectiveC and Ruby file"
+  > "Correcting else position in ObjjectiveC.js file"
   
   ---
   

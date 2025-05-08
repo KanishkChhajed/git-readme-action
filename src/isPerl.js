@@ -56,7 +56,7 @@ export async function Perl_dependencies() {
   // Identify which language is used in the project
 
   // let isPerl = isInclude(files, Perl);
-  const check = Perl_dir()
+  const check = await Perl_dir()
 
   if (check && check.length) {
       for (const file of check) {
@@ -71,7 +71,7 @@ export async function Perl_dependencies() {
               if (line.startsWith("#") || line === "") continue;
               const match = line.match(perlRegex);
               if (match) {
-                techstack_Set.add(match[1]);
+                techstack_Set.add(match[2]);
               }
             }
           }catch(err){

@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Modify error handling and recursive code in isJavaScript.js file"
+  > "Redeclare templateContent in main.js"
   
   ---
   

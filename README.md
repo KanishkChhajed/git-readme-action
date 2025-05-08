@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Comment logs in isR.js file"
+  > "Adding recursive and error handling code in isPerl.js file"
   
   ---
   

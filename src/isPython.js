@@ -69,7 +69,7 @@ export function Python_dependencies() {
                 if(depName) techstack_Set.add(depName);
               }
             }catch(err){
-              console.error(`Error occured ${fileName}:`,err.message())
+              console.error(`Error occured ${fileName}:`,err.message)
             }
             
           } else if (fileName === "pyproject.toml") {
@@ -146,7 +146,7 @@ export function Python_dependencies() {
                           // for (const dep of Object.keys(devDependencyObj)) {
                             // techstack_Set.add(dep);
                           }catch(err){
-                            console.error(`Error occured ${fileName}:`,err.message())
+                            console.error(`Error occured ${fileName}:`,err.message)
                           }
               // }
             } else if (fileName === "Pipfile") {
@@ -230,7 +230,7 @@ export function Python_dependencies() {
                 console.log("It's a string")
                 console.log(techstack_Set)
               }catch(err){
-                console.error(`Error occured ${fileName}:`,err.message())
+                console.error(`Error occured ${fileName}:`,err.message)
               }
           } else if (fileName === "poetry.lock") {
             try{
@@ -301,7 +301,7 @@ export function Python_dependencies() {
               }
             }
             }catch(err){
-              console.error(`Error occured ${fileName}:`,err.message())
+              console.error(`Error occured ${fileName}:`,err.message)
             }
           } else if (fileName === "setup.py") {
             try{
@@ -347,7 +347,7 @@ export function Python_dependencies() {
                     deps.forEach(dep => techstack_Set.add(dep))
                   }
                 }catch(err){
-                  console.error(`Error occured ${fileName}:`,err.message())
+                  console.error(`Error occured ${fileName}:`,err.message)
                 }
               }
               else {

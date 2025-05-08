@@ -75,7 +75,7 @@ export async function ObjectiveC_dependencies() {
               }
             }
           }catch(err){
-            console.error(`Error occured ${fileName}:`,err.message())
+            console.error(`Error occured ${fileName}:`,err.message)
           }
         } else if (fileName === "Podfile.lock"){
           let parsedFile
@@ -91,7 +91,7 @@ export async function ObjectiveC_dependencies() {
               techstack_Set.add(dep.split(" ")[0]);
             }
           }catch(err){
-            console.error(`Error occured ${fileName}:`,err.message())
+            console.error(`Error occured ${fileName}:`,err.message)
           }
         }else {
           techstack_Set.clear();

@@ -77,7 +77,7 @@ export async function R_dependencies() {
               console.log(`Deps:${Array.from(techstack_Set)}`)
             }
           }catch(err){
-            console.error(`Error occured ${fileName}:`,err.message())
+            console.error(`Error occured ${fileName}:`,err.message)
           }
         } else if (fileName === "renv.lock") {
           try{
@@ -87,7 +87,7 @@ export async function R_dependencies() {
               techstack_Set.add(dep);
             }
           }catch(err){
-            console.error(`Error occured ${fileName}:`,err.message())
+            console.error(`Error occured ${fileName}:`,err.message)
           }
         }else {
           techstack_Set.clear();

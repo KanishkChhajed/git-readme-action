@@ -72,7 +72,8 @@ try{
             techstack_Set.add(dep);
           }
         }catch(err){
-          console.error(`Error occured ${fileName}:`,err.message())
+          console.error(`Error occured ${fileName}:`,err.message
+          )
         }
       } else if (fileName === "Manifest.toml") {
         let parsedFile
@@ -93,7 +94,7 @@ try{
             }
           }
         }catch (err){
-          console.error(`Error occured ${fileName}:`,err.message())
+          console.error(`Error occured ${fileName}:`,err.message)
         }
       }else {
         techstack_Set.clear();

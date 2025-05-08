@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Add recursive and error handling code in isR.js"
+  > "Correcting logic of isR.js"
   
   ---
   

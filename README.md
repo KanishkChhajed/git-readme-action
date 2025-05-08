@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "UnComment log code in isJulia.js file for Manifest.toml"
+  > "Adding object logic to Manifest.toml of julia file"
   
   ---
   

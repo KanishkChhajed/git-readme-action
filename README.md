@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Correcting logic in Manifest.toml of julia file"
+  > "Add recursive and error handling code in isR.js"
   
   ---
   

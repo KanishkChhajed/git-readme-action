@@ -77,12 +77,11 @@ async function  generate_readme(){
                         if(module && typeof module[functionName] === 'function'){
                             const deps = await module[functionName]();
                             techStack.push(lang, ...deps);
-                            // if(Array.isArray(deps) && deps.length > 0){
-                            // }
-                        }
-                        else{
-                            console.log(`No module is there of ${lang}` )
-                            techStack.push(lang);
+                            if(Array.isArray(deps) && deps.length > 0){
+                            }else{
+                                console.log(`No module is there of ${lang}` )
+                                techStack.push(lang);
+                            }
                         }
                     }
                   } catch (err) {

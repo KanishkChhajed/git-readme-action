@@ -1,59 +1,111 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import  path from"path";
 
 
+const Perl = ["cpanfile", "Makefile.PL"];
 
-let techstack_Set = new Set();
+const techstack_Set = new Set();
 
 function isInclude(allFiles, dependencyPackage) {
   if (!allFiles || !dependencyPackage) return [];
-  return dependencyPackage.filter((file) => allFiles.includes(path.basename(file)));
+  try{
+
+    return allFiles.filter((file) => dependencyPackage.includes(path.basename(file)));
+  }catch(err){
+    console.error(`Error in isInclude function:`, err.message);
+    return [];
+  }
 }
 
+async function Perl_dir(dir = process.cwd()){
+          // const dir = process.cwd()
+           try{
+            const folder = fs.readdirSync(dir)
+            const allFiles = []
+            for(const file of folder){
+              const Path = path.join(dir,file)
+              const Pathstat = fs.statSync(Path)
+              if(Pathstat.isDirectory()){
+                if(file ==='workflows') continue
+                const subDeps = await Perl_dir(Path)
+                  allFiles.push(...subDeps)
+                console.log(`Successfully recursion on path:${Path}`)
+              }else if(Pathstat.isFile()){
+                if(Perl.includes(file)){
+                  allFiles.push(Path)
+                }
+                console.log(`Successfully push path on allFiles:${Path}`)
+              } 
+            }
+            const check =  isInclude(allFiles,Perl)
+            // console.log(`Included Files: ${check}`)
+            return check;  
+          }catch(err){
+            console.error(`Error occured in Perl_dir function`,err.message)
+            return []
+          }
+}
+
+
 export async function Perl_dependencies() {
-  const workSpace = process.env.GITHUB_WORKSPACE;
-  const files = fs.readdirSync(workSpace);
+  // const workSpace = process.env.GITHUB_WORKSPACE;
+  // const files = fs.readdirSync(workSpace);
   // const lang = process.env.GITHUB_L;
 
   // Identify which language is used in the project
 
-  const Perl = ["cpanfile", "Makefile.PL"];
-  let isPerl = isInclude(files, Perl);
+  // let isPerl = isInclude(files, Perl);
+  const check = Perl_dir()
 
-  if (isPerl.length) {
-      for (const file of isPerl) {
-        if (file === "cpanfile") {
-          const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
-          const perlRegex =
+  if (check && check.length) {
+      for (const file of check) {
+        const fileName = path.basename(file)
+        if (fileName === "cpanfile") {
+          try{
+            const pkg = fs.readFileSync(file, "utf-8").split("\n");
+            const perlRegex =
             /^\s*(requires|recommends|suggests)\s+['"]([^'"]+)['"]/;
-          for (let line of pkg) {
-            line = line.trim();
-            if (line.startsWith("#") || line === "") continue;
-            const match = line.match(perlRegex);
-            if (match) {
-              techstack_Set.add(match[2]);
-            }
-          }
-        } else if (file === "Makefile.PL") {
-          const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
-          const perlRegex = /PREREQ_PM\s*=>\s*\{([\s\S]*?)\}/;
-          const preDep = pkg.match(perlRegex);
-          if (preDep) {
-            const prereqBlock = preDep[1].split("\n");
-            for (let line of prereqBlock) {
+            for (let line of pkg) {
               line = line.trim();
-              const lineRegex = /['"]([^'"]+)['"]\s*=>/;
-              const match = line.match(lineRegex);
+              if (line.startsWith("#") || line === "") continue;
+              const match = line.match(perlRegex);
               if (match) {
-                techstack_Set.add(match[1]);
+                techstack_Set.add(match[2]);
               }
             }
+          }catch(err){
+            console.error(`Error occurred ${fileName}:`, err.message);
           }
-        }
-      }
-    }else {
-        techstack_Set = [];
+        } else if (fileName === "Makefile.PL") {
+          try{
+
+            const pkg = fs.readFileSync(file, "utf-8");
+            const perlRegex = /PREREQ_PM\s*=>\s*\{([\s\S]*?)\}/;
+            const preDep = pkg.match(perlRegex);
+            if (preDep) {
+              const prereqBlock = preDep[1].split("\n");
+              for (let line of prereqBlock) {
+                line = line.trim();
+                const lineRegex = /['"]([^'"]+)['"]\s*=>/;
+                const match = line.match(lineRegex);
+                if (match) {
+                  techstack_Set.add(match[1]);
+                }
+              }
+            }
+          }catch(err){
+            console.error(`Error occurred ${fileName}:`, err.message);
+          }
+          }else {
+        techstack_Set.clear();
         console.log("No common package dependency file found....");
+        return []
       }
+    }
+    }else {
+      techstack_Set.clear();
+      console.log("No common package dependency file found....");
+      return []
+    }
     return Array.from(techstack_Set).filter(Boolean);
 }

@@ -67,8 +67,7 @@ export async function R_dependencies() {
               for (const dep of dependenciesArray) {
                 if (line.startsWith(dep + ":")) {
                   const depList = line.split(":")[1];
-                  const deps = depList
-                  .map((d) => d.trim().split(",")[0]);
+                  const deps = depList.join(" ").map((d) => d.trim().split(",")[0]);
                   for (const dep of deps) {
                     if (dep && dep !== "R" && /^[a-zA-Z]/.test(dep)) techstack_Set.add(dep);
                   }

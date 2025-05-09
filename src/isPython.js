@@ -48,6 +48,7 @@ async function Python_dir(dir = process.cwd()){
     for(const file of folder){
       const Path = path.join(dir,file)
       // To resolve this kind of  error : Error occured in Python_dir function ENOENT: no such file or directory, stat '/home/runner/work/hasktorch-examples/hasktorch-examples/cabal.project.freeze'
+      let Pathstat
       try {
         Pathstat = fs.statSync(Path);
       } catch (err) {
@@ -55,7 +56,7 @@ async function Python_dir(dir = process.cwd()){
       }
       // const Pathstat = fs.statSync(Path)
       if(Pathstat.isDirectory()){
-        if(file ==='.github/workflows') continue
+        if(file ==='.github' || file === '.git' || file === 'node_modules') continue
         const subDeps = await Python_dir(Path)
         if (Array.isArray(subDeps)) {
           allFiles.push(...subDeps)

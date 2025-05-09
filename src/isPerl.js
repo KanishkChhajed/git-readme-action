@@ -26,7 +26,7 @@ async function Perl_dir(dir = process.cwd()){
               const Path = path.join(dir,file)
               const Pathstat = fs.statSync(Path)
               if(Pathstat.isDirectory()){
-                if(file ==='.github/workflows') continue
+                if(file ==='workflows') continue
                 if(file ==='node_modules') continue
                 const subDeps = await Perl_dir(Path)
                   allFiles.push(...subDeps)
@@ -80,17 +80,19 @@ export async function Perl_dependencies() {
         } else if (fileName === "Makefile.PL") {
           try{
 
-            const pkg = fs.readFileSync(file, "utf-8");
+            const pkg = fs.readFileSync(file, "utf-8").split('\n');
             const perlRegex = /PREREQ_PM\s*=>\s*\{([\s\S]*?)\}/;
-            const preDep = pkg.match(perlRegex);
-            if (preDep) {
-              const prereqBlock = preDep[1].split("\n");
-              for (let line of prereqBlock) {
-                line = line.trim();
-                const lineRegex = /['"]([^'"]+)['"]\s*=>/;
-                const match = line.match(lineRegex);
-                if (match) {
-                  techstack_Set.add(match[1]);
+            for(const line of pkg){
+              const preDep = line.match(perlRegex);
+              if (preDep) {
+                const prereqBlock = preDep[1].split("\n");
+                for (let line of prereqBlock) {
+                  line = line.trim();
+                  const lineRegex = /['"]([^'"]+)['"]\s*=>/;
+                  const match = line.match(lineRegex);
+                  if (match) {
+                    techstack_Set.add(match[1]);
+                  }
                 }
               }
             }

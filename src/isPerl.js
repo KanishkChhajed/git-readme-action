@@ -39,7 +39,7 @@ async function Perl_dir(dir = process.cwd()){
               } 
             }
             const check =  isInclude(allFiles,Perl)
-            console.log(`Included Files: ${check}`)
+            // console.log(`Included Files: ${check}`)
             return check;  
           }catch(err){
             console.error(`Error occured in Perl_dir function`,err.message)
@@ -112,7 +112,7 @@ export async function Perl_dependencies() {
               }
             }
         
-            console.log(`Deps: ${Array.from(techstack_Set)}`);
+            // console.log(`Deps: ${Array.from(techstack_Set)}`);
           } catch (err) {
             console.error(`Error occurred ${fileName}:`, err.message);
           }

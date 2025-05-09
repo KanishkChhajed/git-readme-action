@@ -68,7 +68,7 @@ export async function Scala_dependencies() {
         if (fileName === "build.sbt"){
           try{
             const pkg = fs.readFileSync(file, "utf-8");
-            const Scalaregex = /"[^"]+"\s*%%?\s*"([^"]+)"\s*%\s*"[^"]+"/g;
+            const Scalaregex = /"[^"]+"\s*%{1,2}\s*"([^"]+)"\s*%\s*"[^"]+"/g;
             let match;
             while ((match = Scalaregex.exec(pkg)) !== null) {
               techstack_Set.add(match[1]);

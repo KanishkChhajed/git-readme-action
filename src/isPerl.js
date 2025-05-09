@@ -30,16 +30,16 @@ async function Perl_dir(dir = process.cwd()){
                 if(file ==='node_modules') continue
                 const subDeps = await Perl_dir(Path)
                   allFiles.push(...subDeps)
-                console.log(`Successfully recursion on path:${Path}`)
+                // console.log(`Successfully recursion on path:${Path}`)
               }else if(Pathstat.isFile()){
                 if(Perl.includes(file)){
                   allFiles.push(Path)
                 }
-                console.log(`Successfully push path on allFiles:${Path}`)
+                // console.log(`Successfully push path on allFiles:${Path}`)
               } 
             }
             const check =  isInclude(allFiles,Perl)
-            // console.log(`Included Files: ${check}`)
+            console.log(`Included Files: ${check}`)
             return check;  
           }catch(err){
             console.error(`Error occured in Perl_dir function`,err.message)
@@ -96,6 +96,7 @@ export async function Perl_dependencies() {
                 }
               }
             }
+            console.log(`Deps: ${Array.from(techstack_Set)}`)
           }catch(err){
             console.error(`Error occurred ${fileName}:`, err.message);
           }

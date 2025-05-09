@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding recursive and error handling code on isDart.js file"
+  > "Adding recursive and error handling code in isKotlin.js file"
   
   ---
   

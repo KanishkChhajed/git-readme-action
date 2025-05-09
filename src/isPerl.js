@@ -81,15 +81,15 @@ export async function Perl_dependencies() {
           try{
 
             const pkg = fs.readFileSync(file, "utf-8");
-            const perlRegex = /PREREQ_PM\s*=>\s*\{([\s\S]*?)\}/m;
-              const preDep = pkg.match(perlRegex);
+            // const perlregex = /PREREQ_PM\s*=>\s*\{([\s\S]*?)\}/m
+              const preDep = pkg.match(/PREREQ_PM\s*=>\s*\{([\s\S]*?)\}/m);
               if (preDep && preDep[1]) {
                 const prereqBlock = preDep[1].split(/,|\n/);
                 for (let line of prereqBlock) {
                   line = line.trim();
                   if(!line || line.startsWith("#")) continue
-                  const lineRegex = /['"]([^'"]+)['"]\s*=>/;
-                  const match = line.match(lineRegex);
+                  // const lineRegex = /['"]([^'"]+)['"]\s*=>/;
+                  const match = line.match(/['"]([^'"]+)['"]\s*=>/);
                   if (match) {
                     techstack_Set.add(match[1]);
                   }

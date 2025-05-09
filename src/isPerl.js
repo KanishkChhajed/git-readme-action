@@ -80,10 +80,9 @@ export async function Perl_dependencies() {
         } else if (fileName === "Makefile.PL") {
           try{
 
-            const pkg = fs.readFileSync(file, "utf-8").split('\n');
+            const pkg = fs.readFileSync(file, "utf-8");
             const perlRegex = /PREREQ_PM\s*=>\s*\{([\s\S]*?)\}/;
-            for(const line of pkg){
-              const preDep = line.match(perlRegex);
+              const preDep = pkg.match(perlRegex);
               if (preDep) {
                 const prereqBlock = preDep[1].split("\n");
                 for (let line of prereqBlock) {
@@ -94,7 +93,6 @@ export async function Perl_dependencies() {
                     techstack_Set.add(match[1]);
                   }
                 }
-              }
             }
             console.log(`Deps: ${Array.from(techstack_Set)}`)
           }catch(err){

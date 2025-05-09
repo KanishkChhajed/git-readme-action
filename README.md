@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Define Pathstat in dir function of all files"
+  > "Adding recursive and error handling code in isScala.js file"
   
   ---
   

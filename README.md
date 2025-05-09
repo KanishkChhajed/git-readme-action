@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Correcting the logic of isHaskell.js file"
+  > "Define Pathstat in dir function of all files"
   
   ---
   

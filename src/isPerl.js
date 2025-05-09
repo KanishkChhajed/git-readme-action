@@ -79,36 +79,27 @@ export async function Perl_dependencies() {
           }
         } else if (fileName === "Makefile.PL") {
           try {
-            const pkg = fs.readFileSync(file, "utf-8");
+            const pkg = fs.readFileSync(file, "utf-8").split("\n");
         
-            // Step 1: Find where PREREQ_PM block starts
-            const lines = pkg.split('\n');
-            let isInBlock = false;
-            let blockLines = [];
+            const simplePrereqRegex = /^\$prereq\{['"]([^'"]+)['"]\}/;
         
-            for (let line of lines) {
+            for (let line of pkg) {
               line = line.trim();
-        
-              if (line.startsWith("'PREREQ_PM'") && line.includes('{')) {
-                isInBlock = true;
-                continue;
-              }
-        
-              if (isInBlock) {
-                if (line.startsWith('},') || line.startsWith('}')) {
-                  isInBlock = false;
-                  break;
-                }
-        
-                blockLines.push(line);
+              const match = line.match(simplePrereqRegex);
+              if (match && match[1]) {
+                techstack_Set.add(match[1]);
               }
             }
         
-            // Step 2: Extract dependencies from block
-            for (let depLine of blockLines) {
-              const match = depLine.match(/['"]([^'"]+)['"]\s*=>/);
-              if (match) {
-                techstack_Set.add(match[1]);
+            // Fallback: try to extract any inline PREREQ_PM block too
+            const inlineBlock = pkg.join("\n").match(/PREREQ_PM\s*=>\s*\{([\s\S]*?)\}/);
+            if (inlineBlock) {
+              const depsBlock = inlineBlock[1].split("\n");
+              for (let depLine of depsBlock) {
+                const match = depLine.match(/['"]([^'"]+)['"]\s*=>/);
+                if (match) {
+                  techstack_Set.add(match[1]);
+                }
               }
             }
         

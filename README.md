@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding recursive and error handling code in isHaskell.js file"
+  > "Correcting the logic of isHaskell.js file"
   
   ---
   

@@ -130,11 +130,11 @@ export async function Haskell_dependencies() {
             const packagesDependency = parsedFile?.["packages"] || [];
             for (const dep of packagesDependency) {
               if (
-                typeof dep === "string" &&
+                typeof dep === "string" && dep.trim() !== "." &&
                 (dep.endsWith(".cabal") || dep.endsWith("package.yaml"))
               ) {
                 techstack_Set.add(dep);
-              } else if (typeof dep === "string") {
+              } else if (typeof dep === "string" && dep.trim() !== ".") {
                 techstack_Set.add(dep);
               }
             }

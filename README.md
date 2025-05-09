@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding recursive and error handling code in isScala.js file"
+  > "Correcting logic in isScala.js file"
   
   ---
   

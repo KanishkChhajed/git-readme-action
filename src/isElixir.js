@@ -68,7 +68,7 @@ export async function Elixir_dependencies() {
         const fileName = path.basename(file)
         if (fileName === "mix.exs"){
           try{
-            const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
+            const pkg = fs.readFileSync(file, "utf-8").split("\n");
             const depRegex = /{:\s*([a-zA-Z0-9_]+)\s*,/;
             for (let line of pkg) {
               line = line.trim();
@@ -82,7 +82,7 @@ export async function Elixir_dependencies() {
           }
         } else if (fileName === "mix.lock") {
           try{
-            const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8").split("\n");
+            const pkg = fs.readFileSync(file, "utf-8").split("\n");
             const depRegex = /"([^"]+)"\s*=>/g;
             let match;
             while ((match = depRegex.exec(pkg)) !== null) {

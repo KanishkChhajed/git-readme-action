@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Updating main.js code"
+  > "Adding recursive and error handling code on isDart.js file"
   
   ---
   

@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Correcting logic of isElixir.js file"
+  > "Updating main.js code"
   
   ---
   

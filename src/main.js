@@ -78,6 +78,8 @@ async function  generate_readme(){
                             const deps = await module[functionName]();
                             if (Array.isArray(deps) && deps.length > 0) {
                                 techStack.push(lang, ...deps);
+                              }else if(typeof deps === 'string'){
+                                techStack.push(...deps)
                               }else{
                                 console.log(`No module is there of ${lang}` )
                                 techStack.push(lang);

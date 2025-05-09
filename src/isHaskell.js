@@ -133,10 +133,8 @@ export async function Haskell_dependencies() {
                 typeof dep === "string" && dep.trim() !== "." &&
                 (dep.endsWith(".cabal") || dep.endsWith("package.yaml"))
               ) {
-                if(dep === ".")continue
                 techstack_Set.add(dep);
               } else if (typeof dep === "string" && dep.trim() !== ".") {
-                if(dep === ".")continue
                 techstack_Set.add(dep);
               }
             }
@@ -184,5 +182,6 @@ export async function Haskell_dependencies() {
         console.log("No common package dependency file found....");
         return []
       }
+      console.log(`Deps: ${Array.from(techstack_Set)}`)
     return Array.from(techstack_Set).filter(Boolean);
 }

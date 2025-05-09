@@ -25,7 +25,12 @@ async function Haskell_dir(dir = process.cwd()){
             const allFiles = []
             for(const file of folder){
               const Path = path.join(dir,file)
-              const Pathstat = fs.statSync(Path)
+              try {
+                      Pathstat = fs.statSync(Path);
+                    } catch (err) {
+                      console.warn(`Skipping file due to error: ${Path}, ${err.message}`);continue;
+                    }
+              // const Pathstat = fs.statSync(Path)
               if(Pathstat.isDirectory()){
                 if(file ==='workflows') continue
                 if(file ==='node_modules') continue

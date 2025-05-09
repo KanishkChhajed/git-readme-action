@@ -1,49 +1,102 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
 
+const Scala = ["build.sbt", "build.gradle"];
 
-let techstack_Set = new Set();
+const techstack_Set = new Set();
 
 function isInclude(allFiles, dependencyPackage) {
   if (!allFiles || !dependencyPackage) return [];
-  return dependencyPackage.filter((file) => allFiles.includes(path.basename(file)));
+  try{
+    return allFiles.filter((file) => dependencyPackage.includes(path.basename(file)));
+  }catch{
+    console.error(`Error in isInclude function:`, err.message);
+    return [];
+  }
 }
 
+
+async function Scala_dir(dir = process.cwd()){
+          // const dir = process.cwd()
+           try{
+            const folder = fs.readdirSync(dir)
+            const allFiles = []
+            for(const file of folder){
+              const Path = path.join(dir,file)
+              let Pathstat
+              try {
+                    Pathstat = fs.statSync(Path);
+                    } catch (err) {
+                      console.warn(`Skipping file due to error: ${Path}, ${err.message}`);continue;
+                    }
+              // const Pathstat = fs.statSync(Path)
+              if(Pathstat.isDirectory()){
+                if(file ==='.github' || file === '.git' || file === 'node_modules') continue
+                const subDeps = await Scala_dir(Path)
+                  allFiles.push(...subDeps)
+                console.log(`Successfully recursion on path:${Path}`)
+              }else if(Pathstat.isFile()){
+                if(Scala.includes(file)){
+                  allFiles.push(Path)
+                }
+                console.log(`Successfully push path on allFiles:${Path}`)
+              } 
+            }
+            const check = await isInclude(allFiles,Scala)
+            console.log(`Included Files: ${check}`)
+            return check;  
+          }catch(err){
+            console.error(`Error occured in Scala_dir function`,err.message)
+            return []
+          }
+}
+
+
 export async function Scala_dependencies() {
-  const workSpace = process.env.GITHUB_WORKSPACE;
-  const files = fs.readdirSync(workSpace);
+  // const workSpace = process.env.GITHUB_WORKSPACE;
+  // const files = fs.readdirSync(workSpace);
   // const lang = process.env.GITHUB_L;
 
   // Identify which language is used in the project
 
-  const Scala = ["build.sbt", "build.gradle"];
-  let isScala = isInclude(files, Scala);
+  // let isScala = isInclude(files, Scala);
+  const check = await Scala_dir()
 
-  if (isScala.length) {
-      for (const file of isScala) {
-        if (file === "build.sbt") {
-          const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
-          const Scalaregex = /"[^"]+"\s*%%?\s*"([^"]+)"\s*%\s*"[^"]+"/g;
-          let match;
-          while ((match = Scalaregex.exec(pkg)) !== null) {
-            techstack_Set.add(match[1]);
-          }
-        } else if (file === "build.gradle") {
-          const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
-          const dependenciesRegex =
-            /(implementation|api|compile|testImplementation|runtimeOnly|annotationProcessor)\s+['"]([^'"]+)['"]/g;
-          let match;
-          while ((match = dependenciesRegex.exec(pkg)) !== null) {
-            const dep = match[2].split(":");
-            if (dep.length >= 2) {
-              techstack_Set.add(dep[1]);
+  if (check && check.length) {
+      for (const file of check){
+        const fileName = path.basename(file)
+        if (fileName === "build.sbt"){
+          try{
+            const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
+            const Scalaregex = /"[^"]+"\s*%%?\s*"([^"]+)"\s*%\s*"[^"]+"/g;
+            let match;
+            while ((match = Scalaregex.exec(pkg)) !== null) {
+              techstack_Set.add(match[1]);
             }
+          }catch(err){
+             console.error(`Error parsing ${file}: ${err.message}`)
+          }
+        } else if (fileName === "build.gradle"){
+          try{
+            const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
+            const dependenciesRegex =
+            /(implementation|api|compile|testImplementation|runtimeOnly|annotationProcessor)\s+['"]([^'"]+)['"]/g;
+            let match;
+            while ((match = dependenciesRegex.exec(pkg)) !== null) {
+              const dep = match[2].split(":");
+              if (dep.length >= 2) {
+                techstack_Set.add(dep[1]);
+              }
+            }
+          }catch(err){
+             console.error(`Error parsing ${file}: ${err.message}`)
           }
         }
       }
     }else {
-        techstack_Set = [];
+        techstack_Set.clear();
         console.log("No common package dependency file found....");
+        return [];
       }
     return Array.from(techstack_Set).filter(Boolean);
 }

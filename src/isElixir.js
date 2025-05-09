@@ -82,8 +82,8 @@ export async function Elixir_dependencies() {
           }
         } else if (fileName === "mix.lock") {
           try{
-            const pkg = fs.readFileSync(file, "utf-8").split("\n");
-            const depRegex = /"([^"]+)"\s*=>/g;
+            const pkg = fs.readFileSync(file, "utf-8");
+            const depRegex = /"([^"]+)"\s*:\s*\{/g;
             let match;
             while ((match = depRegex.exec(pkg)) !== null) {
               techstack_Set.add(match[1]);

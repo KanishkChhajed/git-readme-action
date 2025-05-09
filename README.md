@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding try and catch code in dir function to avoid freeze files in repo"
+  > "Correcting the logic of isHaskell.js file"
   
   ---
   

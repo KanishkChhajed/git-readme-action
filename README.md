@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Updating isPerl.js file logic"
+  > "Correcting the logic of isPerl.js file"
   
   ---
   

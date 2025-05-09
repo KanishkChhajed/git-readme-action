@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Correcting the logic of isPerl.js file"
+  > "Adding recursive and error handling code in isHaskell.js file"
   
   ---
   

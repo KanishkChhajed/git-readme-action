@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Correcting logic in isScala.js file"
+  > "Correcting logic of isElixir.js file"
   
   ---
   

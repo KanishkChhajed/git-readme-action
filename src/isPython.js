@@ -39,7 +39,37 @@ function isInclude(allFiles, dependencyPackage) {
 }
 
 
-export function Python_dependencies() {
+
+async function Python_dir(dir = process.cwd()){
+  // const dir = process.cwd()
+   try{
+    const folder = fs.readdirSync(dir)
+    const allFiles = []
+    for(const file of folder){
+      const Path = path.join(dir,file)
+      const Pathstat = fs.statSync(Path)
+      if(Pathstat.isDirectory()){
+        if(file ==='.github/workflows') continue
+        const subDeps = await Python_dir(Path)
+        if (Array.isArray(subDeps)) {
+          allFiles.push(...subDeps)
+        }
+        // console.log(`Successfully recursion on path:${Path}`)
+      }else if(Pathstat.isFile()){
+        allFiles.push(Path)
+        // console.log(`Successfully push path on allFiles:${Path}`)
+      } 
+    }
+    const check = await isInclude(allFiles,Python)
+    return check;  
+  }catch(err){
+    console.error(`Error occured in Python_dir function`,err.message)
+    return []
+  }
+}
+
+
+export async function Python_dependencies() {
   // const workSpace = process.env.GITHUB_WORKSPACE;
   // const files = fs.readdirSync(workSpace);
   // const lang = process.env.GITHUB_L;
@@ -55,7 +85,7 @@ export function Python_dependencies() {
 
   // let isPython = isInclude(files, Python);
   try{
-  const check = Python_dir()
+  const check = await Python_dir()
     if (check && check.length) {
       for (const file of check) {
         const fileName = path.basename(file)
@@ -364,31 +394,5 @@ export function Python_dependencies() {
     }
 
 
-    function Python_dir(dir = process.cwd()){
-          // const dir = process.cwd()
-           try{
-            const folder = fs.readdirSync(dir)
-            const allFiles = []
-            for(const file of folder){
-              const Path = path.join(dir,file)
-              const Pathstat = fs.statSync(Path)
-              if(Pathstat.isDirectory()){
-                if(file ==='.github/workflows') continue
-                const subDeps = Python_dir(Path)
-                if (Array.isArray(subDeps)) {
-                  allFiles.push(...subDeps)
-                }
-                // console.log(`Successfully recursion on path:${Path}`)
-              }else if(Pathstat.isFile()){
-                allFiles.push(Path)
-                // console.log(`Successfully push path on allFiles:${Path}`)
-              } 
-            }
-            const check =  isInclude(allFiles,Python)
-            return check;  
-          }catch(err){
-            console.error(`Error occured in Python_dir function`,err.message)
-            return []
-          }
-}
+  
 

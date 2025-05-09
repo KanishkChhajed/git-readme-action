@@ -133,9 +133,9 @@ export async function Haskell_dependencies() {
                 typeof dep === "string" && dep.trim() !== "." &&
                 (dep.endsWith(".cabal") || dep.endsWith("package.yaml"))
               ) {
-                techstack_Set.add(dep);
+                techstack_Set.add(dep.trim());
               } else if (typeof dep === "string" && dep.trim() !== ".") {
-                techstack_Set.add(dep);
+                techstack_Set.add(dep.trim());
               }
             }
           }catch(err){
@@ -168,7 +168,7 @@ export async function Haskell_dependencies() {
                   inPackageSection = false;
                 } else {
                   const dep = trimmedLine.split(/\s+/);
-                  techstack_Set.add(dep);
+                  techstack_Set.add(...dep.filter(d => d.trim() !== "."));
                 }
             }
           }

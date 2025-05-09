@@ -67,7 +67,7 @@ export async function Scala_dependencies() {
         const fileName = path.basename(file)
         if (fileName === "build.sbt"){
           try{
-            const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
+            const pkg = fs.readFileSync(file, "utf-8");
             const Scalaregex = /"[^"]+"\s*%%?\s*"([^"]+)"\s*%\s*"[^"]+"/g;
             let match;
             while ((match = Scalaregex.exec(pkg)) !== null) {
@@ -78,7 +78,7 @@ export async function Scala_dependencies() {
           }
         } else if (fileName === "build.gradle"){
           try{
-            const pkg = fs.readFileSync(path.join(workSpace, file), "utf-8");
+            const pkg = fs.readFileSync(file, "utf-8");
             const dependenciesRegex =
             /(implementation|api|compile|testImplementation|runtimeOnly|annotationProcessor)\s+['"]([^'"]+)['"]/g;
             let match;

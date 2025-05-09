@@ -74,7 +74,7 @@ export async function Scala_dependencies() {
               techstack_Set.add(match[1]);
             }
           }catch(err){
-             console.error(`Error parsing ${file}: ${err.message}`)
+             console.error(`Error occurred ${fileName}:`, err.message)
           }
         } else if (fileName === "build.gradle"){
           try{
@@ -89,7 +89,7 @@ export async function Scala_dependencies() {
               }
             }
           }catch(err){
-             console.error(`Error parsing ${file}: ${err.message}`)
+             console.error(`Error occurred ${fileName}:`, err.message)
           }
         }
       }

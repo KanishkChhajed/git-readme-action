@@ -139,7 +139,7 @@ export async function Haskell_dependencies() {
                 (dep.endsWith(".cabal") || dep.endsWith("package.yaml"))
               ) {
                 techstack_Set.add(dep.trim());
-              } else if (typeof dep === "string" && dep.trim() !== ".") {
+              } else if (typeof dep === "string" && dep.trim() !== "."&& dep.trim() !== "") {
                 techstack_Set.add(dep.trim());
               }
             }

@@ -78,46 +78,42 @@ export async function Perl_dependencies() {
             console.error(`Error occurred ${fileName}:`, err.message);
           }
         } else if (fileName === "Makefile.PL") {
-          try{
-
+          try {
             const pkg = fs.readFileSync(file, "utf-8");
-            // const perlregex = /PREREQ_PM\s*=>\s*\{([\s\S]*?)\}/m
-            const lines = pkg.split('\n')
+        
+            // Step 1: Find where PREREQ_PM block starts
+            const lines = pkg.split('\n');
             let isInBlock = false;
-            for(let line of lines){
-              line = line.trim()
-              if(line.startsWith("'PREREQ_PM'") && line.includes('{')){
-                isInBlock = true
-                continue
+            let blockLines = [];
+        
+            for (let line of lines) {
+              line = line.trim();
+        
+              if (line.startsWith("'PREREQ_PM'") && line.includes('{')) {
+                isInBlock = true;
+                continue;
               }
-              if(isInBlock){
-                if(line.startsWith('},') || line.startsWith('}')){
+        
+              if (isInBlock) {
+                if (line.startsWith('},') || line.startsWith('}')) {
                   isInBlock = false;
-                  break
+                  break;
                 }
-              }
-              for(let dep of line){
-                const match = dep.match(/['"]([^'"]+)['"]\s*=>/)
-                if(match){
-                  techstack_Set.add(match[1])
-                }
+        
+                blockLines.push(line);
               }
             }
-            //   const preDep = pkg.match(/PREREQ_PM\s*=>\s*\{([\s\S]*?)\}/m);
-            //   if (preDep && preDep[1]) {
-            //     const prereqBlock = preDep[1].split(/,|\n/);
-            //     for (let line of prereqBlock) {
-            //       line = line.trim();
-            //       if(!line || line.startsWith("#")) continue
-            //       // const lineRegex = /['"]([^'"]+)['"]\s*=>/;
-            //       const match = line.match(/['"]([^'"]+)['"]\s*=>/);
-            //       if (match) {
-            //         techstack_Set.add(match[1]);
-            //       }
-            //     }
-            // }
-            console.log(`Deps: ${Array.from(techstack_Set)}`)
-          }catch(err){
+        
+            // Step 2: Extract dependencies from block
+            for (let depLine of blockLines) {
+              const match = depLine.match(/['"]([^'"]+)['"]\s*=>/);
+              if (match) {
+                techstack_Set.add(match[1]);
+              }
+            }
+        
+            console.log(`Deps: ${Array.from(techstack_Set)}`);
+          } catch (err) {
             console.error(`Error occurred ${fileName}:`, err.message);
           }
           }else {

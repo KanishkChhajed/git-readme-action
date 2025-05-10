@@ -35,16 +35,16 @@ async function Csharp_dir(dir = process.cwd()){
                 if(file ==='.github' || file === '.git' || file === 'node_modules') continue
                 const subDeps = await Csharp_dir(Path)
                   allFiles.push(...subDeps)
-                console.log(`Successfully recursion on path:${Path}`)
+                // console.log(`Successfully recursion on path:${Path}`)
               }else if(Pathstat.isFile()){
                 if(Csharp.includes(file)){
                   allFiles.push(Path)
                 }
-                console.log(`Successfully push path on allFiles:${Path}`)
+                // console.log(`Successfully push path on allFiles:${Path}`)
               } 
             }
             const check = await isInclude(allFiles,Csharp)
-            console.log(`Included Files: ${check}`)
+            // console.log(`Included Files: ${check}`)
             return check;  
           }catch(err){
             console.error(`Error occured in Csharp_dir function`,err.message)

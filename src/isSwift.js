@@ -34,16 +34,16 @@ async function Swift_dir(dir = process.cwd()){
                 if(file ==='.github' || file === '.git' || file === 'node_modules') continue
                 const subDeps = await Swift_dir(Path)
                   allFiles.push(...subDeps)
-                console.log(`Successfully recursion on path:${Path}`)
+                // console.log(`Successfully recursion on path:${Path}`)
               }else if(Pathstat.isFile()){
                 if(Swift.includes(file)){
                   allFiles.push(Path)
                 }
-                console.log(`Successfully push path on allFiles:${Path}`)
+                // console.log(`Successfully push path on allFiles:${Path}`)
               } 
             }
             const check = await isInclude(allFiles,Swift)
-            console.log(`Included Files: ${check}`)
+            // console.log(`Included Files: ${check}`)
             return check;  
           }catch(err){
             console.error(`Error occured in Kotlin_dir function`,err.message)

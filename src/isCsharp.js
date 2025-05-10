@@ -69,7 +69,7 @@ export async function Csharp_dependencies() {
           let pkg
           try{
             const xmlString = fs.readFileSync(file, "utf-8");
-            const parsedFile = new xml2js.Parser();
+            const parsedFile = new xml2js.Parser({ explicitArray: true });
             pkg = await parsedFile.parseStringPromise(xmlString);
           }catch(err){
             console.error(`Error parsing ${file}: ${err.message}`);

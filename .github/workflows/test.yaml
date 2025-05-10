@@ -88,11 +88,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          # cache: 'npm'
 
       - name: Install dependencies
         run: |
-          npm ci
+          # npm ci
           echo "Node installed successfully"
 
       - name: Initialize my build action

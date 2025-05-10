@@ -1,4 +1,3 @@
-import github  from "@actions/github"
 import  core  from '@actions/core'
 import {Octokit} from 'octokit'
 import  ejs from 'ejs'
@@ -6,6 +5,7 @@ import fs from 'fs'
 import path from 'path'
 import  { execSync } from "child_process"
 import { fileURLToPath ,pathToFileURL } from 'url';
+// import github  from "@actions/github"
 // import JavaScript_dependencies from './isJavaScript.js'
 
 

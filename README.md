@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding recursive and error handling code in isSwift.js file"
+  > "Commenting all log in isSwift.js file"
   
   ---
   

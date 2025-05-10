@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding recursive and error handling code in isCpp.js file"
+  > "Adding more logic to isCpp.js file"
   
   ---
   

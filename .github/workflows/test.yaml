@@ -92,7 +92,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install 
+          npm init -y 
           echo "Node installed successfully"
 
       - name: Initialize my build action

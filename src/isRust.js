@@ -58,7 +58,7 @@ export async function Rust_dependencies() {
 
   // Identify which language is used in the project
   // let isRust = isInclude(files, Rust);
-  const check = Rust_dir()
+  const check = await Rust_dir()
 
    if (check && check.length) {
       for (const file of check){

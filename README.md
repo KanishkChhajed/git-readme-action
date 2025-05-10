@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding node_module in .gitignore file"
+  > "Correcting the logic of isCsharp.js file"
   
   ---
   

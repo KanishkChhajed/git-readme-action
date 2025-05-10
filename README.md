@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding recursive and error handling code on isRust.js file"
+  > "Correcting the logic of isRust.js file"
   
   ---
   

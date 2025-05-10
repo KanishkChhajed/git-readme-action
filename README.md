@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding recursive and error handling code on isFsharp.js file"
+  > "Adding recursive and error handling code on isRust.js file"
   
   ---
   

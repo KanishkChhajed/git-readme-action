@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding node_module in my workflow file"
+  > "Adding node_module in .gitignore file"
   
   ---
   

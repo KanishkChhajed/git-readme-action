@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import  xml2js from "xml2js";
 
-const Fsharp = [".csproj", "packages.config", "project.json"];
+const Fsharp = [".fsproj", "packages.config", "project.json"];
 
 const  techstack_Set = new Set();
 
@@ -47,7 +47,7 @@ async function Fsharp_dir(dir = process.cwd()){
             // console.log(`Included Files: ${check}`)
             return check;  
           }catch(err){
-            console.error(`Error occured in Csharp_dir function`,err.message)
+            console.error(`Error occured in Fsharp_dir function`,err.message)
             return []
           }
 }
@@ -65,7 +65,7 @@ export async function Fsharp_dependencies() {
   if (check && check.length) {
       for (const file of check){
         const fileName = path.basename(file)
-        if (file.endsWith(".csproj")) {
+        if (file.endsWith(".fsproj")) {
           let pkg
           try{
             const xmlString = fs.readFileSync(file, "utf-8");

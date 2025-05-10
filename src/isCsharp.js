@@ -37,7 +37,7 @@ async function Csharp_dir(dir = process.cwd()){
                   allFiles.push(...subDeps)
                 // console.log(`Successfully recursion on path:${Path}`)
               }else if(Pathstat.isFile()){
-                if(Csharp.includes(file)){
+                if(Csharp.some(ext => file.endsWith(ext))){
                   allFiles.push(Path)
                 }
                 // console.log(`Successfully push path on allFiles:${Path}`)

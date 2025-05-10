@@ -48,7 +48,7 @@ export async function Ruby_dependencies() {
       }
     }else {
         techstack_Set = [];
-        console.log("No common package dependency file found....");
+        console.log("No common package dependency file of Ruby found....");
       }
     return Array.from(techstack_Set).filter(Boolean);
 }

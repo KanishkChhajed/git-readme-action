@@ -1,60 +1,137 @@
-const fs = require("fs");
-const path = require("path");
-const xml2js = require("xml2js");
+import fs from "fs";
+import path from "path";
+import  xml2js from "xml2js";
 
+const Csharp = [".csproj", "packages.config", "project.json"];
 
-let techstack_Set = new Set();
+const  techstack_Set = new Set();
 
 function isInclude(allFiles, dependencyPackage) {
   if (!allFiles || !dependencyPackage) return [];
-  return dependencyPackage.filter((file) => allFiles.includes(path.basename(file)));
+  try{
+    return allFiles.filter((file) => dependencyPackage.includes(path.basename(file)));
+  }catch(err){
+    console.error(`Error in isInclude function:`, err.message);
+    return [];
+  }
+}
+
+
+async function Csharp_dir(dir = process.cwd()){
+          // const dir = process.cwd()
+           try{
+            const folder = fs.readdirSync(dir)
+            const allFiles = []
+            for(const file of folder){
+              const Path = path.join(dir,file)
+              let Pathstat
+              try {
+                    Pathstat = fs.statSync(Path);
+                    } catch (err) {
+                      console.warn(`Skipping file due to error: ${Path}, ${err.message}`);continue;
+                    }
+              // const Pathstat = fs.statSync(Path)
+              if(Pathstat.isDirectory()){
+                if(file ==='.github' || file === '.git' || file === 'node_modules') continue
+                const subDeps = await Csharp_dir(Path)
+                  allFiles.push(...subDeps)
+                console.log(`Successfully recursion on path:${Path}`)
+              }else if(Pathstat.isFile()){
+                if(Csharp.includes(file)){
+                  allFiles.push(Path)
+                }
+                console.log(`Successfully push path on allFiles:${Path}`)
+              } 
+            }
+            const check = await isInclude(allFiles,Csharp)
+            console.log(`Included Files: ${check}`)
+            return check;  
+          }catch(err){
+            console.error(`Error occured in Csharp_dir function`,err.message)
+            return []
+          }
 }
 
 export async function Csharp_dependencies() {
-  const workSpace = process.env.GITHUB_WORKSPACE;
-  const files = fs.readdirSync(workSpace);
+  // const workSpace = process.env.GITHUB_WORKSPACE;
+  // const files = fs.readdirSync(workSpace);
   // const lang = process.env.GITHUB_L;
 
   // Identify which language is used in the project
 
-  const NET = [".csproj", "packages.config", "project.json"];
-  let isNET = isInclude(files, NET);
+  // let isNET = isInclude(files, NET);
+  const check = await Csharp_dir()
 
-  if (isNET.length) {
-      for (const file of isNET) {
-        if (file.endsWith(".csproj")) {
-          const xmlString = fs.readFileSync(path.join(workSpace, file), "utf-8");
-          const parsedFile = new xml2js.Parser();
-          const pkg = await parsedFile.parseStringPromise(xmlString);
-          const dependenciesArray = pkg?.Project?.ItemGroup || [];
-          for (const group of dependenciesArray) {
-            const PackageReference = group?.PackageReference || [];
-  
-            for (const dep of PackageReference) {
-              const depName = dep?.$?.Include;
+  if (check && check.length) {
+      for (const file of check){
+        const fileName = path.basename(file)
+        if (fileName.endsWith(".csproj")) {
+          let pkg
+          try{
+            const xmlString = fs.readFileSync(file, "utf-8");
+            const parsedFile = new xml2js.Parser();
+            pkg = await parsedFile.parseStringPromise(xmlString);
+          }catch(err){
+            console.error(`Error parsing ${file}: ${err.message}`);
+            continue;
+          }
+          try{
+
+            const dependenciesArray = pkg?.Project?.ItemGroup || [];
+            for (const group of dependenciesArray) {
+              const PackageReference = group?.PackageReference || [];
+              
+              for (const dep of PackageReference) {
+                const depName = dep?.$?.Include;
+                if (depName) techstack_Set.add(depName);
+              }
+            }
+          }catch(err){
+            console.error(`Error occurred ${fileName}:`, err.message)
+          }
+        } else if (fileName === "packages.config") {
+          let pkg
+          try{
+            const xmlString = fs.readFileSync(file, "utf-8");
+            const parsedFile = new xml2js.Parser();
+            pkg = await parsedFile.parseStringPromise(xmlString);
+          }catch(err){
+            console.error(`Error parsing ${file}: ${err.message}`);
+            continue;
+          }
+          try{
+
+            const dependenciesArray = pkg?.packages?.package || [];
+            for (const dep of dependenciesArray) {
+              const depName = dep?.$?.id;
               if (depName) techstack_Set.add(depName);
             }
+          }catch(err){
+            console.error(`Error occurred ${fileName}:`, err.message)
           }
-        } else if (file === "packages.config") {
-          const xmlString = fs.readFileSync(path.join(workSpace, file), "utf-8");
-          const parsedFile = new xml2js.Parser();
-          const pkg = await parsedFile.parseStringPromise(xmlString);
-          const dependenciesArray = pkg?.packages?.package || [];
-          for (const dep of dependenciesArray) {
-            const depName = dep?.$?.id;
-            if (depName) techstack_Set.add(depName);
+        } else if (fileName === "project.json") {
+          let pkg
+          try{
+            pkg = JSON.parse(fs.readFileSync(file, "utf-8"));
+          }catch(err){
+            console.error(`Error parsing ${file}: ${err.message}`);
+            continue;
           }
-        } else if (file === "project.json") {
-          const pkg = JSON.parse(fs.readFileSync(path.join(workSpace, file), "utf-8"));
-          let dependencyArray = Object.keys(pkg.dependencies || {});
-          for (const dep of dependencyArray) {
-            techstack_Set.add(dep.trim());
+          try{
+
+            let dependencyArray = Object.keys(pkg.dependencies || {});
+            for (const dep of dependencyArray) {
+              techstack_Set.add(dep.trim());
+            }
+          }catch(err){
+            console.error(`Error occurred ${fileName}:`, err.message)
           }
         }
       }
     }else {
-        techstack_Set = [];
-        console.log("No common package dependency file found....");
+        techstack_Set.clear();
+        console.log("No common package dependency file of Csharp found....");
+        return []
       }
     return Array.from(techstack_Set).filter(Boolean);
 }

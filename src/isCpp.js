@@ -46,7 +46,7 @@ async function Cpp_dir(dir = process.cwd()){
             console.log(`Included Files: ${check}`)
             return check;  
           }catch(err){
-            console.error(`Error occured in Kotlin_dir function`,err.message)
+            console.error(`Error occured in Cpp_dir function`,err.message)
             return []
           }
 }

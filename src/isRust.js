@@ -32,7 +32,7 @@ async function Rust_dir(dir = process.cwd()){
               // const Pathstat = fs.statSync(Path)
               if(Pathstat.isDirectory()){
                 if(file ==='.github' || file === '.git' || file === 'node_modules') continue
-                const subDeps = await Cpp_dir(Path)
+                const subDeps = await Rust_dir(Path)
                   allFiles.push(...subDeps)
                 console.log(`Successfully recursion on path:${Path}`)
               }else if(Pathstat.isFile()){

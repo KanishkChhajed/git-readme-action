@@ -9,7 +9,7 @@ const  techstack_Set = new Set();
 function isInclude(allFiles, dependencyPackage) {
   if (!allFiles || !dependencyPackage) return [];
   try{
-    return allFiles.filter((file) => dependencyPackage.includes(path.basename(file)));
+    return allFiles.filter((file) => dependencyPackage.some(ext => file.endsWith(ext)));
   }catch(err){
     console.error(`Error in isInclude function:`, err.message);
     return [];

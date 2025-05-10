@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding more logic to isCpp.js file"
+  > "Adding recursive and error handling code in isCsharp.js file"
   
   ---
   

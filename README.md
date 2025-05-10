@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Adding recursive and error handling code in isCsharp.js file"
+  > "Adding node_module in my workflow file"
   
   ---
   

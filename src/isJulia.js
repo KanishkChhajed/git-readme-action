@@ -104,7 +104,7 @@ try{
         }
       }else {
         techstack_Set.clear();
-        console.log("No common package dependency file found....");
+        console.log("No common package dependency file of Julia found....");
         return []
       }
     }

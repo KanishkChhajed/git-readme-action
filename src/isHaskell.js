@@ -184,7 +184,7 @@ export async function Haskell_dependencies() {
       }
     }else {
         techstack_Set.clear();
-        console.log("No common package dependency file found....");
+        console.log("No common package dependency file of Haskell found....");
         return []
       }
       console.log(`Deps: ${Array.from(techstack_Set)}`)

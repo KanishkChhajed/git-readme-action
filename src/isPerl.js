@@ -129,7 +129,7 @@ export async function Perl_dependencies() {
     }
     }else {
       techstack_Set.clear();
-      console.log("No common package dependency file found....");
+      console.log("No common package dependency file of Perl found....");
       return []
     }
     return Array.from(techstack_Set).filter(Boolean);

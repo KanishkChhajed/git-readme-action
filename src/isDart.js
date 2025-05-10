@@ -109,7 +109,7 @@ export async function Dart_dependencies() {
       }
     }else {
         techstack_Set.clear();
-        console.log("No common package dependency file found....");
+        console.log("No common package dependency file of Dart found....");
         return []
       }
     return Array.from(techstack_Set).filter(Boolean);

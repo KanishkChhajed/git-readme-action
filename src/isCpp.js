@@ -70,6 +70,8 @@ export async function Cpp_dependencies() {
             const findPackageRegex = /find_package\(\s*(?<package>[\w:\-_]+).*?\)/;
             const targetLinkLibrariesRegex =
             /target_link_libraries\([^)]*?\b(?<dependency>[\w:\-_]+)\b.*?\)/;
+              const externalProjectRegex = /ExternalProject_Add\s*\(\s*([\w\-]+)/;
+              const sourceDirRegex = /SOURCE_DIR\s+["']?\${?PROJECT_SOURCE_DIR}?\/([^"'\s\)]+)/;
             for (const line of pkg) {
               const findPackageMatch = line.match(findPackageRegex);
               if (findPackageMatch?.groups?.package) {
@@ -78,6 +80,14 @@ export async function Cpp_dependencies() {
               const targetLinkLibrariesMatch = line.match(targetLinkLibrariesRegex);
               if (targetLinkLibrariesMatch?.groups?.dependency) {
                 techstack_Set.add(targetLinkLibrariesMatch.groups.dependency);
+              }
+               const externalProjectMatch = line.match(externalProjectRegex);
+               if (externalProjectMatch) {
+                techstack_Set.add(externalProjectMatch[1]);
+              }
+              const sourceDirMatch = line.match(sourceDirRegex);
+              if (sourceDirMatch) {
+                techstack_Set.add(sourceDirMatch[1]);
               }
             }
           }catch(err){

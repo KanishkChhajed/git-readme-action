@@ -65,7 +65,7 @@ export async function Csharp_dependencies() {
   if (check && check.length) {
       for (const file of check){
         const fileName = path.basename(file)
-        if (fileName.endsWith(".csproj")) {
+        if (file.endsWith(".csproj")) {
           let pkg
           try{
             const xmlString = fs.readFileSync(file, "utf-8");

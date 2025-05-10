@@ -26,7 +26,7 @@
   
   ## 📢 Last Commit
   
-  > "Correcting the logic of isCsharp.js file"
+  > "Adding recursive and error handling code on isFsharp.js file"
   
   ---
   
